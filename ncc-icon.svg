@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 0 440 500" fill="none" overflow="visible">
+  <!-- Shield clipping path -->
+  <defs>
+    <clipPath id="shield-clip">
+      <path d="M200 20 L370 70 L370 240 C370 350 290 430 200 470 C110 430 30 350 30 240 L30 70 Z"/>
+    </clipPath>
+    <!-- Wreath gradient -->
+    <radialGradient id="center-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1a6e"/>
+      <stop offset="100%" stop-color="#0d0d50"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ── Shield panels (clipped) ── -->
+  <!-- Red panel (Army - left) -->
+  <rect x="30" y="20" width="115" height="450" clip-path="url(#shield-clip)" fill="#CC2222"/>
+  <!-- Navy blue panel (centre) -->
+  <rect x="145" y="20" width="110" height="450" clip-path="url(#shield-clip)" fill="#0F0F7A"/>
+  <!-- Sky blue panel (Air - right) -->
+  <rect x="255" y="20" width="115" height="450" clip-path="url(#shield-clip)" fill="#4C9FD4"/>
+
+  <!-- Shield outline -->
+  <path d="M200 20 L370 70 L370 240 C370 350 290 430 200 470 C110 430 30 350 30 240 L30 70 Z"
+    stroke="#C8A84B" stroke-width="5" fill="none"/>
+
+  <!-- ── Central circular emblem ── -->
+  <!-- Outer gold ring -->
+  <circle cx="200" cy="220" r="105" fill="#C8A84B"/>
+  <!-- Inner navy circle -->
+  <circle cx="200" cy="220" r="95" fill="url(#center-grad)"/>
+
+  <!-- ── Laurel wreath ── -->
+  <!-- Left branch leaves -->
+  <g fill="#C8A84B">
+    <!-- Left side leaves going up -->
+    <ellipse cx="124" cy="218" rx="10" ry="18" transform="rotate(-10 124 218)"/>
+    <ellipse cx="118" cy="197" rx="9" ry="17" transform="rotate(-25 118 197)"/>
+    <ellipse cx="121" cy="176" rx="9" ry="16" transform="rotate(-42 121 176)"/>
+    <ellipse cx="133" cy="158" rx="9" ry="15" transform="rotate(-58 133 158)"/>
+    <ellipse cx="152" cy="146" rx="8" ry="14" transform="rotate(-72 152 146)"/>
+    <ellipse cx="173" cy="139" rx="8" ry="13" transform="rotate(-85 173 139)"/>
+    <!-- Left side leaves going down -->
+    <ellipse cx="124" cy="240" rx="10" ry="18" transform="rotate(10 124 240)"/>
+    <ellipse cx="118" cy="262" rx="9" ry="17" transform="rotate(25 118 262)"/>
+    <ellipse cx="122" cy="283" rx="9" ry="16" transform="rotate(42 122 283)"/>
+    <ellipse cx="135" cy="300" rx="9" ry="15" transform="rotate(58 135 300)"/>
+    <ellipse cx="153" cy="311" rx="8" ry="14" transform="rotate(72 153 311)"/>
+    <ellipse cx="175" cy="318" rx="8" ry="13" transform="rotate(85 175 318)"/>
+
+    <!-- Right side leaves going up -->
+    <ellipse cx="276" cy="218" rx="10" ry="18" transform="rotate(10 276 218)"/>
+    <ellipse cx="282" cy="197" rx="9" ry="17" transform="rotate(25 282 197)"/>
+    <ellipse cx="279" cy="176" rx="9" ry="16" transform="rotate(42 279 176)"/>
+    <ellipse cx="267" cy="158" rx="9" ry="15" transform="rotate(58 267 158)"/>
+    <ellipse cx="248" cy="146" rx="8" ry="14" transform="rotate(72 248 146)"/>
+    <ellipse cx="227" cy="139" rx="8" ry="13" transform="rotate(85 227 139)"/>
+    <!-- Right side leaves going down -->
+    <ellipse cx="276" cy="240" rx="10" ry="18" transform="rotate(-10 276 240)"/>
+    <ellipse cx="282" cy="262" rx="9" ry="17" transform="rotate(-25 282 262)"/>
+    <ellipse cx="278" cy="283" rx="9" ry="16" transform="rotate(-42 278 283)"/>
+    <ellipse cx="265" cy="300" rx="9" ry="15" transform="rotate(-58 265 300)"/>
+    <ellipse cx="247" cy="311" rx="8" ry="14" transform="rotate(-72 247 311)"/>
+    <ellipse cx="225" cy="318" rx="8" ry="13" transform="rotate(-85 225 318)"/>
+
+    <!-- Top knot -->
+    <circle cx="200" cy="128" r="5"/>
+    <ellipse cx="191" cy="130" rx="6" ry="4" transform="rotate(-20 191 130)"/>
+    <ellipse cx="209" cy="130" rx="6" ry="4" transform="rotate(20 209 130)"/>
+
+    <!-- Bottom knot -->
+    <circle cx="200" cy="315" r="5"/>
+    <ellipse cx="191" cy="313" rx="6" ry="4" transform="rotate(20 191 313)"/>
+    <ellipse cx="209" cy="313" rx="6" ry="4" transform="rotate(-20 209 313)"/>
+  </g>
+
+  <!-- ── NCC Text ── -->
+  <text x="200" y="242"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="68"
+    font-weight="700"
+    text-anchor="middle"
+    fill="#C8A84B"
+    letter-spacing="6">NCC</text>
+
+  <!-- ── Banner scroll ── -->
+  <!-- Left scroll curl -->
+  <path d="M48 388 C35 382 28 392 38 400 C30 400 22 394 30 408 L70 408 C58 404 52 393 48 388 Z"
+    fill="#F5F0D8" stroke="#C8A84B" stroke-width="1.5"/>
+  <!-- Main banner body -->
+  <rect x="68" y="395" width="264" height="42" rx="3" fill="#F5F0D8" stroke="#C8A84B" stroke-width="1.5"/>
+  <!-- Right scroll curl -->
+  <path d="M352 388 C365 382 372 392 362 400 C370 400 378 394 370 408 L330 408 C342 404 348 393 352 388 Z"
+    fill="#F5F0D8" stroke="#C8A84B" stroke-width="1.5"/>
+  <!-- Banner top edge line -->
+  <line x1="68" y1="399" x2="332" y2="399" stroke="#C8A84B" stroke-width="0.8" opacity="0.5"/>
+  <!-- Motto text -->
+  <text x="200" y="423"
+    font-family="'Noto Sans Devanagari', Arial, sans-serif"
+    font-size="22"
+    font-weight="600"
+    text-anchor="middle"
+    fill="#8B6914"
+    letter-spacing="1">एकता और अनुशासन</text>
+</svg>
