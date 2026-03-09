@@ -11,6 +11,9 @@ import {
   X,
   Bell,
   ClipboardCheck,
+  UserPlus,
+  FileText,
+  Upload,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import toast from 'react-hot-toast'
@@ -19,8 +22,11 @@ const ADMIN_NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/events', label: 'Manage Events', icon: Calendar },
   { to: '/admin/registrations', label: 'Registrations', icon: ClipboardList },
+  { to: '/admin/applications', label: 'Join Applications', icon: UserPlus },
+  { to: '/admin/declarations', label: 'Declarations', icon: FileText },
   { to: '/admin/cadets', label: 'Cadets', icon: Users },
   { to: '/admin/attendance', label: 'Attendance', icon: ClipboardCheck },
+  { to: '/admin/bulk-import', label: 'Bulk Import', icon: Upload },
 ]
 
 export default function AdminLayout() {

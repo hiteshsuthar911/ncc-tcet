@@ -16,6 +16,8 @@ import {
   ChevronRight,
   TrendingUp,
   Clock,
+  UserPlus,
+  FileText,
 } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -25,6 +27,10 @@ export default function AdminDashboard() {
     totalRegistrations: 0,
     pendingRegistrations: 0,
     totalCadets: 0,
+    totalApplications: 0,
+    pendingApplications: 0,
+    totalDeclarations: 0,
+    pendingDeclarations: 0,
   })
   const [recentRegs, setRecentRegs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -32,7 +38,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [eventsSnap, activeSnap, regsSnap, pendingSnap, cadetsSnap, recentSnap] =
+        const [eventsSnap, activeSnap, regsSnap, pendingSnap, cadetsSnap, recentSnap, appsSnap, pendingAppsSnap, declSnap, pendingDeclSnap] =
           await Promise.all([
             getDocs(collection(db, 'events')),
             getDocs(query(collection(db, 'events'), where('isActive', '==', true))),
@@ -46,6 +52,10 @@ export default function AdminDashboard() {
                 limit(5)
               )
             ),
+            getDocs(collection(db, 'joinApplications')),
+            getDocs(query(collection(db, 'joinApplications'), where('status', '==', 'pending'))),
+            getDocs(collection(db, 'declarations')),
+            getDocs(query(collection(db, 'declarations'), where('status', '==', 'pending'))),
           ])
 
         setStats({
@@ -54,6 +64,10 @@ export default function AdminDashboard() {
           totalRegistrations: regsSnap.size,
           pendingRegistrations: pendingSnap.size,
           totalCadets: cadetsSnap.size,
+          totalApplications: appsSnap.size,
+          pendingApplications: pendingAppsSnap.size,
+          totalDeclarations: declSnap.size,
+          pendingDeclarations: pendingDeclSnap.size,
         })
         setRecentRegs(recentSnap.docs.map((d) => ({ id: d.id, ...d.data() })))
       } catch {
@@ -69,7 +83,9 @@ export default function AdminDashboard() {
     { label: 'Total Events', value: stats.totalEvents, sub: `${stats.activeEvents} Active`, icon: Calendar, color: 'text-gold-400' },
     { label: 'Registrations', value: stats.totalRegistrations, sub: `${stats.pendingRegistrations} Pending`, icon: ClipboardList, color: 'text-green-400' },
     { label: 'Cadets', value: stats.totalCadets, sub: 'Registered', icon: Users, color: 'text-blue-400' },
-    { label: 'Recent Activity', value: recentRegs.length, sub: 'Last 5 submissions', icon: TrendingUp, color: 'text-purple-400' },
+    { label: 'Join Applications', value: stats.totalApplications, sub: `${stats.pendingApplications} Pending`, icon: UserPlus, color: 'text-orange-400' },
+    { label: 'Declarations', value: stats.totalDeclarations, sub: `${stats.pendingDeclarations} Pending`, icon: FileText, color: 'text-purple-400' },
+    { label: 'Recent Activity', value: recentRegs.length, sub: 'Last 5 submissions', icon: TrendingUp, color: 'text-teal-400' },
   ]
 
   const formatTs = (ts) => {
@@ -87,7 +103,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {STAT_CARDS.map(({ label, value, sub, icon: Icon, color }) => (
           <div key={label} className="stat-card">
             <Icon className={`w-5 h-5 ${color} mb-3`} />
@@ -111,6 +127,8 @@ export default function AdminDashboard() {
             {[
               { to: '/admin/events', label: 'Create New Event', icon: Calendar },
               { to: '/admin/registrations', label: 'View Registrations', icon: ClipboardList },
+              { to: '/admin/applications', label: 'Join Applications', icon: UserPlus },
+              { to: '/admin/declarations', label: 'Declarations', icon: FileText },
               { to: '/admin/cadets', label: 'Manage Cadets', icon: Users },
             ].map(({ to, label, icon: Icon }) => (
               <Link

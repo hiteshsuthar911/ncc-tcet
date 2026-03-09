@@ -23,6 +23,15 @@ import {
   CheckCircle,
   Shield,
   Filter,
+  Award,
+  Phone,
+  Info,
+  Tag,
+  UserCheck,
+  BookOpen,
+  ArrowRight,
+  ClipboardList,
+  Star,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -310,13 +319,28 @@ export default function EventRegistration() {
           <p className="text-army-300 font-body mt-4 max-w-xl">
             Browse active events and register with your cadet credentials. All fields are verified against the cadet register.
           </p>
+          {/* Quick stats strip */}
+          <div className="flex flex-wrap gap-6 mt-6">
+            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
+              <Shield className="w-4 h-4 text-gold-500" />
+              <span>{events.length} Active Event{events.length !== 1 ? 's' : ''}</span>
+            </div>
+            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
+              <UserCheck className="w-4 h-4 text-gold-500" />
+              <span>Cadet Credentials Required</span>
+            </div>
+            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
+              <CheckCircle className="w-4 h-4 text-gold-500" />
+              <span>Instant Confirmation</span>
+            </div>
+          </div>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {selectedEvent ? (
           /* ── REGISTRATION FORM ── */
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             <button
               onClick={() => { setSelectedEvent(null); setSubmitted(false) }}
               className="flex items-center gap-2 text-army-400 hover:text-gold-400 font-body text-sm mb-6 transition-colors"
@@ -324,134 +348,392 @@ export default function EventRegistration() {
               ← Back to Events
             </button>
 
+            {/* ── Event Briefing Card ── */}
             <div className="card-army relative overflow-hidden mb-6">
               <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
               <div className="p-6">
-                <span className="badge-rank mb-3 inline-flex">{selectedEvent.category || 'Event'}</span>
-                <h2 className="font-heading text-2xl text-white uppercase tracking-widest mb-2">
-                  {selectedEvent.title}
-                </h2>
-                <p className="text-army-300 font-body text-sm mb-4">{selectedEvent.description}</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                  {selectedEvent.date && (
-                    <div className="flex items-center gap-2 text-army-400">
-                      <Calendar className="w-4 h-4 text-gold-500" />
-                      <span className="font-body">{formatDate(selectedEvent.date)}</span>
-                    </div>
-                  )}
-                  {selectedEvent.venue && (
-                    <div className="flex items-center gap-2 text-army-400">
-                      <MapPin className="w-4 h-4 text-gold-500" />
-                      <span className="font-body">{selectedEvent.venue}</span>
-                    </div>
-                  )}
+                {/* Category + Title */}
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                  <div>
+                    <span className="badge-rank mb-3 inline-flex">{selectedEvent.category || 'Event'}</span>
+                    <h2 className="font-heading text-2xl text-white uppercase tracking-widest mt-1">
+                      {selectedEvent.title}
+                    </h2>
+                  </div>
                   {selectedEvent.maxParticipants && (
-                    <div className="flex items-center gap-2 text-army-400">
-                      <Users className="w-4 h-4 text-gold-500" />
-                      <span className="font-body">Max {selectedEvent.maxParticipants}</span>
+                    <div className="text-right">
+                      <p className="text-army-500 text-xs font-body uppercase tracking-widest mb-1">Capacity</p>
+                      <div className="flex items-center gap-2 text-gold-400 font-heading text-lg">
+                        <Users className="w-4 h-4" />
+                        {selectedEvent.maxParticipants}
+                      </div>
                     </div>
                   )}
                 </div>
+
+                {/* Description */}
+                {selectedEvent.description && (
+                  <p className="text-army-300 font-body text-sm mb-5 leading-relaxed border-l-2 border-gold-500/40 pl-4">
+                    {selectedEvent.description}
+                  </p>
+                )}
+
+                <div className="divider-gold mb-5" />
+
+                {/* Detail grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-5 text-sm mb-5">
+                  {selectedEvent.date && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" /> Date
+                      </p>
+                      <p className="text-white font-body font-medium">{formatDate(selectedEvent.date)}</p>
+                    </div>
+                  )}
+                  {selectedEvent.time && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> Time
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.time}</p>
+                    </div>
+                  )}
+                  {selectedEvent.venue && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" /> Venue
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.venue}</p>
+                    </div>
+                  )}
+                  {selectedEvent.duration && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> Duration
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.duration}</p>
+                    </div>
+                  )}
+                  {selectedEvent.eligibility && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Award className="w-3 h-3" /> Eligibility
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.eligibility}</p>
+                    </div>
+                  )}
+                  {selectedEvent.organizer && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <UserCheck className="w-3 h-3" /> Organizer
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.organizer}</p>
+                    </div>
+                  )}
+                  {selectedEvent.reportingTime && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> Reporting Time
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.reportingTime}</p>
+                    </div>
+                  )}
+                  {selectedEvent.deadline && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" /> Registration Deadline
+                      </p>
+                      <p className="text-gold-400 font-body font-medium">{formatDate(selectedEvent.deadline)}</p>
+                    </div>
+                  )}
+                  {selectedEvent.contact && (
+                    <div>
+                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
+                        <Phone className="w-3 h-3" /> Contact
+                      </p>
+                      <p className="text-white font-body font-medium">{selectedEvent.contact}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Instructions section */}
+                {selectedEvent.instructions && (
+                  <div className="bg-army-900 border border-army-700 p-4 mb-4">
+                    <p className="text-gold-500 font-body text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <BookOpen className="w-3.5 h-3.5" /> Instructions &amp; Guidelines
+                    </p>
+                    <p className="text-army-300 font-body text-sm leading-relaxed whitespace-pre-line">
+                      {selectedEvent.instructions}
+                    </p>
+                  </div>
+                )}
+
+                {/* What to bring */}
+                {selectedEvent.whatToBring && (
+                  <div className="bg-army-900 border border-army-700 p-4">
+                    <p className="text-gold-500 font-body text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <ClipboardList className="w-3.5 h-3.5" /> What to Bring
+                    </p>
+                    <p className="text-army-300 font-body text-sm leading-relaxed whitespace-pre-line">
+                      {selectedEvent.whatToBring}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
             {submitted && receiptData ? (
               <div>
-                {/* ── Printable Receipt ── */}
-                <div id="print-receipt" className="card-army relative overflow-hidden mb-4">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
-                  <div className="p-8">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div>
-                        <p className="text-gold-500 font-heading text-xs uppercase tracking-widest mb-1">NCC TCET — 1 Maharashtra Naval Unit</p>
-                        <h2 className="font-heading text-2xl text-white uppercase tracking-widest">Registration Receipt</h2>
-                      </div>
-                      <CheckCircle className="w-12 h-12 text-gold-500" />
-                    </div>
-                    <div className="divider-gold mb-6" />
 
-                    {/* Registration ID */}
-                    <div className="bg-army-900 border border-gold-500/30 px-4 py-3 mb-6">
-                      <p className="text-army-400 font-body text-xs uppercase tracking-widest mb-1">Registration ID</p>
-                      <p className="font-heading text-gold-400 text-sm tracking-widest">{receiptData.regId}</p>
-                    </div>
-
-                    {/* Cadet Info */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1">Cadet Name</p>
-                        <p className="text-white font-body font-medium">{receiptData.name || '—'}</p>
-                      </div>
-                      <div>
-                        <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1">Regimental No.</p>
-                        <p className="text-white font-body font-medium">{receiptData.regimentalNo || '—'}</p>
-                      </div>
-                    </div>
-
-                    {/* Event Info */}
-                    <div className="border border-army-700 p-4 mb-6">
-                      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-3">Event Details</p>
-                      <p className="text-white font-heading text-lg uppercase tracking-wide mb-2">{receiptData.event.title}</p>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
-                        {receiptData.event.date && (
-                          <div className="flex items-center gap-2 text-army-400">
-                            <Calendar className="w-3.5 h-3.5 text-gold-500" />
-                            <span className="font-body">{formatDate(receiptData.event.date)}</span>
-                          </div>
-                        )}
-                        {receiptData.event.venue && (
-                          <div className="flex items-center gap-2 text-army-400">
-                            <MapPin className="w-3.5 h-3.5 text-gold-500" />
-                            <span className="font-body">{receiptData.event.venue}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Dynamic form answers */}
-                    {Object.entries(receiptData.formData).filter(([k]) => k !== 'declaration').length > 0 && (
-                      <div className="mb-6">
-                        <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-3">Submitted Information</p>
-                        <div className="space-y-2">
-                          {(receiptData.event.fields || []).map((field) => {
-                            const val = receiptData.formData[field.id]
-                            if (!val) return null
-                            return (
-                              <div key={field.id} className="flex justify-between border-b border-army-800 pb-2">
-                                <span className="text-army-400 font-body text-sm">{field.label}</span>
-                                <span className="text-white font-body text-sm">{String(val)}</span>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Footer */}
-                    <div className="flex justify-between items-end pt-4 border-t border-army-800">
-                      <div>
-                        <p className="text-army-500 font-body text-xs">Submitted on</p>
-                        <p className="text-army-300 font-body text-sm">
-                          {receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-army-500 font-body text-xs">Status</p>
-                        <span className="badge-rank">Pending Review</span>
-                      </div>
-                    </div>
+                {/* ── Screen success banner ── */}
+                <div className="no-print flex items-center gap-3 border border-green-700/50 bg-green-900/20 p-4 mb-6">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <div>
+                    <p className="text-green-300 font-heading text-sm uppercase tracking-wider">Registration Submitted Successfully</p>
+                    <p className="text-green-500 font-body text-xs mt-0.5">Your application is now pending review. Print or save your receipt below.</p>
                   </div>
                 </div>
 
+                {/* ── Printable Receipt ── */}
+                <div id="print-receipt">
+                  <div className="receipt-page">
+
+                    {/* ══ LETTERHEAD ══ */}
+                    <div className="receipt-letterhead flex items-center gap-4 border-b-2 border-army-600 pb-4 mb-3">
+                      {/* NCC Shield SVG */}
+                      <div className="receipt-crest flex-shrink-0">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M32 4L54 12V28C54 42 44 54 32 60C20 54 10 42 10 28V12L32 4Z" fill="#1a2214" stroke="#b8860b" strokeWidth="2"/>
+                          <path d="M32 10L48 17V28C48 38 41 47 32 52C23 47 16 38 16 28V17L32 10Z" fill="#111808" stroke="#d4a017" strokeWidth="1.2"/>
+                          <text x="32" y="30" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">NATIONAL</text>
+                          <text x="32" y="38" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">CADET</text>
+                          <text x="32" y="46" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">CORPS</text>
+                        </svg>
+                      </div>
+                      <div className="receipt-org-name flex-1 text-center">
+                        <span className="org-main block font-heading text-xl text-white uppercase tracking-widest">National Cadet Corps</span>
+                        <span className="org-sub block font-body text-gold-400 text-sm mt-0.5">1 Maharashtra Naval Unit — Thakur College of Engineering &amp; Technology</span>
+                        <span className="org-address block font-body text-army-400 text-xs mt-0.5">Kandivali (East), Mumbai — 400 101 &nbsp;|&nbsp; Ministry of Defence, Govt. of India</span>
+                      </div>
+                    </div>
+
+                    {/* ══ DOCUMENT TITLE ══ */}
+                    <div className="receipt-title-bar bg-army-800 border border-army-600 text-center py-2 mb-3">
+                      <p className="font-heading text-sm text-white uppercase tracking-widest">Event Registration — Acknowledgement Receipt</p>
+                    </div>
+
+                    {/* ══ REG ID + DATE ROW ══ */}
+                    <div className="receipt-regid-row flex flex-wrap justify-between items-center border border-army-700 bg-army-900/60 px-4 py-2 mb-5 gap-2">
+                      <div>
+                        <span className="text-army-500 font-body text-xs uppercase tracking-widest mr-2">Registration No.:</span>
+                        <span className="font-heading text-gold-400 text-xs tracking-widest break-all">{receiptData.regId}</span>
+                      </div>
+                      <div>
+                        <span className="text-army-500 font-body text-xs uppercase tracking-widest mr-2">Generated:</span>
+                        <span className="text-army-300 font-body text-xs">
+                          {receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* ══ CADET PARTICULARS ══ */}
+                    <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
+                      <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
+                        <Shield className="w-3 h-3" /> Part I — Cadet Particulars
+                      </p>
+                    </div>
+                    <table className="receipt-table w-full border-collapse mb-5">
+                      <tbody>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Full Name</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm font-medium">{receiptData.name || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Regimental No.</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-gold-400 font-heading text-sm">{receiptData.regimentalNo || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Rank</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.rank || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Wing</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.wing || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Batch / Year</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.batch || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Contact No.</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.phone || '—'}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    {/* ══ EVENT PARTICULARS ══ */}
+                    <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
+                      <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
+                        <Calendar className="w-3 h-3" /> Part II — Event Particulars
+                      </p>
+                    </div>
+                    <table className="receipt-table w-full border-collapse mb-5">
+                      <tbody>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Event Name</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-heading text-sm uppercase tracking-wide">{receiptData.event.title}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Category</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.category || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Date</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.date ? formatDate(receiptData.event.date) : '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Time</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.time || '—'}</td>
+                        </tr>
+                        <tr className="border border-army-700">
+                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Venue</td>
+                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.venue || '—'}</td>
+                        </tr>
+                        {receiptData.event.reportingTime && (
+                          <tr className="border border-army-700">
+                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Reporting Time</td>
+                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-gold-400 font-body text-sm">{receiptData.event.reportingTime}</td>
+                          </tr>
+                        )}
+                        {receiptData.event.organizer && (
+                          <tr className="border border-army-700">
+                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Organized By</td>
+                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.organizer}</td>
+                          </tr>
+                        )}
+                        {receiptData.event.contact && (
+                          <tr className="border border-army-700">
+                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Event Contact</td>
+                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.contact}</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+
+                    {/* ══ ADDITIONAL DETAILS (dynamic fields) ══ */}
+                    {Object.entries(receiptData.formData).filter(([k]) => k !== 'declaration').length > 0 && (
+                      <>
+                        <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
+                          <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
+                            <ClipboardList className="w-3 h-3" /> Part III — Additional Information
+                          </p>
+                        </div>
+                        <table className="receipt-table w-full border-collapse mb-5">
+                          <tbody>
+                            {(receiptData.event.fields || []).map((field) => {
+                              const val = receiptData.formData[field.id]
+                              if (!val) return null
+                              return (
+                                <tr key={field.id} className="border border-army-700">
+                                  <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">{field.label}</td>
+                                  <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">
+                                    {typeof val === 'boolean' ? (val ? 'Yes' : 'No') : String(val)}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+
+                    {/* ══ CERTIFICATION ══ */}
+                    <div className="receipt-cert-text border border-army-600 bg-army-900/40 p-4 mb-5">
+                      <p className="text-army-300 font-body text-sm italic leading-relaxed text-justify">
+                        This is to acknowledge that <strong className="text-white">{receiptData.name || 'the above-named cadet'}</strong> bearing
+                        Regimental No. <strong className="text-gold-400">{receiptData.regimentalNo || '—'}</strong> has
+                        successfully submitted a registration application for the event titled
+                        <strong className="text-white"> &ldquo;{receiptData.event.title}&rdquo;</strong> organized under
+                        1 Maharashtra Naval Unit, NCC TCET. This receipt is an
+                        acknowledgement of submission only and does not constitute a confirmed participation.
+                        Final approval is subject to review by the Officer-In-Charge.
+                      </p>
+                    </div>
+
+                    {/* ══ STATUS STRIP ══ */}
+                    <div className="receipt-status-strip flex flex-wrap justify-between items-center border border-army-600 bg-army-900/60 px-4 py-2 mb-6 gap-2">
+                      <div className="flex items-center gap-3">
+                        <span className="text-army-400 font-body text-xs uppercase tracking-wider">Submission Status:</span>
+                        <span className="receipt-status-pending font-heading text-xs text-yellow-400 uppercase tracking-widest border border-yellow-700 px-2 py-0.5">⏳ Pending Approval</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-army-400 font-body text-xs uppercase tracking-wider">Submitted: </span>
+                        <span className="text-army-300 font-body text-xs">
+                          {receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* ══ SIGNATURE BLOCKS ══ */}
+                    <div className="receipt-signatures grid grid-cols-2 gap-8 mb-5">
+                      <div className="receipt-sig-block border-t border-army-500 pt-3 text-center">
+                        <div className="sig-line h-10 border-b border-army-600 mb-2" />
+                        <p className="text-army-400 font-body text-xs uppercase tracking-widest">Cadet's Signature</p>
+                        <p className="text-army-500 font-body text-xs mt-0.5">{receiptData.name || ''}</p>
+                        <p className="text-army-600 font-body text-xs">{receiptData.regimentalNo || ''}</p>
+                      </div>
+                      <div className="receipt-sig-block border-t border-army-500 pt-3 text-center">
+                        <div className="sig-line h-10 border-b border-army-600 mb-2" />
+                        <p className="text-army-400 font-body text-xs uppercase tracking-widest">Officer-In-Charge</p>
+                        <p className="text-army-500 font-body text-xs mt-0.5">1 Maharashtra Naval Unit</p>
+                        <p className="text-army-600 font-body text-xs">NCC TCET, Mumbai</p>
+                      </div>
+                    </div>
+
+                    {/* ══ INSTRUCTIONS (screen-only) ══ */}
+                    <div className="no-print bg-army-900 border border-gold-500/20 p-4 mb-5">
+                      <p className="text-gold-500 font-body text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <ArrowRight className="w-3.5 h-3.5" /> Next Steps
+                      </p>
+                      <ul className="space-y-1.5 text-army-300 font-body text-sm">
+                        {[
+                          'Your registration is under review by the event coordinator.',
+                          'You will be notified of approval via the NCC notice board.',
+                          'Print this receipt and bring it to the venue on the day of the event.',
+                          'Report in proper NCC uniform unless instructed otherwise.',
+                        ].map((step, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="text-gold-500 font-heading text-xs mt-0.5">{String(i + 1).padStart(2, '0')}.</span>
+                            {step}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* ══ FOOTER ══ */}
+                    <div className="receipt-footer border-t border-army-700 pt-3 text-center">
+                      <p className="text-army-500 font-body text-xs">
+                        This is a system-generated acknowledgement receipt from the NCC TCET Cadet Management Portal.
+                      </p>
+                      <p className="text-army-600 font-body text-xs mt-0.5">
+                        For queries, contact the NCC Office, TCET Campus, Thakur Village, Kandivali (East), Mumbai — 400 101.
+                      </p>
+                    </div>
+
+                  </div>{/* end receipt-page */}
+                </div>
+
                 {/* Action Buttons */}
-                <div className="no-print flex gap-3 justify-center">
+                <div className="no-print flex flex-wrap gap-3 justify-center mt-6">
                   <button
                     onClick={() => window.print()}
                     className="btn-primary flex items-center gap-2 text-sm"
                   >
-                    🖨️ Print Receipt
+                    🖨️ Print / Save as PDF
                   </button>
+                  <Link to="/my-registrations" className="btn-secondary text-sm flex items-center gap-2">
+                    <ClipboardList className="w-4 h-4" /> View My Registrations
+                  </Link>
                   <button
                     onClick={() => { setSelectedEvent(null); setSubmitted(false); setReceiptData(null) }}
                     className="btn-secondary text-sm"
@@ -464,10 +746,11 @@ export default function EventRegistration() {
               <div className="card-army relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-gold-500" />
                 <div className="p-8">
-                  <h3 className="font-heading text-lg text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                    <span className="h-px w-4 bg-gold-500 inline-block" />
+                  <h3 className="font-heading text-lg text-white uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <ClipboardList className="w-5 h-5 text-gold-500" />
                     Registration Form
                   </h3>
+                  <p className="text-army-500 font-body text-xs mb-6">All fields marked <span className="text-gold-500">*</span> are mandatory.</p>
 
                   {!currentUser && (
                     <div className="flex items-start gap-3 border border-yellow-700/50 bg-yellow-900/20 p-4 mb-6">
@@ -481,58 +764,135 @@ export default function EventRegistration() {
                   )}
 
                   <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                    <div className="space-y-5">
-                      {/* Auto-filled fields from profile */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="label-field">Name</label>
-                          <input
-                            type="text"
-                            value={userProfile?.name || ''}
-                            readOnly
-                            className="input-field opacity-60 cursor-not-allowed"
-                            placeholder="From your profile"
-                          />
+                    <div className="space-y-6">
+
+                      {/* ── Section 1: Cadet Identity ── */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Shield className="w-4 h-4 text-gold-500" />
+                          <h4 className="font-heading text-sm text-gold-500 uppercase tracking-widest">Cadet Identity</h4>
+                          <div className="flex-1 h-px bg-army-800" />
                         </div>
-                        <div>
-                          <label className="label-field">Regimental No.</label>
-                          <input
-                            type="text"
-                            value={userProfile?.regimentalNo || ''}
-                            readOnly
-                            className="input-field opacity-60 cursor-not-allowed"
-                            placeholder="From your profile"
-                          />
+                        <p className="text-army-500 font-body text-xs mb-4">These fields are auto-filled from your cadet profile and cannot be edited here.</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="label-field">Full Name</label>
+                            <input
+                              type="text"
+                              value={userProfile?.name || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
+                          <div>
+                            <label className="label-field">Regimental No.</label>
+                            <input
+                              type="text"
+                              value={userProfile?.regimentalNo || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
+                          <div>
+                            <label className="label-field">Wing</label>
+                            <input
+                              type="text"
+                              value={userProfile?.wing || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
+                          <div>
+                            <label className="label-field">Rank</label>
+                            <input
+                              type="text"
+                              value={userProfile?.rank || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
+                          <div>
+                            <label className="label-field">Batch / Year</label>
+                            <input
+                              type="text"
+                              value={userProfile?.batch || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
+                          <div>
+                            <label className="label-field">Phone</label>
+                            <input
+                              type="text"
+                              value={userProfile?.phone || ''}
+                              readOnly
+                              className="input-field opacity-60 cursor-not-allowed"
+                              placeholder="From your profile"
+                            />
+                          </div>
                         </div>
+                        {currentUser && !userProfile?.wing && (
+                          <div className="flex items-start gap-2 mt-3 p-3 border border-army-700 bg-army-900/50">
+                            <Info className="w-4 h-4 text-army-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-army-500 text-xs font-body">
+                              Some profile fields appear empty.{' '}
+                              <Link to="/profile" className="text-gold-500 underline">Update your profile</Link> to ensure your registration is complete.
+                            </p>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Dynamic Fields from Admin */}
-                      {(selectedEvent.fields || []).length > 0 ? (
-                        (selectedEvent.fields || []).map((field) => (
-                          <DynamicField
-                            key={field.id}
-                            field={field}
-                            register={register}
-                            errors={errors}
-                            watch={watch}
-                          />
-                        ))
-                      ) : (
-                        <p className="text-army-500 text-sm font-body text-center py-4 border border-dashed border-army-700">
-                          No additional fields for this event.
-                        </p>
+                      {/* ── Section 2: Event-Specific Fields ── */}
+                      {(selectedEvent.fields || []).length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-4">
+                            <Star className="w-4 h-4 text-gold-500" />
+                            <h4 className="font-heading text-sm text-gold-500 uppercase tracking-widest">Event-Specific Details</h4>
+                            <div className="flex-1 h-px bg-army-800" />
+                          </div>
+                          <div className="space-y-5">
+                            {(selectedEvent.fields || []).map((field) => (
+                              <DynamicField
+                                key={field.id}
+                                field={field}
+                                register={register}
+                                errors={errors}
+                                watch={watch}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       )}
 
-                      {/* Declaration */}
-                      <div className="pt-4 border-t border-army-800">
+                      {/* ── Section 3: Declaration ── */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <BookOpen className="w-4 h-4 text-gold-500" />
+                          <h4 className="font-heading text-sm text-gold-500 uppercase tracking-widest">Declaration</h4>
+                          <div className="flex-1 h-px bg-army-800" />
+                        </div>
+                        <div className="bg-army-900 border border-army-700 p-4 mb-4 text-army-400 font-body text-xs leading-relaxed space-y-2">
+                          <p>By submitting this form, I confirm that:</p>
+                          <ul className="list-disc list-inside space-y-1 pl-2">
+                            <li>I am a currently enrolled cadet of NCC TCET — 1 Maharashtra Naval Unit.</li>
+                            <li>All information provided above is accurate and complete.</li>
+                            <li>I understand that providing false information may result in disqualification.</li>
+                            <li>I agree to abide by all event rules and NCC discipline standards.</li>
+                          </ul>
+                        </div>
                         <label className="flex items-start gap-3 cursor-pointer group">
                           <input
                             type="checkbox"
-                            {...register('declaration', { required: 'You must accept the declaration' })}
+                            {...register('declaration', { required: 'You must accept the declaration to proceed' })}
                             className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
                           />
                           <span className="text-army-300 text-sm font-body group-hover:text-white transition-colors">
-                            I hereby declare that the information provided is accurate and I am a currently enrolled cadet of NCC TCET.
+                            I have read and hereby declare that the above statements are true and accurate.
                             <span className="text-gold-500"> *</span>
                           </span>
                         </label>
@@ -547,7 +907,7 @@ export default function EventRegistration() {
                     <button
                       type="submit"
                       disabled={submitting || !currentUser}
-                      className="btn-primary w-full mt-6 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn-primary w-full mt-8 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submitting ? (
                         <>
@@ -555,12 +915,13 @@ export default function EventRegistration() {
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                           </svg>
-                          Submitting...
+                          Submitting Registration...
                         </>
                       ) : (
                         <>
                           <Shield className="w-4 h-4" />
                           Submit Registration
+                          <ArrowRight className="w-4 h-4" />
                         </>
                       )}
                     </button>
@@ -634,47 +995,78 @@ export default function EventRegistration() {
                     <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500/0 to-transparent group-hover:via-gold-500 transition-all duration-500" />
                     <div className="absolute left-0 top-0 w-1 h-full bg-gold-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="p-6 flex-1">
+                      {/* Top row: category + capacity */}
                       <div className="flex items-start justify-between mb-3">
                         <span className="badge-rank">{event.category || 'Event'}</span>
                         {event.maxParticipants && (
                           <span className="text-army-500 text-xs font-body flex items-center gap-1">
-                            <Users className="w-3 h-3" /> {event.maxParticipants}
+                            <Users className="w-3 h-3" /> {event.maxParticipants} seats
                           </span>
                         )}
                       </div>
+
+                      {/* Title */}
                       <h3 className="font-heading text-lg text-white uppercase tracking-wide mb-2 group-hover:text-gold-400 transition-colors duration-200">
                         {event.title}
                       </h3>
-                      <p className="text-army-400 text-sm font-body mb-4 line-clamp-3">
+
+                      {/* Description */}
+                      <p className="text-army-400 text-sm font-body mb-4 line-clamp-2">
                         {event.description}
                       </p>
+
+                      {/* Detail rows */}
                       <div className="space-y-1.5 mb-4">
                         {event.date && (
                           <div className="flex items-center gap-2 text-army-400 text-xs font-body">
-                            <Calendar className="w-3.5 h-3.5 text-gold-600" />
+                            <Calendar className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
                             <span>{formatDate(event.date)}</span>
-                          </div>
-                        )}
-                        {event.time && (
-                          <div className="flex items-center gap-2 text-army-400 text-xs font-body">
-                            <Clock className="w-3.5 h-3.5 text-gold-600" />
-                            <span>{event.time}</span>
+                            {event.time && <span className="text-army-600">•</span>}
+                            {event.time && <Clock className="w-3 h-3 text-gold-700 flex-shrink-0" />}
+                            {event.time && <span>{event.time}</span>}
                           </div>
                         )}
                         {event.venue && (
                           <div className="flex items-center gap-2 text-army-400 text-xs font-body">
-                            <MapPin className="w-3.5 h-3.5 text-gold-600" />
+                            <MapPin className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
                             <span>{event.venue}</span>
                           </div>
                         )}
+                        {event.eligibility && (
+                          <div className="flex items-center gap-2 text-army-400 text-xs font-body">
+                            <Award className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
+                            <span>Eligible: {event.eligibility}</span>
+                          </div>
+                        )}
+                        {event.organizer && (
+                          <div className="flex items-center gap-2 text-army-400 text-xs font-body">
+                            <UserCheck className="w-3.5 h-3.5 text-gold-600 flex-shrink-0" />
+                            <span>{event.organizer}</span>
+                          </div>
+                        )}
+                        {event.deadline && (
+                          <div className="flex items-center gap-2 text-xs font-body text-yellow-600">
+                            <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span>Closes: {formatDate(event.deadline)}</span>
+                          </div>
+                        )}
                       </div>
+
+                      {/* Fields count indicator */}
+                      {(event.fields || []).length > 0 && (
+                        <div className="flex items-center gap-1.5 text-army-600 text-xs font-body">
+                          <ClipboardList className="w-3 h-3" />
+                          <span>{event.fields.length} additional field{event.fields.length !== 1 ? 's' : ''} required</span>
+                        </div>
+                      )}
                     </div>
+
                     <div className="px-6 pb-6">
                       <button
                         onClick={() => handleSelectEvent(event)}
                         className="btn-primary w-full text-sm flex items-center justify-center gap-2"
                       >
-                        Register <ChevronRight className="w-4 h-4" />
+                        Register Now <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

@@ -164,6 +164,11 @@ export default function AdminRegistrations() {
     return map[status] || 'text-army-400 border-army-700'
   }
 
+  // Print table
+  function printTable() {
+    window.print()
+  }
+
   // Export CSV
   function exportCSV() {
     if (filtered.length === 0) { toast.error('No data to export.'); return }

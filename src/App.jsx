@@ -10,8 +10,12 @@ import AdminLayout from './pages/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminEvents from './pages/admin/AdminEvents'
 import AdminRegistrations from './pages/admin/AdminRegistrations'
+
 import AdminCadets from './pages/admin/AdminCadets'
 import AdminAttendance from './pages/admin/AdminAttendance'
+import AdminApplications from './pages/admin/AdminApplications'
+import AdminDeclarations from './pages/admin/AdminDeclarations'
+import AdminBulkImport from './pages/admin/AdminBulkImport'
 import CadetProfile from './pages/CadetProfile'
 import MyRegistrations from './pages/MyRegistrations'
 import InstallPrompt from './components/InstallPrompt'
@@ -146,6 +150,9 @@ export default function App() {
         <Route path="registrations" element={<AdminRegistrations />} />
         <Route path="cadets" element={<AdminCadets />} />
         <Route path="attendance" element={<AdminAttendance />} />
+        <Route path="applications" element={<AdminApplications />} />
+        <Route path="declarations" element={<AdminDeclarations />} />
+        <Route path="bulk-import" element={<AdminBulkImport />} />
       </Route>
 
       {/* 404 */}
