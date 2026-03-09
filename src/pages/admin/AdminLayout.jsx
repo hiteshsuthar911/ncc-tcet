@@ -24,6 +24,7 @@ const ADMIN_NAV = [
   { to: '/admin/registrations', label: 'Registrations', icon: ClipboardList },
   { to: '/admin/applications', label: 'Join Applications', icon: UserPlus },
   { to: '/admin/declarations', label: 'Declarations', icon: FileText },
+  { to: '/admin/leave-applications', label: 'Leave Applications', icon: ClipboardList },
   { to: '/admin/cadets', label: 'Cadets', icon: Users },
   { to: '/admin/attendance', label: 'Attendance', icon: ClipboardCheck },
   { to: '/admin/bulk-import', label: 'Bulk Import', icon: Upload },

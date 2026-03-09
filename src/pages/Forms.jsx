@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../context/AuthContext'
+import { db } from '../firebase/config'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import {
   Printer, FileText, ChevronRight, ArrowLeft,
   ClipboardList, Users, Tent, Shuffle,
@@ -892,8 +894,23 @@ export default function Forms() {
     email:        userProfile?.email        || '',
   }
 
-  function handlePrint(data) {
+  async function handlePrint(data) {
     setPrintData(data)
+
+    // Save leave applications to Firestore for admin review
+    if (config.id === 'leave') {
+      try {
+        await addDoc(collection(db, 'leaveApplications'), {
+          ...data,
+          userId:    userProfile?.uid  || null,
+          status:    'pending',
+          submittedAt: serverTimestamp(),
+        })
+      } catch (e) {
+        console.error('Failed to save leave application:', e)
+      }
+    }
+
     const prev = document.title
     document.title = `NCC TCET — ${config.label}`
     setTimeout(() => {

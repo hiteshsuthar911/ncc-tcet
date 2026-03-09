@@ -16,6 +16,7 @@ import AdminAttendance from './pages/admin/AdminAttendance'
 import AdminApplications from './pages/admin/AdminApplications'
 import AdminDeclarations from './pages/admin/AdminDeclarations'
 import AdminBulkImport from './pages/admin/AdminBulkImport'
+import AdminLeaveApplications from './pages/admin/AdminLeaveApplications'
 import CadetProfile from './pages/CadetProfile'
 import MyRegistrations from './pages/MyRegistrations'
 import InstallPrompt from './components/InstallPrompt'
@@ -161,6 +162,7 @@ export default function App() {
         <Route path="attendance" element={<AdminAttendance />} />
         <Route path="applications" element={<AdminApplications />} />
         <Route path="declarations" element={<AdminDeclarations />} />
+        <Route path="leave-applications" element={<AdminLeaveApplications />} />
         <Route path="bulk-import" element={<AdminBulkImport />} />
       </Route>
 
