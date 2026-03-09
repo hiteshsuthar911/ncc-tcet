@@ -14,6 +14,7 @@ import {
   UserPlus,
   FileText,
   Upload,
+  ShieldPlus,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import toast from 'react-hot-toast'
@@ -28,6 +29,7 @@ const ADMIN_NAV = [
   { to: '/admin/cadets', label: 'Cadets', icon: Users },
   { to: '/admin/attendance', label: 'Attendance', icon: ClipboardCheck },
   { to: '/admin/bulk-import', label: 'Bulk Import', icon: Upload },
+  { to: '/admin/add-admin', label: 'Add Admin', icon: ShieldPlus },
 ]
 
 export default function AdminLayout() {

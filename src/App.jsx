@@ -26,6 +26,8 @@ import DeclarationForm from './pages/DeclarationForm'
 import Training from './pages/Training'
 import Achievements from './pages/Achievements'
 import Forms from './pages/Forms'
+import Setup from './pages/Setup'
+import AdminAddAdmin from './pages/admin/AdminAddAdmin'
 
 // Public layout wrapper (with navbar + footer)
 function PublicLayout({ children }) {
@@ -75,6 +77,7 @@ export default function App() {
           </PublicLayout>
         }
       />
+      <Route path="/setup" element={<Setup />} />
       <Route
         path="/join"
         element={
@@ -164,6 +167,7 @@ export default function App() {
         <Route path="declarations" element={<AdminDeclarations />} />
         <Route path="leave-applications" element={<AdminLeaveApplications />} />
         <Route path="bulk-import" element={<AdminBulkImport />} />
+        <Route path="add-admin" element={<AdminAddAdmin />} />
       </Route>
 
       {/* 404 */}
