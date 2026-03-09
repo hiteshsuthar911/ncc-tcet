@@ -7,6 +7,9 @@ import {
   where,
   orderBy,
   limit,
+  deleteDoc,
+  doc,
+  writeBatch,
 } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 import {
@@ -18,7 +21,11 @@ import {
   Clock,
   UserPlus,
   FileText,
+  Trash2,
+  AlertTriangle,
+  X,
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -34,6 +41,9 @@ export default function AdminDashboard() {
   })
   const [recentRegs, setRecentRegs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showClearModal, setShowClearModal] = useState(false)
+  const [confirmText, setConfirmText] = useState('')
+  const [clearing, setClearing] = useState(false)
 
   useEffect(() => {
     async function fetchStats() {
@@ -78,6 +88,44 @@ export default function AdminDashboard() {
     }
     fetchStats()
   }, [])
+
+  async function clearAllData() {
+    setClearing(true)
+    const COLLECTIONS = [
+      'events', 'registrations', 'users',
+      'joinApplications', 'declarations', 'leaveApplications', 'attendance',
+    ]
+    try {
+      for (const col of COLLECTIONS) {
+        const snap = await getDocs(collection(db, col))
+        // Firestore writeBatch max 500 ops
+        const chunks = []
+        for (let i = 0; i < snap.docs.length; i += 400) {
+          chunks.push(snap.docs.slice(i, i + 400))
+        }
+        for (const chunk of chunks) {
+          const batch = writeBatch(db)
+          chunk.forEach(d => batch.delete(doc(db, col, d.id)))
+          await batch.commit()
+        }
+      }
+      toast.success('All data cleared successfully')
+      setShowClearModal(false)
+      setConfirmText('')
+      // Reset stats
+      setStats({
+        totalEvents: 0, activeEvents: 0,
+        totalRegistrations: 0, pendingRegistrations: 0,
+        totalCadets: 0, totalApplications: 0,
+        pendingApplications: 0, totalDeclarations: 0, pendingDeclarations: 0,
+      })
+      setRecentRegs([])
+    } catch (e) {
+      toast.error('Failed to clear data: ' + e.message)
+    } finally {
+      setClearing(false)
+    }
+  }
 
   const STAT_CARDS = [
     { label: 'Total Events', value: stats.totalEvents, sub: `${stats.activeEvents} Active`, icon: Calendar, color: 'text-gold-400' },
@@ -192,6 +240,80 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Danger Zone */}
+      <div className="border border-red-900 bg-red-950/20 p-6">
+        <h3 className="font-heading text-sm text-red-400 uppercase tracking-widest mb-1 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4" /> Danger Zone
+        </h3>
+        <p className="text-army-500 font-body text-xs mb-4">
+          Permanently delete all data from every collection — events, registrations, cadets, applications, declarations, leave applications, and attendance. This action cannot be undone.
+        </p>
+        <button
+          onClick={() => { setShowClearModal(true); setConfirmText('') }}
+          className="flex items-center gap-2 px-4 py-2 bg-red-900/40 border border-red-700 text-red-300 font-heading text-xs uppercase tracking-widest hover:bg-red-800/60 hover:text-white transition-all"
+        >
+          <Trash2 className="w-4 h-4" /> Clear All Data
+        </button>
+      </div>
+
+      {/* Confirm Modal */}
+      {showClearModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80" onClick={() => !clearing && setShowClearModal(false)} />
+          <div className="relative w-full max-w-md bg-military-darker border border-red-800 shadow-2xl">
+            <div className="absolute top-0 left-0 w-full h-0.5 bg-red-600" />
+            <div className="flex items-center justify-between px-6 py-4 border-b border-red-900">
+              <h3 className="font-heading text-base text-red-400 uppercase tracking-widest flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" /> Confirm Clear All Data
+              </h3>
+              {!clearing && (
+                <button onClick={() => setShowClearModal(false)} className="text-army-500 hover:text-white transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-army-300 font-body text-sm leading-relaxed">
+                This will permanently erase <strong className="text-white">all</strong> records from:
+              </p>
+              <ul className="text-red-400 font-body text-xs space-y-1 list-disc list-inside">
+                {['Events', 'Registrations', 'Cadets (users)', 'Join Applications', 'Declarations', 'Leave Applications', 'Attendance'].map(c => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+              <p className="text-army-400 font-body text-xs">
+                Type <strong className="text-white">DELETE ALL</strong> to confirm:
+              </p>
+              <input
+                type="text"
+                value={confirmText}
+                onChange={e => setConfirmText(e.target.value)}
+                placeholder="DELETE ALL"
+                disabled={clearing}
+                className="w-full px-3 py-2 bg-black border border-red-800 text-white font-mono text-sm focus:outline-none focus:border-red-500 placeholder-army-700 disabled:opacity-50"
+              />
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowClearModal(false)}
+                  disabled={clearing}
+                  className="flex-1 px-4 py-2 border border-army-700 text-army-400 font-heading text-xs uppercase tracking-widest hover:text-white hover:border-army-500 transition-all disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={clearAllData}
+                  disabled={confirmText !== 'DELETE ALL' || clearing}
+                  className="flex-1 px-4 py-2 bg-red-800 border border-red-700 text-white font-heading text-xs uppercase tracking-widest hover:bg-red-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {clearing ? 'Clearing…' : 'Clear All Data'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
