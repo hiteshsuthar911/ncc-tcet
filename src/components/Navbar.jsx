@@ -49,7 +49,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <img
-              src="/ncc-logo.svg"
+              src={`${import.meta.env.BASE_URL}ncc-logo.svg`}
               alt="NCC Logo"
               className="h-14 w-auto object-contain drop-shadow-md flex-shrink-0"
               style={{ maxHeight: '56px' }}

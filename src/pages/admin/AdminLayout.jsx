@@ -55,7 +55,7 @@ export default function AdminLayout() {
         {/* Logo */}
         <div className="flex items-center gap-3 p-5 border-b border-army-800">
           <img
-            src="/ncc-logo.svg"
+            src={`${import.meta.env.BASE_URL}ncc-logo.svg`}
             alt="NCC Logo"
             className="h-11 w-auto object-contain flex-shrink-0"
           />

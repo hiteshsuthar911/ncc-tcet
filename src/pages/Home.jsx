@@ -74,11 +74,8 @@ export default function Home() {
     <div className="min-h-screen">
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Parade photo background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/parade.jpg')" }}
-        />
+        {/* Background base layer */}
+        <div className="absolute inset-0 bg-military-dark" />
         {/* Dark gradient overlay so text stays readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-military-dark/95" />
         {/* Subtle camo texture on top */}
