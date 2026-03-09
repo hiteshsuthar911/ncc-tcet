@@ -24,6 +24,7 @@ import Rules from './pages/Rules'
 import DeclarationForm from './pages/DeclarationForm'
 import Training from './pages/Training'
 import Achievements from './pages/Achievements'
+import Forms from './pages/Forms'
 
 // Public layout wrapper (with navbar + footer)
 function PublicLayout({ children }) {
@@ -94,6 +95,14 @@ export default function App() {
         element={
           <PublicLayout>
             <DeclarationForm />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/forms"
+        element={
+          <PublicLayout>
+            <Forms />
           </PublicLayout>
         }
       />

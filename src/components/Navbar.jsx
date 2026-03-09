@@ -34,6 +34,7 @@ export default function Navbar() {
     { to: '/join', label: 'Join NCC' },
     { to: '/training', label: 'Training' },
     { to: '/achievements', label: 'Achievements' },
+    { to: '/forms', label: 'Forms' },
   ]
 
   return (
