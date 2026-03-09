@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Shield, Eye, EyeOff, Lock, Hash, AlertTriangle } from 'lucide-react'
+import { Shield, Eye, EyeOff, Lock, Hash, AlertTriangle, ShieldCheck } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import toast from 'react-hot-toast'
 
 export default function Login() {
@@ -22,9 +24,21 @@ export default function Login() {
   async function onSubmit({ regimentalNo, password }) {
     setLoading(true)
     try {
-      await login(regimentalNo.trim(), password)
-      toast.success('Welcome back, Cadet!')
-      navigate(from, { replace: true })
+      const credential = await login(regimentalNo.trim(), password)
+      // Fetch role from Firestore to redirect correctly
+      let role = 'cadet'
+      try {
+        const profileSnap = await getDoc(doc(db, 'users', credential.user.uid))
+        if (profileSnap.exists()) role = profileSnap.data()?.role || 'cadet'
+      } catch { /* profile may not exist */ }
+
+      if (role === 'admin') {
+        toast.success('Welcome, Admin!', { icon: '🛡️' })
+        navigate('/admin', { replace: true })
+      } else {
+        toast.success('Welcome back, Cadet!')
+        navigate(from === '/admin' ? '/' : from, { replace: true })
+      }
     } catch (err) {
       let msg = 'Login failed. Please try again.'
       const code = err.code || ''
@@ -63,7 +77,7 @@ export default function Login() {
           <h1 className="font-heading text-3xl text-white uppercase tracking-widest">
             NCC TCET
           </h1>
-          <p className="text-army-400 font-body text-sm mt-1">Cadet Portal Login</p>
+          <p className="text-army-400 font-body text-sm mt-1">Cadet &amp; Admin Portal</p>
         </div>
 
         {/* Login Form */}
@@ -165,9 +179,15 @@ export default function Login() {
               </button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-army-800">
-              <p className="text-army-500 text-xs font-body text-center leading-relaxed">
-                Access is restricted to registered NCC cadets of TCET. Contact your ANO for credentials.
+            <div className="mt-6 pt-6 border-t border-army-800 space-y-3">
+              <div className="flex items-start gap-2 bg-gold-950/30 border border-gold-900/50 p-3">
+                <ShieldCheck className="w-4 h-4 text-gold-500 mt-0.5 shrink-0" />
+                <p className="text-army-400 text-xs font-body leading-relaxed">
+                  <strong className="text-gold-400">Admins</strong> are automatically redirected to the Admin Dashboard upon login.
+                </p>
+              </div>
+              <p className="text-army-600 text-xs font-body text-center">
+                Access is restricted to registered NCC cadets and staff of TCET.
               </p>
             </div>
           </div>
@@ -182,16 +202,7 @@ export default function Login() {
           </Link>
         </div>
 
-        {/* Info Banner */}
-        <div className="mt-6 border border-army-700 bg-army-950/50 p-4">
-          <p className="text-army-400 text-xs font-body text-center">
-            <strong className="text-gold-500">Admin?</strong> Use your admin credentials to access the{' '}
-            <Link to="/login" className="text-gold-500 hover:underline">
-              Admin Portal
-            </Link>
-            .
-          </p>
-        </div>
+
       </div>
     </div>
   )
