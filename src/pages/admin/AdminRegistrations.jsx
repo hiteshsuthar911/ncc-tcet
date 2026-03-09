@@ -193,22 +193,22 @@ export default function AdminRegistrations() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <p className="section-subtitle">Admin</p>
-          <h2 className="font-heading text-2xl text-white uppercase tracking-widest">Registrations</h2>
+          <h2 className="font-heading text-xl sm:text-2xl text-white uppercase tracking-widest">Registrations</h2>
           <div className="h-px w-16 bg-gold-500 mt-2" />
         </div>
         <div className="flex gap-2">
           <button
             onClick={printTable}
-            className="btn-secondary text-sm flex items-center gap-2"
+            className="btn-secondary text-xs sm:text-sm flex items-center gap-1.5 px-3 py-1.5"
           >
             <Printer className="w-4 h-4" /> Print
           </button>
           <button
             onClick={exportCSV}
-            className="btn-secondary text-sm flex items-center gap-2"
+            className="btn-secondary text-xs sm:text-sm flex items-center gap-1.5 px-3 py-1.5"
           >
             <Download className="w-4 h-4" /> Export CSV
           </button>
@@ -216,8 +216,8 @@ export default function AdminRegistrations() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-3 mb-6">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
           <input
             type="text"
@@ -227,40 +227,42 @@ export default function AdminRegistrations() {
             className="input-field pl-10"
           />
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="select-field sm:w-40"
-        >
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s} className="capitalize">
-              {s === 'all' ? 'All Status' : s.charAt(0).toUpperCase() + s.slice(1)}
-            </option>
-          ))}
-        </select>
-        <select
-          value={eventFilter}
-          onChange={(e) => setEventFilter(e.target.value)}
-          className="select-field sm:w-48"
-        >
-          <option value="">All Events</option>
-          {events.map((e) => (
-            <option key={e.id} value={e.id}>{e.title}</option>
-          ))}
-        </select>
+        <div className="flex gap-2">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="select-field flex-1"
+          >
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s} className="capitalize">
+                {s === 'all' ? 'All Status' : s.charAt(0).toUpperCase() + s.slice(1)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={eventFilter}
+            onChange={(e) => setEventFilter(e.target.value)}
+            className="select-field flex-1"
+          >
+            <option value="">All Events</option>
+            {events.map((e) => (
+              <option key={e.id} value={e.id}>{e.title}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Stats row */}
-      <div className="flex gap-4 mb-6 flex-wrap">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
         {[
           { label: 'Total', count: registrations.length, color: 'text-white' },
           { label: 'Pending', count: registrations.filter((r) => r.status === 'pending' || !r.status).length, color: 'text-yellow-400' },
           { label: 'Approved', count: registrations.filter((r) => r.status === 'approved').length, color: 'text-green-400' },
           { label: 'Rejected', count: registrations.filter((r) => r.status === 'rejected').length, color: 'text-red-400' },
         ].map(({ label, count, color }) => (
-          <div key={label} className="flex items-center gap-2 border border-army-800 px-4 py-2 bg-army-950">
-            <span className={`font-heading text-lg ${color}`}>{loading ? '—' : count}</span>
-            <span className="text-army-500 text-xs font-body uppercase tracking-wider">{label}</span>
+          <div key={label} className="flex flex-col items-center justify-center border border-army-800 px-3 py-3 bg-army-950">
+            <span className={`font-heading text-2xl ${color}`}>{loading ? '—' : count}</span>
+            <span className="text-army-500 text-xs font-body uppercase tracking-wider mt-0.5">{label}</span>
           </div>
         ))}
       </div>
@@ -278,88 +280,90 @@ export default function AdminRegistrations() {
           <p className="text-army-400 font-heading uppercase tracking-wider">No registrations found.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b border-army-700">
-                {['Cadet', 'Event', 'Date', 'Status', 'Actions'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-heading text-xs text-army-400 uppercase tracking-widest">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((reg) => (
-                <tr
-                  key={reg.id}
-                  className="border-b border-army-900 hover:bg-army-900/50 transition-colors"
-                >
-                  <td className="px-4 py-4">
-                    <p className="font-heading text-sm text-white uppercase tracking-wide">
-                      {reg.name || '—'}
-                    </p>
-                    <p className="text-gold-600 text-xs font-body">{reg.regimentalNo}</p>
-                  </td>
-                  <td className="px-4 py-4 text-army-300 text-sm font-body">
-                    <span className="line-clamp-1">{reg.eventTitle}</span>
-                  </td>
-                  <td className="px-4 py-4 text-army-400 text-xs font-body">
-                    {formatTs(reg.submittedAt)}
-                  </td>
-                  <td className="px-4 py-4">
-                    <span
-                      className={`font-heading text-xs uppercase tracking-wider border px-2 py-1 ${statusBadge(reg.status || 'pending')}`}
-                    >
-                      {reg.status || 'pending'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setDetailReg(reg)}
-                        className="text-army-400 hover:text-gold-400 transition-colors p-1"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      {(reg.status === 'pending' || !reg.status) && (
-                        <>
-                          <button
-                            onClick={() => updateStatus(reg.id, 'approved')}
-                            disabled={updatingId === reg.id}
-                            className="text-army-600 hover:text-green-400 transition-colors p-1 disabled:opacity-50"
-                            title="Approve"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => updateStatus(reg.id, 'rejected')}
-                            disabled={updatingId === reg.id}
-                            className="text-army-600 hover:text-red-400 transition-colors p-1 disabled:opacity-50"
-                            title="Reject"
-                          >
-                            <XCircle className="w-4 h-4" />
-                          </button>
-                        </>
-                      )}
-                      {reg.status === 'approved' && (
-                        <button
-                          onClick={() => updateStatus(reg.id, 'rejected')}
-                          disabled={updatingId === reg.id}
-                          className="text-green-600 hover:text-red-400 transition-colors p-1 disabled:opacity-50 text-xs font-body"
-                          title="Revoke"
-                        >
-                          <XCircle className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
+        <>
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b border-army-700">
+                  {['Cadet', 'Event', 'Date', 'Status', 'Actions'].map((h) => (
+                    <th key={h} className="text-left px-4 py-3 font-heading text-xs text-army-400 uppercase tracking-widest">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filtered.map((reg) => (
+                  <tr key={reg.id} className="border-b border-army-900 hover:bg-army-900/50 transition-colors">
+                    <td className="px-4 py-4">
+                      <p className="font-heading text-sm text-white uppercase tracking-wide">{reg.name || '—'}</p>
+                      <p className="text-gold-600 text-xs font-body">{reg.regimentalNo}</p>
+                    </td>
+                    <td className="px-4 py-4 text-army-300 text-sm font-body">
+                      <span className="line-clamp-1">{reg.eventTitle}</span>
+                    </td>
+                    <td className="px-4 py-4 text-army-400 text-xs font-body">{formatTs(reg.submittedAt)}</td>
+                    <td className="px-4 py-4">
+                      <span className={`font-heading text-xs uppercase tracking-wider border px-2 py-1 ${statusBadge(reg.status || 'pending')}`}>
+                        {reg.status || 'pending'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => setDetailReg(reg)} className="text-army-400 hover:text-gold-400 transition-colors p-1" title="View Details"><Eye className="w-4 h-4" /></button>
+                        {(reg.status === 'pending' || !reg.status) && (<>
+                          <button onClick={() => updateStatus(reg.id, 'approved')} disabled={updatingId === reg.id} className="text-army-600 hover:text-green-400 transition-colors p-1 disabled:opacity-50" title="Approve"><CheckCircle className="w-4 h-4" /></button>
+                          <button onClick={() => updateStatus(reg.id, 'rejected')} disabled={updatingId === reg.id} className="text-army-600 hover:text-red-400 transition-colors p-1 disabled:opacity-50" title="Reject"><XCircle className="w-4 h-4" /></button>
+                        </>)}
+                        {reg.status === 'approved' && (
+                          <button onClick={() => updateStatus(reg.id, 'rejected')} disabled={updatingId === reg.id} className="text-green-600 hover:text-red-400 transition-colors p-1 disabled:opacity-50" title="Revoke"><XCircle className="w-4 h-4" /></button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="sm:hidden space-y-3">
+            {filtered.map((reg) => (
+              <div key={reg.id} className="border border-army-800 bg-military-darker p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-heading text-sm text-white uppercase tracking-wide">{reg.name || '—'}</p>
+                    <p className="text-gold-600 text-xs font-body mt-0.5">{reg.regimentalNo}</p>
+                  </div>
+                  <span className={`font-heading text-xs uppercase tracking-wider border px-2 py-1 shrink-0 ${statusBadge(reg.status || 'pending')}`}>
+                    {reg.status || 'pending'}
+                  </span>
+                </div>
+                <p className="text-army-300 text-xs font-body border-t border-army-900 pt-2">{reg.eventTitle}</p>
+                <p className="text-army-600 text-xs font-body">{formatTs(reg.submittedAt)}</p>
+                <div className="flex gap-2 border-t border-army-900 pt-2">
+                  <button onClick={() => setDetailReg(reg)} className="flex-1 flex items-center justify-center gap-1 text-army-400 hover:text-gold-400 border border-army-800 py-1.5 text-xs font-heading uppercase tracking-wider transition-colors">
+                    <Eye className="w-3.5 h-3.5" /> View
+                  </button>
+                  {(reg.status === 'pending' || !reg.status) && (<>
+                    <button onClick={() => updateStatus(reg.id, 'approved')} disabled={updatingId === reg.id} className="flex-1 flex items-center justify-center gap-1 text-green-400 border border-green-900 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-green-900/30 transition-colors disabled:opacity-50">
+                      <CheckCircle className="w-3.5 h-3.5" /> Approve
+                    </button>
+                    <button onClick={() => updateStatus(reg.id, 'rejected')} disabled={updatingId === reg.id} className="flex-1 flex items-center justify-center gap-1 text-red-400 border border-red-900 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-red-900/30 transition-colors disabled:opacity-50">
+                      <XCircle className="w-3.5 h-3.5" /> Reject
+                    </button>
+                  </>)}
+                  {reg.status === 'approved' && (
+                    <button onClick={() => updateStatus(reg.id, 'rejected')} disabled={updatingId === reg.id} className="flex-1 flex items-center justify-center gap-1 text-red-400 border border-red-900 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-red-900/30 transition-colors disabled:opacity-50">
+                      <XCircle className="w-3.5 h-3.5" /> Revoke
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Detail Modal */}
