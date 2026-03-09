@@ -976,9 +976,20 @@ export default function Forms() {
         )}
       </div>
 
-      {/* ── Hidden print area ── */}
+      {/* ── Hidden print area (visually hidden on screen, visible during print via CSS) ── */}
       {printData && PrintComp && (
-        <div className="no-print" aria-hidden="true">
+        <div
+          style={{
+            visibility: 'hidden',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            pointerEvents: 'none',
+            zIndex: -1,
+          }}
+          aria-hidden="true"
+        >
           <PrintComp d={printData} />
         </div>
       )}
