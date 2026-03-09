@@ -154,6 +154,9 @@
   background: #4a6330;
 }
 
+/* Hide print-only areas on screen */
+.pf-hidden-wrapper { display: none; }
+
 /* ── Print styles: formal A4 official receipt & declaration form ── */
 @media print {
   @page {
@@ -594,6 +597,7 @@
   }
 
   /* ════ Official NCC Forms (Forms.jsx) — pf-* classes ════ */
+  .pf-hidden-wrapper { display: block !important; }
   #print-form, #print-form * { visibility: visible !important; }
   #print-form {
     display: block !important;

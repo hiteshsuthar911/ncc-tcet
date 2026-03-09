@@ -976,20 +976,9 @@ export default function Forms() {
         )}
       </div>
 
-      {/* ── Hidden print area (visually hidden on screen, visible during print via CSS) ── */}
+      {/* ── Print area: hidden on screen via CSS, shown only during window.print() ── */}
       {printData && PrintComp && (
-        <div
-          style={{
-            visibility: 'hidden',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            pointerEvents: 'none',
-            zIndex: -1,
-          }}
-          aria-hidden="true"
-        >
+        <div className="pf-hidden-wrapper" aria-hidden="true">
           <PrintComp d={printData} />
         </div>
       )}
