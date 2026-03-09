@@ -10,23 +10,29 @@ import { useForm } from 'react-hook-form'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  deleteUser,
 } from 'firebase/auth'
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../firebase/config'
-import { Shield, Eye, EyeOff, AlertTriangle, CheckCircle, Lock } from 'lucide-react'
+import { Shield, Eye, EyeOff, AlertTriangle, CheckCircle, Lock, Trash2, UserX } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const SETUP_KEY = 'NCC-SETUP-2026'
 
 export default function Setup() {
   const [showPassword, setShowPassword] = useState(false)
+  const [showDelPassword, setShowDelPassword] = useState(false)
+  const [tab, setTab] = useState('create') // 'create' | 'delete'
   const [step, setStep] = useState('key') // 'key' | 'form' | 'done'
   const [keyInput, setKeyInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [delLoading, setDelLoading] = useState(false)
   const [createdAdmin, setCreatedAdmin] = useState(null)
+  const [deletedId, setDeletedId] = useState(null)
   const navigate = useNavigate()
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm()
+  const delForm = useForm()
 
   function checkKey(e) {
     e.preventDefault()
@@ -34,6 +40,32 @@ export default function Setup() {
       setStep('form')
     } else {
       toast.error('Invalid setup key')
+    }
+  }
+
+  async function handleDelete(data) {
+    setDelLoading(true)
+    const email = `${data.regimentalNo.toLowerCase().trim()}@ncc-tcet.in`
+    try {
+      // Sign in as that user then delete them
+      const credential = await signInWithEmailAndPassword(auth, email, data.password)
+      const uid = credential.user.uid
+      // Delete Firestore doc
+      await deleteDoc(doc(db, 'users', uid))
+      // Delete Firebase Auth user
+      await deleteUser(credential.user)
+      setDeletedId(data.regimentalNo.trim().toUpperCase())
+      toast.success(`User "${data.regimentalNo.toUpperCase()}" deleted`)
+      delForm.reset()
+    } catch (err) {
+      let msg = 'Failed to delete user.'
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+        msg = 'Incorrect Regimental No. or password.'
+      }
+      toast.error(msg, { duration: 5000 })
+      console.error(err)
+    } finally {
+      setDelLoading(false)
     }
   }
 
@@ -92,13 +124,30 @@ export default function Setup() {
             <Shield className="w-8 h-8 text-gold-400" />
           </div>
           <h1 className="font-heading text-2xl text-white uppercase tracking-widest">Admin Setup</h1>
-          <p className="text-army-400 font-body text-sm mt-1">NCC TCET — First-time admin creation</p>
+          <p className="text-army-400 font-body text-sm mt-1">NCC TCET — Admin management utility</p>
         </div>
 
-        <div className="card-army relative overflow-hidden">
+        {/* Tab switcher */}
+        <div className="flex mb-0 border border-army-700">
+          <button
+            onClick={() => setTab('create')}
+            className={`flex-1 py-2 font-heading text-xs uppercase tracking-widest transition-colors ${tab === 'create' ? 'bg-gold-900/40 text-gold-400 border-b-2 border-gold-500' : 'text-army-500 hover:text-white'}`}
+          >
+            Create Admin
+          </button>
+          <button
+            onClick={() => setTab('delete')}
+            className={`flex-1 py-2 font-heading text-xs uppercase tracking-widest transition-colors ${tab === 'delete' ? 'bg-red-900/30 text-red-400 border-b-2 border-red-600' : 'text-army-500 hover:text-white'}`}
+          >
+            Remove User
+          </button>
+        </div>
+
+        <div className="card-army relative overflow-hidden" style={{ borderTop: 'none' }}>
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
 
           {/* Step 1: Setup Key */}
+          {tab === 'create' && (<>
           {step === 'key' && (
             <div className="p-8">
               <h2 className="font-heading text-sm text-white uppercase tracking-widest mb-1 flex items-center gap-2">
@@ -236,6 +285,70 @@ export default function Setup() {
               >
                 <Shield className="w-4 h-4" /> Go to Login
               </button>
+            </div>
+          )}
+          </>)}
+
+          {/* ── Remove User Tab ── */}
+          {tab === 'delete' && (
+            <div className="p-8">
+              <h2 className="font-heading text-sm text-red-400 uppercase tracking-widest mb-1 flex items-center gap-2">
+                <UserX className="w-4 h-4" /> Remove User
+              </h2>
+              <p className="text-army-500 font-body text-xs mb-6">
+                Sign in as the user to permanently delete their account and Firestore profile.
+              </p>
+
+              {deletedId && (
+                <div className="mb-4 border border-green-800 bg-green-950/30 p-3 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
+                  <p className="text-green-300 font-body text-xs">User <strong>{deletedId}</strong> deleted successfully.</p>
+                </div>
+              )}
+
+              <form onSubmit={delForm.handleSubmit(handleDelete)} noValidate className="space-y-4">
+                <div>
+                  <label className="label-field">Regimental No. / Admin ID <span className="text-gold-500">*</span></label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ADMIN001"
+                    {...delForm.register('regimentalNo', { required: 'Required' })}
+                    className={`input-field ${delForm.formState.errors.regimentalNo ? 'border-red-700' : ''}`}
+                  />
+                </div>
+                <div>
+                  <label className="label-field">Password <span className="text-gold-500">*</span></label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
+                    <input
+                      type={showDelPassword ? 'text' : 'password'}
+                      placeholder="Current password of that account"
+                      {...delForm.register('password', { required: 'Required' })}
+                      className={`input-field pl-10 pr-10 ${delForm.formState.errors.password ? 'border-red-700' : ''}`}
+                    />
+                    <button type="button" onClick={() => setShowDelPassword(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-army-500 hover:text-army-300 transition-colors">
+                      {showDelPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={delLoading}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-900/50 border border-red-700 text-red-300 font-heading text-xs uppercase tracking-widest hover:bg-red-800 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {delLoading ? (
+                    <><svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" /></svg> Deleting…</>
+                  ) : (
+                    <><Trash2 className="w-4 h-4" /> Delete This User</>
+                  )}
+                </button>
+              </form>
+              <div className="mt-6 pt-4 border-t border-army-800 text-center">
+                <Link to="/login" className="text-army-500 hover:text-gold-400 text-xs font-body transition-colors">
+                  ← Back to Login
+                </Link>
+              </div>
             </div>
           )}
         </div>
