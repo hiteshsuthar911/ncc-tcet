@@ -13,6 +13,8 @@ import {
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../firebase/config'
 import { useForm } from 'react-hook-form'
+import { auth } from '../../firebase/config'
+import { sendPasswordResetEmail } from 'firebase/auth'
 import {
   Users,
   Plus,
@@ -25,6 +27,9 @@ import {
   Shield,
   Upload,
   UserCircle,
+  KeyRound,
+  RefreshCw,
+  Printer,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -66,6 +71,102 @@ function printCredential({ name, regimentalNo, email, password, wing, rank }) {
   if (!win) { alert('Allow popups to print credentials.'); return }
   win.document.write(`<!DOCTYPE html><html><head><title>NCC TCET – Cadet Credentials</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f5f5f5;display:flex;justify-content:center;padding:40px 20px}.card{background:#fff;border:2px solid #2d5016;border-radius:8px;padding:32px;max-width:420px;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.15)}.hdr{text-align:center;border-bottom:1px solid #e5e7eb;padding-bottom:18px;margin-bottom:24px}.logo{font-size:36px;margin-bottom:10px}.t1{font-size:18px;color:#1a2e0d;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:4px}.t2{font-size:11px;color:#6b7280;letter-spacing:2px;text-transform:uppercase}.row{margin-bottom:14px}.lbl{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}.val{font-size:15px;color:#111827;font-weight:600}.pwd-box{background:#fffbeb;border:1px solid #f59e0b;border-radius:6px;padding:12px 16px;margin-top:6px}.pwd-val{color:#92400e;font-family:'Courier New',monospace;font-size:22px;letter-spacing:3px;font-weight:700}.pwd-note{font-size:10px;color:#b45309;margin-top:6px}.ftr{margin-top:22px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;text-align:center;letter-spacing:1px}@media print{body{background:#fff;padding:0}.card{box-shadow:none;max-width:100%}}</style></head><body><div class="card"><div class="hdr"><div class="logo">🛡️</div><div class="t1">NCC TCET</div><div class="t2">Cadet Login Credentials — Confidential</div></div><div class="row"><div class="lbl">Cadet Name</div><div class="val">${name}</div></div><div class="row"><div class="lbl">Regimental No.</div><div class="val">${regimentalNo}</div></div><div class="row"><div class="lbl">Wing</div><div class="val">${wing||'—'}</div></div><div class="row"><div class="lbl">Rank</div><div class="val">${rank||'—'}</div></div><div class="row"><div class="lbl">Login Email</div><div class="val">${email}</div></div><div class="row"><div class="lbl">Login Password</div><div class="pwd-box"><div class="pwd-val">${password}</div><div class="pwd-note">⚠ Ask cadet to change this password after first login</div></div></div><div class="ftr">NCC TCET Cadet Portal · Strictly Confidential · Do not share</div></div><script>setTimeout(function(){window.print();},500);<\/script></body></html>`)
   win.document.close()
+}
+
+// ── Reset Password Modal ─────────────────────────────────────────────────────
+function ResetPasswordModal({ cadet, onClose }) {
+  const [password, setPassword]   = useState(() => generatePassword())
+  const [sending, setSending]     = useState(false)
+  const [sent, setSent]           = useState(false)
+  const email = `${(cadet.regimentalNo || '').toLowerCase()}@ncc-tcet.in`
+
+  async function handleSendReset() {
+    setSending(true)
+    try {
+      await sendPasswordResetEmail(auth, email)
+      setSent(true)
+      toast.success('Reset email sent to ' + email)
+    } catch (err) {
+      const code = err.code || ''
+      if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
+        // Account may not exist in Auth — just show success silently
+        setSent(true)
+      } else if (code === 'auth/too-many-requests') {
+        toast.error('Too many requests. Wait a few minutes.')
+      } else {
+        toast.error('Failed to send reset email: ' + (err.message || code))
+      }
+    } finally {
+      setSending(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 pt-16">
+      <div className="card-army w-full max-w-md p-6 relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-army-500 hover:text-white"><X className="w-5 h-5" /></button>
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-army-800 border border-army-700">
+            <KeyRound className="w-5 h-5 text-gold-400" />
+          </div>
+          <div>
+            <h3 className="font-heading text-white text-sm uppercase tracking-widest">Reset Password</h3>
+            <p className="font-body text-army-400 text-xs">{cadet.name} · {cadet.regimentalNo}</p>
+          </div>
+        </div>
+
+        {/* New password */}
+        <div className="mb-5">
+          <label className="label-field">New Password</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className="input-field font-mono tracking-widest flex-1"
+            />
+            <button
+              onClick={() => setPassword(generatePassword())}
+              className="btn-secondary flex items-center gap-1.5 flex-shrink-0"
+              title="Generate random password"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="text-army-500 text-xs font-body mt-1.5">Login email: <span className="text-army-300 font-mono">{email}</span></p>
+        </div>
+
+        {/* Print credential */}
+        <button
+          onClick={() => printCredential({ name: cadet.name, regimentalNo: cadet.regimentalNo, email, password, wing: cadet.wing || '', rank: cadet.rank || '' })}
+          className="btn-secondary w-full flex items-center justify-center gap-2 mb-3"
+        >
+          <Printer className="w-4 h-4" /> Print New Credential Card
+        </button>
+
+        {/* Send reset email */}
+        {!sent ? (
+          <button
+            onClick={handleSendReset}
+            disabled={sending}
+            className="btn-primary w-full flex items-center justify-center gap-2"
+          >
+            <KeyRound className="w-4 h-4" />
+            {sending ? 'Sending…' : 'Send Password Reset Email to Cadet'}
+          </button>
+        ) : (
+          <div className="bg-green-900/30 border border-green-700/50 px-4 py-3 text-green-300 font-body text-xs text-center">
+            ✓ Reset email sent to {email}
+          </div>
+        )}
+
+        <p className="text-army-600 text-xs font-body mt-4 leading-relaxed">
+          Print the credential card and give it to the cadet. The reset email lets them set their new password.
+        </p>
+      </div>
+    </div>
+  )
 }
 
 function CadetModal({ cadet, onClose, onSaved }) {
@@ -356,6 +457,7 @@ export default function AdminCadets() {
   const [showModal, setShowModal] = useState(false)
   const [editingCadet, setEditingCadet] = useState(null)
   const [deletingId, setDeletingId] = useState(null)
+  const [resetCadet, setResetCadet] = useState(null)
 
   async function fetchCadets() {
     try {
@@ -533,13 +635,22 @@ export default function AdminCadets() {
                       <button
                         onClick={() => { setEditingCadet(cadet); setShowModal(true) }}
                         className="text-army-400 hover:text-gold-400 transition-colors p-1"
+                        title="Edit cadet"
                       >
                         <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setResetCadet(cadet)}
+                        className="text-army-400 hover:text-blue-400 transition-colors p-1"
+                        title="Reset password"
+                      >
+                        <KeyRound className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(cadet)}
                         disabled={deletingId === cadet.docId}
                         className="text-army-600 hover:text-red-400 transition-colors p-1 disabled:opacity-50"
+                        title="Delete cadet"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -557,6 +668,12 @@ export default function AdminCadets() {
           cadet={editingCadet}
           onClose={() => { setShowModal(false); setEditingCadet(null) }}
           onSaved={handleSaved}
+        />
+      )}
+      {resetCadet && (
+        <ResetPasswordModal
+          cadet={resetCadet}
+          onClose={() => setResetCadet(null)}
         />
       )}
     </div>

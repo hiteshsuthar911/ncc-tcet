@@ -190,13 +190,8 @@ export default function Login() {
               <p className="text-gray-400 text-xs font-body text-center">
                 Access is restricted to registered NCC cadets and staff of TCET.
               </p>
-              <p className="text-center">
-                <Link
-                  to="/reset-password"
-                  className="text-gold-500 hover:text-gold-300 text-xs font-body transition-colors"
-                >
-                  Forgot password?
-                </Link>
+              <p className="text-center text-army-600 text-xs font-body">
+                Forgot password? Contact your unit administrator.
               </p>
             </div>
           </div>
