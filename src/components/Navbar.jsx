@@ -229,183 +229,118 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Mobile — Backdrop */}
       <div
-        aria-hidden={!isOpen}
-        className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        onClick={() => setIsOpen(false)}
+        className={`fixed inset-0 z-40 lg:hidden bg-black/60 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Mobile — Drawer Panel (fixed full-height, slides in from right) */}
+      <div
+        className={`fixed top-0 right-0 bottom-0 z-50 lg:hidden w-[min(300px,85vw)] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/60"
-          onClick={() => setIsOpen(false)}
-        />
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 flex-shrink-0">
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src={`${import.meta.env.BASE_URL}ncc-logo.svg`} alt="NCC" className="h-9 w-auto object-contain" />
+            <div>
+              <p className="font-heading text-xs tracking-[0.25em] text-gold-500 uppercase leading-none">NCC TCET</p>
+              <p className="font-body text-[10px] text-gray-400 leading-none mt-0.5">National Cadet Corps</p>
+            </div>
+          </Link>
+          <button onClick={() => setIsOpen(false)} aria-label="Close menu" className="p-2 -mr-1 text-gray-400 hover:text-gray-700">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-        {/* Drawer Panel — right-side slide-in */}
-        <div
-          className={`absolute top-0 right-0 h-full w-[min(300px,85vw)] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
-            isOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          {/* Drawer Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-            <Link to="/" className="flex items-center gap-2.5">
-              <img
-                src={`${import.meta.env.BASE_URL}ncc-logo.svg`}
-                alt="NCC Logo"
-                className="h-10 w-auto object-contain"
-              />
-              <div>
-                <p className="font-heading text-xs tracking-[0.25em] text-gold-500 uppercase leading-none">NCC TCET</p>
-                <p className="font-body text-[10px] text-gray-400 leading-none mt-0.5">National Cadet Corps</p>
-              </div>
-            </Link>
-            <button
-              onClick={() => setIsOpen(false)}
-              aria-label="Close menu"
-              className="p-2 -mr-1 text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+        {/* Scrollable links — min-h-0 is essential for flex-1 + overflow-y-auto to work */}
+        <div className="flex-1 min-h-0 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="py-2">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
+                className={({ isActive }) =>
+                  `block py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                    isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
 
-          {/* Scrollable Nav Content — iOS needs the style prop for touch scroll */}
-          <div
-            className="flex-1 overflow-y-auto"
-            style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}
-          >
-            <nav className="py-2">
-              {/* Main Links */}
-              {navLinks.map((link) => (
+            <div className="mt-2 pt-2 border-t border-gray-100">
+              <p className="px-5 pt-3 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">Explore</p>
+              {exploreLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}
-                  end={link.to === '/'}
                   className={({ isActive }) =>
-                    `flex items-center py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                      isActive
-                        ? 'text-army-700 border-army-600 bg-army-50'
-                        : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                    `flex items-center gap-2.5 py-3.5 px-5 pl-7 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                      isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-600 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
                     }`
                   }
                 >
-                  {link.label}
+                  <link.icon className="w-3.5 h-3.5 flex-shrink-0" /> {link.label}
                 </NavLink>
               ))}
+            </div>
 
-              {/* Explore Section */}
+            {isAdmin && (
               <div className="mt-2 pt-2 border-t border-gray-100">
-                <p className="px-5 pt-2 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">Explore</p>
-                {exploreLinks.map((link) => (
-                  <NavLink
-                    key={link.to}
-                    to={link.to}
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3 px-5 pl-7 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive
-                          ? 'text-army-700 border-army-600 bg-army-50'
-                          : 'text-gray-600 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                      }`
-                    }
-                  >
-                    <link.icon className="w-3.5 h-3.5 flex-shrink-0" />{link.label}
-                  </NavLink>
-                ))}
-              </div>
-
-              {/* Admin */}
-              {isAdmin && (
-                <div className="mt-2 pt-2 border-t border-gray-100">
-                  <NavLink
-                    to="/admin"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive
-                          ? 'text-army-700 border-army-600 bg-army-50'
-                          : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                      }`
-                    }
-                  >
-                    <Settings className="w-3.5 h-3.5 flex-shrink-0 mr-2" /> Admin Portal
-                  </NavLink>
-                </div>
-              )}
-
-              {/* Cadet Account Links */}
-              {currentUser && (
-                <div className="mt-2 pt-2 border-t border-gray-100">
-                  <p className="px-5 pt-2 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">My Account</p>
-                  <NavLink
-                    to="/dashboard"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive ? 'text-gold-700 border-gold-500 bg-amber-50' : 'text-gold-600 border-transparent bg-amber-50/50 hover:border-gold-400'
-                      }`
-                    }
-                  >
-                    <LayoutDashboard className="w-4 h-4 flex-shrink-0" /> My Dashboard
-                  </NavLink>
-                  <NavLink
-                    to="/profile"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                      }`
-                    }
-                  >
-                    <User className="w-4 h-4 flex-shrink-0" /> My Profile
-                  </NavLink>
-                  <NavLink
-                    to="/my-registrations"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                      }`
-                    }
-                  >
-                    <ClipboardList className="w-4 h-4 flex-shrink-0" /> My Registrations
-                  </NavLink>
-                  <NavLink
-                    to="/polls"
-                    className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
-                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                      }`
-                    }
-                  >
-                    <ClipboardList className="w-4 h-4 flex-shrink-0" /> Session Polls
-                  </NavLink>
-                </div>
-              )}
-
-              {/* Extra bottom spacer so last item isn't flush with footer */}
-              <div className="h-4" />
-            </nav>
-          </div>
-
-          {/* Drawer Footer — always visible at bottom */}
-          <div className="flex-shrink-0 px-5 py-4 border-t border-gray-200 bg-gray-50">
-            {currentUser ? (
-              <div>
-                <p className="font-heading text-xs text-army-700 uppercase tracking-widest truncate">{userProfile?.name || 'Cadet'}</p>
-                <p className="text-gray-500 text-xs mb-3">{userProfile?.regimentalNo || ''}</p>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-700 font-heading text-xs uppercase tracking-wider transition-colors"
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                      isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                    }`
+                  }
                 >
-                  <LogOut className="w-4 h-4" /> Sign Out
-                </button>
+                  <Settings className="w-4 h-4 flex-shrink-0" /> Admin Portal
+                </NavLink>
               </div>
-            ) : (
-              <Link
-                to="/login"
-                className="btn-primary block w-full text-center py-3 text-sm"
-              >
-                Login
-              </Link>
             )}
+
+            {currentUser && (
+              <div className="mt-2 pt-2 border-t border-gray-100">
+                <p className="px-5 pt-3 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">My Account</p>
+                <NavLink to="/dashboard" className={({ isActive }) => `flex items-center gap-2 py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${isActive ? 'text-gold-700 border-gold-500 bg-amber-50' : 'text-gold-600 border-transparent bg-amber-50/40 hover:border-gold-400'}`}>
+                  <LayoutDashboard className="w-4 h-4 flex-shrink-0" /> My Dashboard
+                </NavLink>
+                <NavLink to="/profile" className={({ isActive }) => `flex items-center gap-2 py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'}`}>
+                  <User className="w-4 h-4 flex-shrink-0" /> My Profile
+                </NavLink>
+                <NavLink to="/my-registrations" className={({ isActive }) => `flex items-center gap-2 py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'}`}>
+                  <ClipboardList className="w-4 h-4 flex-shrink-0" /> My Registrations
+                </NavLink>
+                <NavLink to="/polls" className={({ isActive }) => `flex items-center gap-2 py-4 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'}`}>
+                  <ClipboardList className="w-4 h-4 flex-shrink-0" /> Session Polls
+                </NavLink>
+              </div>
+            )}
+            <div className="h-6" />
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex-shrink-0 px-5 py-4 border-t border-gray-200 bg-gray-50">
+          {currentUser ? (
+            <div>
+              <p className="font-heading text-xs text-army-700 uppercase tracking-widest truncate">{userProfile?.name || 'Cadet'}</p>
+              <p className="text-gray-500 text-xs mb-3">{userProfile?.regimentalNo || userProfile?.role || ''}</p>
+              <button onClick={handleLogout} className="flex items-center gap-2 text-red-600 hover:text-red-700 font-heading text-xs uppercase tracking-wider transition-colors">
+                <LogOut className="w-4 h-4" /> Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="btn-primary block w-full text-center py-3 text-sm">Login</Link>
+          )}
         </div>
       </div>
     </nav>
