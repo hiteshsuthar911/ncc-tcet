@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { NavLink, Link, useNavigate } from 'react-router-dom'
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X, LogOut, User, ChevronDown, ClipboardList, Settings, Camera, BookOpen, Flame, Calendar, Users, Trophy, LayoutDashboard } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useNotification } from '../context/NotificationContext'
@@ -13,18 +13,16 @@ export default function Navbar() {
   const { currentUser, userProfile, logout, isAdmin } = useAuth()
   const { isActive: hasNotif } = useNotification()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Close drawer whenever the route changes
+  useEffect(() => { setIsOpen(false) }, [location.pathname])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  // Lock body scroll when mobile drawer is open
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [isOpen])
 
   async function handleLogout() {
     try {
@@ -233,8 +231,9 @@ export default function Navbar() {
 
       {/* Mobile Drawer Overlay */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        aria-hidden={!isOpen}
+        className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
         }`}
       >
         {/* Backdrop */}
@@ -243,7 +242,7 @@ export default function Navbar() {
           onClick={() => setIsOpen(false)}
         />
 
-        {/* Drawer Panel */}
+        {/* Drawer Panel — right-side slide-in */}
         <div
           className={`absolute top-0 right-0 h-full w-[min(300px,85vw)] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
             isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -251,7 +250,7 @@ export default function Navbar() {
         >
           {/* Drawer Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white flex-shrink-0">
-            <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5">
+            <Link to="/" className="flex items-center gap-2.5">
               <img
                 src={`${import.meta.env.BASE_URL}ncc-logo.svg`}
                 alt="NCC Logo"
@@ -264,24 +263,27 @@ export default function Navbar() {
             </Link>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1.5 text-gray-500 hover:text-gray-800 transition-colors"
+              aria-label="Close menu"
+              className="p-2 -mr-1 text-gray-500 hover:text-gray-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Scrollable Nav Content */}
-          <div className="flex-1 overflow-y-auto overscroll-contain">
-            <nav className="py-3">
+          {/* Scrollable Nav Content — iOS needs the style prop for touch scroll */}
+          <div
+            className="flex-1 overflow-y-auto"
+            style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}
+          >
+            <nav className="py-2">
               {/* Main Links */}
               {navLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}
                   end={link.to === '/'}
-                  onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center py-3 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                    `flex items-center py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
                       isActive
                         ? 'text-army-700 border-army-600 bg-army-50'
                         : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
@@ -293,15 +295,14 @@ export default function Navbar() {
               ))}
 
               {/* Explore Section */}
-              <div className="mt-3 pt-3 border-t border-gray-100">
-                <p className="px-5 pb-2 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">Explore</p>
+              <div className="mt-2 pt-2 border-t border-gray-100">
+                <p className="px-5 pt-2 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">Explore</p>
                 {exploreLinks.map((link) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
-                    onClick={() => setIsOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3 px-5 pl-7 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                      `flex items-center gap-2.5 py-3 px-5 pl-7 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
                         isActive
                           ? 'text-army-700 border-army-600 bg-army-50'
                           : 'text-gray-600 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
@@ -315,68 +316,82 @@ export default function Navbar() {
 
               {/* Admin */}
               {isAdmin && (
-                <div className="mt-3 pt-3 border-t border-gray-100">
+                <div className="mt-2 pt-2 border-t border-gray-100">
                   <NavLink
                     to="/admin"
-                    onClick={() => setIsOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center gap-2.5 py-3 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
                         isActive
                           ? 'text-army-700 border-army-600 bg-army-50'
                           : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
                       }`
                     }
                   >
-                    <Settings className="w-3.5 h-3.5 flex-shrink-0" /> Admin Portal
+                    <Settings className="w-3.5 h-3.5 flex-shrink-0 mr-2" /> Admin Portal
                   </NavLink>
                 </div>
               )}
 
-              {/* Cadet Links */}
+              {/* Cadet Account Links */}
               {currentUser && (
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                  <p className="px-5 pb-2 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">My Account</p>
-                  <Link
+                <div className="mt-2 pt-2 border-t border-gray-100">
+                  <p className="px-5 pt-2 pb-1 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">My Account</p>
+                  <NavLink
                     to="/dashboard"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2.5 py-3 px-5 text-gold-600 bg-amber-50 border-l-4 border-gold-500 font-heading text-sm uppercase tracking-widest"
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                        isActive ? 'text-gold-700 border-gold-500 bg-amber-50' : 'text-gold-600 border-transparent bg-amber-50/50 hover:border-gold-400'
+                      }`
+                    }
                   >
                     <LayoutDashboard className="w-4 h-4 flex-shrink-0" /> My Dashboard
-                  </Link>
-                  <Link
+                  </NavLink>
+                  <NavLink
                     to="/profile"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                      }`
+                    }
                   >
                     <User className="w-4 h-4 flex-shrink-0" /> My Profile
-                  </Link>
-                  <Link
+                  </NavLink>
+                  <NavLink
                     to="/my-registrations"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                      }`
+                    }
                   >
                     <ClipboardList className="w-4 h-4 flex-shrink-0" /> My Registrations
-                  </Link>
-                  <Link
+                  </NavLink>
+                  <NavLink
                     to="/polls"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3.5 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-colors ${
+                        isActive ? 'text-army-700 border-army-600 bg-army-50' : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                      }`
+                    }
                   >
                     <ClipboardList className="w-4 h-4 flex-shrink-0" /> Session Polls
-                  </Link>
+                  </NavLink>
                 </div>
               )}
+
+              {/* Extra bottom spacer so last item isn't flush with footer */}
+              <div className="h-4" />
             </nav>
           </div>
 
-          {/* Drawer Footer */}
+          {/* Drawer Footer — always visible at bottom */}
           <div className="flex-shrink-0 px-5 py-4 border-t border-gray-200 bg-gray-50">
             {currentUser ? (
               <div>
-                <p className="font-heading text-xs text-army-700 uppercase tracking-widest">{userProfile?.name || 'Cadet'}</p>
+                <p className="font-heading text-xs text-army-700 uppercase tracking-widest truncate">{userProfile?.name || 'Cadet'}</p>
                 <p className="text-gray-500 text-xs mb-3">{userProfile?.regimentalNo || ''}</p>
                 <button
-                  onClick={() => { handleLogout(); setIsOpen(false) }}
+                  onClick={handleLogout}
                   className="flex items-center gap-2 text-red-600 hover:text-red-700 font-heading text-xs uppercase tracking-wider transition-colors"
                 >
                   <LogOut className="w-4 h-4" /> Sign Out
@@ -385,7 +400,6 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                onClick={() => setIsOpen(false)}
                 className="btn-primary block w-full text-center py-3 text-sm"
               >
                 Login
