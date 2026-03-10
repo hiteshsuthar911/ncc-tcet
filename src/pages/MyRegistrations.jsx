@@ -71,7 +71,7 @@ function ReceiptModal({ reg, userProfile, onClose }) {
       <div className="absolute inset-0 bg-black/70 no-print" onClick={onClose} />
 
       {/* Printable area */}
-      <div id="print-receipt" className="relative w-full max-w-lg bg-military-darker border border-army-700 shadow-2xl">
+      <div id="print-receipt" className="relative w-full max-w-lg bg-gray-900 border border-gray-700 shadow-2xl">
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
 
         {/* Modal header */}
@@ -205,14 +205,14 @@ export default function MyRegistrations() {
   return (
     <div className="min-h-screen pt-20">
       {/* Header */}
-      <section className="relative py-14 bg-military-darker overflow-hidden">
+      <section className="relative py-14 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Tracking</p>
-          <h1 className="section-title text-4xl mb-2">My Registrations</h1>
+          <p className="section-subtitle text-gold-400">Tracking</p>
+          <h1 className="section-title text-4xl mb-2 text-white">My Registrations</h1>
           <div className="divider-gold w-24 mt-3" />
-          <p className="text-army-300 font-body mt-3 text-sm">Track all your event registrations and their approval status.</p>
+          <p className="text-gray-300 font-body mt-3 text-sm">Track all your event registrations and their approval status.</p>
         </div>
       </section>
 
@@ -221,7 +221,7 @@ export default function MyRegistrations() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total', count: counts.total, color: 'text-white' },
+            { label: 'Total', count: counts.total, color: 'text-gray-900' },
             { label: 'Pending', count: counts.pending, color: 'text-yellow-400' },
             { label: 'Approved', count: counts.approved, color: 'text-green-400' },
             { label: 'Rejected', count: counts.rejected, color: 'text-red-400' },
@@ -237,7 +237,7 @@ export default function MyRegistrations() {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-army-900 animate-pulse" />
+              <div key={i} className="h-20 bg-gray-200 animate-pulse rounded-sm" />
             ))}
           </div>
         ) : registrations.length === 0 ? (
@@ -274,7 +274,7 @@ export default function MyRegistrations() {
                         }`}
                       />
                       <div className="min-w-0">
-                        <p className="font-heading text-sm text-white uppercase tracking-wide truncate">
+                        <p className="font-heading text-sm text-gray-900 uppercase tracking-wide truncate">
                           {reg.eventTitle}
                         </p>
                         <div className="flex items-center gap-3 mt-1 text-xs text-army-500 font-body">

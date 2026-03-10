@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply font-body bg-military-dark text-gray-100 antialiased;
+    @apply font-body bg-military-dark text-army-300 antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -37,7 +37,7 @@
   }
 
   .btn-secondary {
-    @apply border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-military-dark font-heading tracking-widest uppercase px-6 py-3 transition-all duration-300;
+    @apply border border-army-600 text-army-300 hover:bg-army-600 hover:text-white font-heading tracking-widest uppercase px-6 py-3 transition-all duration-300;
   }
 
   .btn-danger {
@@ -45,15 +45,15 @@
   }
 
   .input-field {
-    @apply w-full bg-army-950 border border-army-700 text-gray-100 px-4 py-3 focus:outline-none focus:border-gold-500 transition-colors duration-200 placeholder-army-500 font-body;
+    @apply w-full bg-army-900 border border-army-700 text-army-200 px-4 py-3 focus:outline-none focus:border-army-600 focus:ring-2 focus:ring-army-600/20 transition-colors duration-200 placeholder-army-600 font-body rounded-sm;
   }
 
   .select-field {
-    @apply w-full bg-army-950 border border-army-700 text-gray-100 px-4 py-3 focus:outline-none focus:border-gold-500 transition-colors duration-200 font-body appearance-none;
+    @apply w-full bg-army-900 border border-army-700 text-army-200 px-4 py-3 focus:outline-none focus:border-army-600 focus:ring-2 focus:ring-army-600/20 transition-colors duration-200 font-body appearance-none rounded-sm;
   }
 
   .card-army {
-    @apply bg-army-950 border border-army-800 hover:border-army-600 transition-colors duration-300;
+    @apply bg-army-900 border border-army-800 hover:border-army-600 transition-all duration-300 rounded-md;
   }
 
   .section-title {
@@ -65,7 +65,7 @@
   }
 
   .label-field {
-    @apply block text-army-300 font-body text-sm mb-1 tracking-wide;
+    @apply block text-army-400 font-body text-sm mb-2 tracking-wide font-medium;
   }
 
   .divider-gold {
@@ -73,11 +73,11 @@
   }
 
   .badge-rank {
-    @apply inline-flex items-center gap-1 bg-army-800 border border-army-600 text-gold-400 text-xs font-heading px-2 py-1 uppercase tracking-wider;
+    @apply inline-flex items-center gap-1 bg-army-800 border border-army-700 text-army-300 text-xs font-heading px-2 py-1 uppercase tracking-wider rounded-sm;
   }
 
   .nav-link {
-    @apply font-heading text-sm uppercase tracking-widest text-army-300 hover:text-gold-400 transition-colors duration-200 relative;
+    @apply font-heading text-sm uppercase tracking-widest text-gray-700 hover:text-army-700 transition-colors duration-200 relative;
   }
 
   .nav-link::after {
@@ -91,7 +91,7 @@
   }
 
   .nav-link.active {
-    @apply text-gold-400;
+    @apply text-army-700;
   }
 
   .sidebar-link {
@@ -144,14 +144,14 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1207;
+  background: #f0f4ed;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3b4f27;
+  background: #a4b888;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a6330;
+  background: #7d9b5e;
 }
 
 /* Hide print-only areas on screen */
@@ -802,3 +802,74 @@
   .screen-only, .no-print { display: none !important; }
   .print-only { display: block !important; }
 }
+
+/* ══════════════════════════════════════════════════════
+   PUBLIC SITE — LIGHT MODE OVERRIDES (.light-site scope)
+   Applied via wrapper div in PublicLayout (App.jsx)
+══════════════════════════════════════════════════════ */
+
+/* ── Body background on public pages ── */
+.light-site { background-color: #f9fafb; color: #111827; }
+
+/* ── Section background overrides ── */
+.light-site .bg-military-dark   { background-color: #f9fafb; }
+.light-site .bg-military-darker { background-color: #f3f4f6; }
+.light-site .bg-army-950        { background-color: #ffffff; }
+
+/* ── Card overrides: dark card → white card ── */
+.light-site .card-army {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+.light-site .card-army:hover {
+  border-color: #7d9b5e;
+  box-shadow: 0 4px 12px rgba(0,0,0,.10);
+}
+
+/* ── Form fields on light pages ── */
+.light-site .input-field {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+  color: #111827;
+}
+.light-site .input-field::placeholder { color: #9ca3af; }
+.light-site .select-field {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+/* ── Component text overrides ── */
+.light-site .section-title  { color: #111827; }
+.light-site .section-subtitle { color: #4a6330; }
+.light-site .label-field    { color: #4b5563; }
+.light-site .badge-rank {
+  background-color: #f4f6f0;
+  border-color: #c8d4b5;
+  color: #3b4f27;
+}
+
+/* ── Text color overrides for army shades on light bg ── */
+.light-site .text-army-300 { color: #374151; }
+.light-site .text-army-400 { color: #4b5563; }
+.light-site .text-army-500 { color: #9ca3af; }
+.light-site .text-army-600 { color: #d1d5db; }
+
+/* ── Border overrides ── */
+.light-site .border-army-800 { border-color: #e5e7eb; }
+.light-site .border-army-700 { border-color: #e5e7eb; }
+
+/* ── Card headings / white text inside light cards ── */
+.light-site .card-army h1,
+.light-site .card-army h2,
+.light-site .card-army h3,
+.light-site .card-army h4 { color: #111827; }
+.light-site .stat-card p.text-white           { color: #111827; }
+.light-site .stat-card .text-white            { color: #111827; }
+
+/* ── Hover: bg-army-900 → soft sage on light sections ── */
+.light-site .hover\:bg-army-900:hover { background-color: #f0f4eb; }
+
+/* ── Skeleton loaders (inline bg-army-800 used as placeholder) ── */
+.light-site .bg-army-800.animate-pulse { background-color: #e5e7eb; }

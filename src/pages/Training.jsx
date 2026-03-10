@@ -135,21 +135,21 @@ export default function Training() {
     <div className="min-h-screen pt-20">
 
       {/* Header */}
-      <section className="relative py-16 bg-military-darker overflow-hidden">
+      <section className="relative py-16 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Develop. Excel. Lead.</p>
-          <h1 className="section-title text-4xl md:text-5xl mb-2">Training & Camps</h1>
+          <p className="section-subtitle text-gold-400">Develop. Excel. Lead.</p>
+          <h1 className="section-title text-4xl md:text-5xl mb-2 text-white">Training & Camps</h1>
           <div className="divider-gold w-24 mt-3 mb-4" />
-          <p className="text-army-300 font-body max-w-2xl leading-relaxed">
+          <p className="text-gray-300 font-body max-w-2xl leading-relaxed">
             NCC training transforms ordinary students into disciplined, capable, and service-oriented leaders. Explore the training calendar, camp opportunities, and certificate pathways.
           </p>
         </div>
       </section>
 
       {/* Weekly Training */}
-      <section className="py-16 bg-military-dark">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Regular Programme</p>
@@ -158,18 +158,18 @@ export default function Training() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {trainingTypes.map((t, i) => (
-              <div key={i} className="card-army p-6 flex flex-col group hover:bg-army-900 transition-colors relative overflow-hidden">
+              <div key={i} className="card-army p-6 flex flex-col group transition-colors relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500/0 to-transparent group-hover:via-gold-500 transition-all duration-500" />
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-heading text-sm text-white uppercase tracking-wide">{t.title}</h3>
+                  <h3 className="font-heading text-sm text-gray-900 uppercase tracking-wide">{t.title}</h3>
                   <span className={`font-heading text-xs border px-2 py-0.5 flex-shrink-0 ml-2 ${t.badgeColor}`}>{t.badge}</span>
                 </div>
-                <p className="text-army-400 font-body text-sm leading-relaxed mb-4 flex-1">{t.desc}</p>
-                <div className="space-y-1.5 border-t border-army-800 pt-3">
-                  <div className="flex items-center gap-2 text-army-500 text-xs font-body">
+                <p className="text-gray-500 font-body text-sm leading-relaxed mb-4 flex-1">{t.desc}</p>
+                <div className="space-y-1.5 border-t border-gray-100 pt-3">
+                  <div className="flex items-center gap-2 text-gray-400 text-xs font-body">
                     <Clock className="w-3.5 h-3.5 text-gold-600" /> {t.schedule}
                   </div>
-                  <div className="flex items-center gap-2 text-army-500 text-xs font-body">
+                  <div className="flex items-center gap-2 text-gray-400 text-xs font-body">
                     <MapPin className="w-3.5 h-3.5 text-gold-600" /> {t.venue}
                   </div>
                 </div>
@@ -180,7 +180,7 @@ export default function Training() {
       </section>
 
       {/* Camps */}
-      <section className="py-16 bg-military-darker">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Immersive Experience</p>
@@ -189,20 +189,20 @@ export default function Training() {
           </div>
           <div className="grid lg:grid-cols-2 gap-6">
             {camps.map((camp, i) => (
-              <div key={i} className="card-army relative overflow-hidden group hover:bg-army-900 transition-colors">
+              <div key={i} className="card-army relative overflow-hidden group transition-colors">
                 <div className="absolute left-0 top-0 w-1 h-full bg-gold-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="font-heading text-base text-white uppercase tracking-wide">{camp.name}</h3>
-                      <p className="text-army-500 font-body text-xs mt-1">{camp.level} &nbsp;·&nbsp; {camp.duration} &nbsp;·&nbsp; {camp.frequency}</p>
+                      <h3 className="font-heading text-base text-gray-900 uppercase tracking-wide">{camp.name}</h3>
+                      <p className="text-gray-400 font-body text-xs mt-1">{camp.level} &nbsp;·&nbsp; {camp.duration} &nbsp;·&nbsp; {camp.frequency}</p>
                     </div>
                     <Award className="w-5 h-5 text-gold-500 flex-shrink-0 mt-1" />
                   </div>
-                  <p className="text-army-400 font-body text-sm leading-relaxed mb-4">{camp.desc}</p>
+                  <p className="text-gray-500 font-body text-sm leading-relaxed mb-4">{camp.desc}</p>
                   <div className="flex flex-wrap gap-2">
                     {camp.highlights.map((h) => (
-                      <span key={h} className="text-army-400 font-body text-xs border border-army-700 px-2 py-0.5">{h}</span>
+                      <span key={h} className="text-gray-500 font-body text-xs border border-gray-200 px-2 py-0.5 rounded-sm">{h}</span>
                     ))}
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export default function Training() {
       </section>
 
       {/* Certificates */}
-      <section className="py-16 bg-military-dark">
+      <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Career Advantage</p>
@@ -224,35 +224,35 @@ export default function Training() {
             {certificates.map((cert, i) => (
               <div key={i} className={`card-army border-t-4 ${cert.color} p-6`}>
                 <span className="badge-rank mb-3 inline-flex text-xs">{cert.badge}</span>
-                <h3 className="font-heading text-xl text-white tracking-widest mb-1">{cert.name}</h3>
+                <h3 className="font-heading text-xl text-gray-900 tracking-widest mb-1">{cert.name}</h3>
                 <p className="text-gold-600 font-body text-xs mb-4">{cert.year} of NCC</p>
                 <ul className="space-y-1.5 mb-5">
                   {cert.subjects.map((s) => (
-                    <li key={s} className="flex items-center gap-2 text-army-400 font-body text-xs">
+                    <li key={s} className="flex items-center gap-2 text-gray-500 font-body text-xs">
                       <ChevronRight className="w-3 h-3 text-gold-600 flex-shrink-0" /> {s}
                     </li>
                   ))}
                 </ul>
-                <div className="border-t border-army-800 pt-3">
-                  <p className="text-army-500 font-body text-xs leading-relaxed">{cert.passing}</p>
+                <div className="border-t border-gray-100 pt-3">
+                  <p className="text-gray-400 font-body text-xs leading-relaxed">{cert.passing}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-6 card-army p-5 flex items-start gap-3">
             <Star className="w-5 h-5 text-gold-500 flex-shrink-0 mt-0.5" />
-            <p className="text-army-300 font-body text-sm leading-relaxed">
-              <strong className="text-white">NCC "C" Certificate Bonus:</strong> Holders get up to 5% bonus marks in NDA/CDS selection, direct entry to Indian Military/Naval/Air Force as commissioned officers through NCC Special Entry, and weightage in state government jobs.
+            <p className="text-gray-600 font-body text-sm leading-relaxed">
+              <strong className="text-army-800">NCC "C" Certificate Bonus:</strong> Holders get up to 5% bonus marks in NDA/CDS selection, direct entry to Indian Military/Naval/Air Force as commissioned officers through NCC Special Entry, and weightage in state government jobs.
             </p>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-12 bg-military-darker border-t border-army-800">
+      <section className="py-12 bg-army-900 border-t border-army-700">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="font-heading text-xl text-white uppercase tracking-widest mb-3">Begin Your Training Journey</h2>
-          <p className="text-army-300 font-body text-sm mb-6">Apply to join NCC TCET and start building the discipline and skills that last a lifetime.</p>
+          <p className="text-gray-300 font-body text-sm mb-6">Apply to join NCC TCET and start building the discipline and skills that last a lifetime.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/join" className="btn-primary inline-flex items-center gap-2">
               <Shield className="w-4 h-4" /> Join NCC

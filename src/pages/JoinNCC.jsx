@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, addDoc, serverTimestamp, getDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase/config'
 import {
   Shield, CheckCircle, ChevronRight, BookOpen,
   Star, AlertTriangle, FileText, Clock,
   User, Phone, BookOpen as BookOpenIcon, Activity,
-  Send, RefreshCw, Award
+  Send, RefreshCw, Award, Lock,
 } from 'lucide-react'
 
 const eligibility = [
@@ -361,21 +361,36 @@ function ApplicationForm() {
 }
 
 export default function JoinNCC() {
+  // null = loading, true = open, false = closed
+  const [isLive, setIsLive] = useState(null)
+
+  useEffect(() => {
+    async function fetchSetting() {
+      try {
+        const snap = await getDoc(doc(db, 'settings', 'joinNcc'))
+        setIsLive(snap.exists() ? (snap.data().isLive ?? false) : false)
+      } catch {
+        setIsLive(false)
+      }
+    }
+    fetchSetting()
+  }, [])
+
   return (
     <div className="min-h-screen pt-20">
 
       {/* Hero */}
-      <section className="relative py-20 bg-military-darker overflow-hidden">
+      <section className="relative py-20 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-army-800 border-2 border-gold-500 mb-6">
             <Shield className="w-10 h-10 text-gold-400" />
           </div>
-          <p className="section-subtitle">Enroll Now</p>
-          <h1 className="section-title text-4xl md:text-6xl mb-4">Join NCC TCET</h1>
+          <p className="section-subtitle text-gold-400">Enroll Now</p>
+          <h1 className="section-title text-4xl md:text-6xl mb-4 text-white">Join NCC TCET</h1>
           <div className="divider-gold w-24 mx-auto mt-3 mb-6" />
-          <p className="text-army-300 font-body text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-300 font-body text-lg max-w-2xl mx-auto leading-relaxed">
             Be part of India's premier youth development organisation. Train with discipline, serve the nation, and build a career.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
@@ -534,22 +549,77 @@ export default function JoinNCC() {
             <p className="section-subtitle">Apply Online</p>
             <h2 className="section-title text-3xl">NCC Enrollment Application</h2>
             <div className="divider-gold w-20 mx-auto mt-3" />
-            <p className="text-army-400 font-body text-sm mt-4 max-w-xl mx-auto">
-              Fill this form to express your interest in joining NCC TCET. This is a preliminary application — shortlisted candidates will be contacted for the medical exam and formal enrollment.
-            </p>
           </div>
-          <ApplicationForm />
+
+          {/* Loading */}
+          {isLive === null && (
+            <div className="card-army p-10 text-center">
+              <RefreshCw className="w-8 h-8 text-gold-400 mx-auto mb-4 animate-spin" />
+              <p className="text-army-400 font-body text-sm">Checking registration status…</p>
+            </div>
+          )}
+
+          {/* Registration Closed */}
+          {isLive === false && (
+            <div className="card-army relative overflow-hidden p-8 sm:p-12 text-center">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-700 to-transparent" />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-army-800 border-2 border-red-700 mb-6 mx-auto">
+                <Lock className="w-8 h-8 text-red-400" />
+              </div>
+              <h3 className="font-heading text-xl text-white uppercase tracking-widest mb-3">
+                Registration Currently Closed
+              </h3>
+              <div className="h-px w-16 bg-red-700 mx-auto mb-5" />
+              <p className="text-army-300 font-body text-sm leading-relaxed max-w-md mx-auto mb-6">
+                The NCC TCET enrollment window is not open at this time. Applications will be accepted during the official enrollment period announced by the ANO.
+              </p>
+              <div className="bg-army-900/60 border border-army-700 p-4 max-w-sm mx-auto text-left mb-6">
+                <p className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-2">Stay Updated</p>
+                <ul className="space-y-1.5">
+                  <li className="flex items-center gap-2 text-army-400 font-body text-xs">
+                    <CheckCircle className="w-3.5 h-3.5 text-gold-500 flex-shrink-0" />
+                    Watch the college notice board
+                  </li>
+                  <li className="flex items-center gap-2 text-army-400 font-body text-xs">
+                    <CheckCircle className="w-3.5 h-3.5 text-gold-500 flex-shrink-0" />
+                    Check the NCC TCET WhatsApp group
+                  </li>
+                  <li className="flex items-center gap-2 text-army-400 font-body text-xs">
+                    <CheckCircle className="w-3.5 h-3.5 text-gold-500 flex-shrink-0" />
+                    Visit the NCC office — B-block, Ground floor
+                  </li>
+                </ul>
+              </div>
+              <Link to="/about" className="btn-secondary inline-flex items-center gap-2 text-sm">
+                <Shield className="w-4 h-4" /> Learn About NCC TCET
+              </Link>
+            </div>
+          )}
+
+          {/* Registration Open */}
+          {isLive === true && (
+            <>
+              <p className="text-army-400 font-body text-sm mb-8 text-center max-w-xl mx-auto">
+                Fill this form to express your interest in joining NCC TCET. This is a preliminary application — shortlisted candidates will be contacted for the medical exam and formal enrollment.
+              </p>
+              <div className="inline-flex items-center gap-2 bg-green-900/20 border border-green-800 px-4 py-2 mb-8 mx-auto flex">
+                <div className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_1px_rgba(74,222,128,0.5)]" />
+                <span className="font-heading text-xs text-green-400 uppercase tracking-widest">Registration Open</span>
+              </div>
+              <ApplicationForm />
+            </>
+          )}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-14 bg-military-darker border-t border-army-800">
+      <section className="py-14 bg-army-900 border-t border-army-700">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <Shield className="w-12 h-12 text-gold-500 mx-auto mb-4" />
+          <Shield className="w-12 h-12 text-gold-400 mx-auto mb-4" />
           <h2 className="font-heading text-2xl text-white uppercase tracking-widest mb-3">
             Ready to Serve the Nation?
           </h2>
-          <p className="text-army-300 font-body mb-6">
+          <p className="text-gray-300 font-body mb-6">
             Apply online above, or download the declaration form and submit it at the NCC office to begin your enrollment.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

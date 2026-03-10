@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import {
-  collection, getDocs, query, orderBy, updateDoc, doc,
+  collection, getDocs, query, orderBy, updateDoc, doc, getDoc, setDoc,
 } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 import {
   UserPlus, Search, CheckCircle, XCircle, Clock,
-  Eye, X, Download,
+  Eye, X, Download, Radio, RadioTower, Lock, Unlock, AlertTriangle,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -63,6 +63,32 @@ export default function AdminApplications() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [selected, setSelected] = useState(null)
+  const [isLive, setIsLive] = useState(false)
+  const [togglingLive, setTogglingLive] = useState(false)
+
+  // Load live status
+  useEffect(() => {
+    async function fetchSetting() {
+      try {
+        const snap = await getDoc(doc(db, 'settings', 'joinNcc'))
+        if (snap.exists()) setIsLive(snap.data().isLive ?? false)
+      } catch { /* ignore */ }
+    }
+    fetchSetting()
+  }, [])
+
+  async function toggleLive() {
+    setTogglingLive(true)
+    try {
+      await setDoc(doc(db, 'settings', 'joinNcc'), { isLive: !isLive }, { merge: true })
+      setIsLive(v => !v)
+      toast.success(!isLive ? '🟢 Join NCC page is now LIVE — cadets can apply!' : '🔴 Join NCC page is now CLOSED.')
+    } catch {
+      toast.error('Failed to update status')
+    } finally {
+      setTogglingLive(false)
+    }
+  }
 
   useEffect(() => {
     async function fetch() {
@@ -115,6 +141,37 @@ export default function AdminApplications() {
         <p className="section-subtitle">Admin</p>
         <h2 className="font-heading text-2xl text-white uppercase tracking-widest">Join NCC Applications</h2>
         <div className="h-px w-16 bg-gold-500 mt-2" />
+      </div>
+
+      {/* Live toggle banner */}
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border mb-6 ${
+        isLive ? 'border-green-800 bg-green-900/15' : 'border-army-700 bg-army-900/30'
+      }`}>
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full flex-shrink-0 ${isLive ? 'bg-green-400 shadow-[0_0_8px_2px_rgba(74,222,128,0.5)]' : 'bg-army-600'}`} />
+          <div>
+            <p className={`font-heading text-sm uppercase tracking-widest ${isLive ? 'text-green-400' : 'text-army-400'}`}>
+              Registration is {isLive ? 'LIVE' : 'CLOSED'}
+            </p>
+            <p className="font-body text-xs text-army-500 mt-0.5">
+              {isLive
+                ? 'The Join NCC page is accepting applications from cadets.'
+                : 'The Join NCC page shows a "Registration Closed" screen to cadets.'}
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={toggleLive}
+          disabled={togglingLive}
+          className={`flex items-center gap-2 px-5 py-2.5 font-heading text-sm uppercase tracking-wider border transition-all duration-200 disabled:opacity-50 flex-shrink-0 ${
+            isLive
+              ? 'border-red-800 text-red-400 hover:bg-red-900/20'
+              : 'border-green-800 text-green-400 hover:bg-green-900/20'
+          }`}
+        >
+          {isLive ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
+          {isLive ? 'Close Registration' : 'Open Registration'}
+        </button>
       </div>
 
       {/* Stats */}

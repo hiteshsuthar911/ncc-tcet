@@ -96,20 +96,20 @@ export default function CadetProfile() {
 
   const field = (label, value) => (
     <div>
-      <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1">{label}</p>
-      <p className="text-white font-body text-sm">{value || '—'}</p>
+      <p className="text-gray-400 font-body text-xs uppercase tracking-widest mb-1">{label}</p>
+      <p className="text-gray-900 font-body text-sm">{value || '—'}</p>
     </div>
   )
 
   return (
     <div className="min-h-screen pt-20">
       {/* Header */}
-      <section className="relative py-14 bg-military-darker overflow-hidden">
+      <section className="relative py-14 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Cadet</p>
-          <h1 className="section-title text-4xl mb-2">My Profile</h1>
+          <p className="section-subtitle text-gold-400">Cadet</p>
+          <h1 className="section-title text-4xl mb-2 text-white">My Profile</h1>
           <div className="divider-gold w-20 mt-3" />
         </div>
       </section>
@@ -241,7 +241,7 @@ export default function CadetProfile() {
               <Award className="w-5 h-5 text-gold-400" />
             </div>
             <div>
-              <p className="font-heading text-sm text-white uppercase tracking-wide">My Registrations</p>
+              <p className="font-heading text-sm text-gray-900 uppercase tracking-wide">My Registrations</p>
               <p className="text-army-400 font-body text-xs mt-0.5">Track event registration status</p>
             </div>
           </Link>
@@ -253,7 +253,7 @@ export default function CadetProfile() {
               <Calendar className="w-5 h-5 text-gold-400" />
             </div>
             <div>
-              <p className="font-heading text-sm text-white uppercase tracking-wide">Browse Events</p>
+              <p className="font-heading text-sm text-gray-900 uppercase tracking-wide">Browse Events</p>
               <p className="text-army-400 font-body text-xs mt-0.5">Register for upcoming events</p>
             </div>
           </Link>
@@ -265,7 +265,7 @@ export default function CadetProfile() {
             <div className="flex items-center gap-3">
               <Lock className="w-5 h-5 text-gold-500" />
               <div>
-                <p className="font-heading text-sm text-white uppercase tracking-wide">Password</p>
+                <p className="font-heading text-sm text-gray-900 uppercase tracking-wide">Password</p>
                 <p className="text-army-500 font-body text-xs">Change your login password</p>
               </div>
             </div>
@@ -365,7 +365,7 @@ export default function CadetProfile() {
             </div>
             <div className="flex items-center gap-3 text-army-400 font-body">
               <Shield className="w-4 h-4 text-gold-500 flex-shrink-0" />
-              Role: <span className="text-white ml-1 capitalize">{userProfile?.role || 'cadet'}</span>
+              Role: <span className="text-gray-900 ml-1 capitalize">{userProfile?.role || 'cadet'}</span>
             </div>
           </div>
           <div className="mt-4 border-t border-army-800 pt-4">

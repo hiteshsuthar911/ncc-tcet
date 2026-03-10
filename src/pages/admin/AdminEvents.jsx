@@ -25,6 +25,16 @@ import {
   Save,
   X,
   AlertTriangle,
+  MapPin,
+  Clock,
+  Image,
+  Award,
+  Phone,
+  User,
+  Shield,
+  FileText,
+  Link,
+  Info,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -41,6 +51,10 @@ const FIELD_TYPES = [
 ]
 
 const CATEGORIES = ['Training', 'Camp', 'Competition', 'Social Service', 'Adventure', 'Workshop', 'Republic Day', 'Other']
+
+const CERTIFICATE_TYPES = ['None', 'A Certificate', 'B Certificate', 'C Certificate', 'Participation Certificate']
+const WINGS = ['Army', 'Navy', 'Air']
+const YEARS = ['1st Year', '2nd Year', '3rd Year', 'All Years']
 
 function generateId() {
   return `field_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
@@ -230,8 +244,24 @@ function EventFormModal({ event, onClose, onSaved }) {
             .split('T')[0]
         : '',
       time: event?.time || '',
+      registrationDeadline: event?.registrationDeadline || '',
+      reportingTime: event?.reportingTime || '',
+      duration: event?.duration || '',
       venue: event?.venue || '',
+      venueAddress: event?.venueAddress || '',
+      mapLink: event?.mapLink || '',
+      bannerUrl: event?.bannerUrl || '',
       maxParticipants: event?.maxParticipants || '',
+      wingArmy: event?.eligibleWings?.includes('Army') ?? true,
+      wingNavy: event?.eligibleWings?.includes('Navy') ?? true,
+      wingAir: event?.eligibleWings?.includes('Air') ?? true,
+      minRank: event?.minRank || '',
+      yearOfStudy: event?.yearOfStudy || '',
+      pointsAwarded: event?.pointsAwarded || '',
+      certificateType: event?.certificateType || 'None',
+      instructions: event?.instructions || '',
+      contactName: event?.contactName || '',
+      contactPhone: event?.contactPhone || '',
       isActive: event?.isActive ?? true,
     },
   })
@@ -261,10 +291,14 @@ function EventFormModal({ event, onClose, onSaved }) {
 
     setSaving(true)
     try {
+      const eligibleWings = WINGS.filter((w) => data[`wing${w}`])
+      const { wingArmy, wingNavy, wingAir, ...rest } = data
       const payload = {
-        ...data,
+        ...rest,
         maxParticipants: data.maxParticipants ? Number(data.maxParticipants) : null,
+        pointsAwarded: data.pointsAwarded ? Number(data.pointsAwarded) : null,
         isActive: Boolean(data.isActive),
+        eligibleWings,
         fields: fields.map((f) => ({ ...f, label: f.label.trim() })),
         updatedAt: serverTimestamp(),
       }
@@ -285,27 +319,31 @@ function EventFormModal({ event, onClose, onSaved }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 pt-20">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 pt-12">
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
-      <div className="relative w-full max-w-2xl bg-military-darker border border-army-700 shadow-2xl shadow-black/50 mb-8">
+      <div className="relative w-full max-w-3xl bg-military-darker border border-army-700 shadow-2xl shadow-black/50 mb-8">
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
 
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-army-800">
-          <h2 className="font-heading text-lg text-white uppercase tracking-widest">
-            {isEditing ? 'Edit Event' : 'Create New Event'}
-          </h2>
+          <div>
+            <h2 className="font-heading text-lg text-white uppercase tracking-widest">
+              {isEditing ? 'Edit Event' : 'Create New Event'}
+            </h2>
+            <p className="text-army-500 text-xs font-body mt-0.5">Fill in all relevant details for this event</p>
+          </div>
           <button onClick={onClose} className="text-army-500 hover:text-white transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto scrollbar-thin">
-            {/* Basic Info */}
-            <div>
-              <h3 className="font-heading text-xs text-army-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <span className="h-px w-3 bg-gold-500 inline-block" /> Event Details
+          <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto scrollbar-thin">
+
+            {/* ── Section 1: Basic Info ─────────────────────── */}
+            <div className="border border-army-800 p-4">
+              <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Info className="w-3.5 h-3.5" /> Basic Information
               </h3>
               <div className="space-y-4">
                 <div>
@@ -328,7 +366,7 @@ function EventFormModal({ event, onClose, onSaved }) {
                   <textarea
                     rows={3}
                     {...register('description', { required: 'Description is required' })}
-                    placeholder="Describe the event..."
+                    placeholder="Describe the event objectives, activities, and what cadets can expect..."
                     className={`input-field resize-none ${errors.description ? 'border-red-700' : ''}`}
                   />
                   {errors.description && (
@@ -358,9 +396,40 @@ function EventFormModal({ event, onClose, onSaved }) {
                   </div>
                 </div>
 
+                <div>
+                  <label className="label-field flex items-center gap-1.5"><Image className="w-3.5 h-3.5" /> Banner Image URL</label>
+                  <input
+                    type="url"
+                    {...register('bannerUrl')}
+                    placeholder="https://example.com/banner.jpg"
+                    className="input-field"
+                  />
+                  <p className="text-army-600 text-xs font-body mt-1">Paste a direct image link to show as the event banner.</p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-1">
+                  <input
+                    type="checkbox"
+                    id="isActive"
+                    {...register('isActive')}
+                    className="accent-gold-500 w-4 h-4"
+                  />
+                  <label htmlFor="isActive" className="text-army-300 text-sm font-body cursor-pointer">
+                    Event is active <span className="text-army-500">(visible to cadets for registration)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Section 2: Schedule ───────────────────────── */}
+            <div className="border border-army-800 p-4">
+              <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5" /> Schedule
+              </h3>
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="label-field">Date</label>
+                    <label className="label-field">Event Date</label>
                     <input
                       type="date"
                       {...register('date')}
@@ -368,7 +437,7 @@ function EventFormModal({ event, onClose, onSaved }) {
                     />
                   </div>
                   <div>
-                    <label className="label-field">Time</label>
+                    <label className="label-field">Start Time</label>
                     <input
                       type="time"
                       {...register('time')}
@@ -377,35 +446,181 @@ function EventFormModal({ event, onClose, onSaved }) {
                   </div>
                 </div>
 
-                <div>
-                  <label className="label-field">Venue</label>
-                  <input
-                    type="text"
-                    {...register('venue')}
-                    placeholder="e.g. TCET Parade Ground"
-                    className="input-field"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="label-field">Registration Deadline</label>
+                    <input
+                      type="date"
+                      {...register('registrationDeadline')}
+                      className="input-field [color-scheme:dark]"
+                    />
+                  </div>
+                  <div>
+                    <label className="label-field">Reporting Time</label>
+                    <input
+                      type="time"
+                      {...register('reportingTime')}
+                      className="input-field [color-scheme:dark]"
+                    />
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div>
+                  <label className="label-field">Duration</label>
                   <input
-                    type="checkbox"
-                    id="isActive"
-                    {...register('isActive')}
-                    className="accent-gold-500 w-4 h-4"
+                    type="text"
+                    {...register('duration')}
+                    placeholder="e.g. 3 Days, Half Day, 2 Hours"
+                    className="input-field"
                   />
-                  <label htmlFor="isActive" className="text-army-300 text-sm font-body cursor-pointer">
-                    Event is active (visible to cadets)
-                  </label>
                 </div>
               </div>
             </div>
 
-            {/* Custom Fields */}
-            <div className="border-t border-army-800 pt-5">
+            {/* ── Section 3: Location ───────────────────────── */}
+            <div className="border border-army-800 p-4">
+              <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5" /> Location
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="label-field">Venue / Location Name</label>
+                  <input
+                    type="text"
+                    {...register('venue')}
+                    placeholder="e.g. TCET Parade Ground, NCC Camp Nashik"
+                    className="input-field"
+                  />
+                </div>
+
+                <div>
+                  <label className="label-field">Full Address</label>
+                  <textarea
+                    rows={2}
+                    {...register('venueAddress')}
+                    placeholder="Street, Area, City, State — PIN"
+                    className="input-field resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="label-field flex items-center gap-1.5"><Link className="w-3.5 h-3.5" /> Google Maps / Location Link</label>
+                  <input
+                    type="url"
+                    {...register('mapLink')}
+                    placeholder="https://maps.google.com/..."
+                    className="input-field"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Section 4: Eligibility & Awards ──────────── */}
+            <div className="border border-army-800 p-4">
+              <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Shield className="w-3.5 h-3.5" /> Eligibility & Awards
+              </h3>
+              <div className="space-y-4">
+
+                <div>
+                  <label className="label-field">Eligible Wings</label>
+                  <div className="flex gap-6 mt-2">
+                    {WINGS.map((wing) => (
+                      <label key={wing} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          {...register(`wing${wing}`)}
+                          className="accent-gold-500 w-4 h-4"
+                        />
+                        <span className="text-army-300 text-sm font-body">{wing}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <p className="text-army-600 text-xs font-body mt-1">Select which NCC wings can register. Leave all checked for open event.</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="label-field">Minimum Rank Required</label>
+                    <input
+                      type="text"
+                      {...register('minRank')}
+                      placeholder="e.g. Lance Corporal, Cadet"
+                      className="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label className="label-field">Year of Study</label>
+                    <select {...register('yearOfStudy')} className="select-field">
+                      <option value="">— Any Year —</option>
+                      {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="label-field flex items-center gap-1.5"><Award className="w-3.5 h-3.5" /> Points Awarded</label>
+                    <input
+                      type="number"
+                      min="0"
+                      {...register('pointsAwarded')}
+                      placeholder="e.g. 10"
+                      className="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label className="label-field">Certificate Type</label>
+                    <select {...register('certificateType')} className="select-field">
+                      {CERTIFICATE_TYPES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="label-field flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" /> Instructions / Special Notes</label>
+                  <textarea
+                    rows={3}
+                    {...register('instructions')}
+                    placeholder="List any items to bring, dress code, physical requirements, important rules, or other instructions for the cadets..."
+                    className="input-field resize-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Section 5: Contact ────────────────────────── */}
+            <div className="border border-army-800 p-4">
+              <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5" /> Contact Person
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label-field flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> Name</label>
+                  <input
+                    type="text"
+                    {...register('contactName')}
+                    placeholder="e.g. Lt. Col. Sharma"
+                    className="input-field"
+                  />
+                </div>
+                <div>
+                  <label className="label-field flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> Phone</label>
+                  <input
+                    type="tel"
+                    {...register('contactPhone')}
+                    placeholder="e.g. 9876543210"
+                    className="input-field"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Section 6: Custom Fields ──────────────────────── */}
+            <div className="border border-army-800 p-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-heading text-xs text-army-400 uppercase tracking-widest flex items-center gap-2">
-                  <span className="h-px w-3 bg-gold-500 inline-block" /> Custom Registration Fields
+                <h3 className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
+                  <FileText className="w-3.5 h-3.5" /> Custom Registration Fields
                 </h3>
                 <button
                   type="button"

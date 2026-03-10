@@ -104,18 +104,18 @@ function RuleSection({ section }) {
     <div className="card-army overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-5 hover:bg-army-900 transition-colors group text-left"
+        className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors group text-left"
       >
         <div className="flex items-center gap-3">
           <div className="w-1 h-6 bg-gold-500" />
-          <span className="font-heading text-sm text-white uppercase tracking-widest group-hover:text-gold-400 transition-colors">
+          <span className="font-heading text-sm text-gray-900 uppercase tracking-widest group-hover:text-army-700 transition-colors">
             {section.title}
           </span>
-          <span className="text-army-600 font-body text-xs">({section.rules.length} rules)</span>
+          <span className="text-gray-400 font-body text-xs">({section.rules.length} rules)</span>
         </div>
         {open
-          ? <ChevronUp className="w-4 h-4 text-gold-400 flex-shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-army-500 flex-shrink-0" />}
+          ? <ChevronUp className="w-4 h-4 text-gold-500 flex-shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />}
       </button>
       {open && (
         <div className="border-t border-army-800 px-6 py-5">
@@ -142,14 +142,14 @@ export default function Rules() {
     <div className="min-h-screen pt-20">
 
       {/* Header */}
-      <section className="relative py-16 bg-military-darker overflow-hidden">
+      <section className="relative py-16 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Regulations</p>
-          <h1 className="section-title text-4xl md:text-5xl mb-2">Rules & Regulations</h1>
+          <p className="section-subtitle text-gold-400">Regulations</p>
+          <h1 className="section-title text-4xl md:text-5xl mb-2 text-white">Rules & Regulations</h1>
           <div className="divider-gold w-24 mt-3 mb-4" />
-          <p className="text-army-300 font-body max-w-2xl leading-relaxed">
+          <p className="text-gray-300 font-body max-w-2xl leading-relaxed">
             All cadets enrolled in the NCC TCET unit are bound by the following rules and regulations as prescribed by the Directorate General NCC and the unit's Standing Orders.
           </p>
         </div>
@@ -190,7 +190,7 @@ export default function Rules() {
         <div className="mt-8 card-army p-6 flex items-start gap-4">
           <BookOpen className="w-6 h-6 text-gold-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-heading text-sm text-white uppercase tracking-wide mb-1">Official Reference</p>
+            <p className="font-heading text-sm text-gray-900 uppercase tracking-wide mb-1">Official Reference</p>
             <p className="text-army-400 font-body text-sm leading-relaxed">
               These rules are based on the NCC Act 1948, NCC Rules 1948 (amended), DG NCC Training Instructions, and TCET Unit Standing Orders. For the complete gazette-notified regulations, refer to the NCC Cadet's Handbook issued at enrollment.
             </p>
@@ -211,18 +211,18 @@ function ExpandableSection({ section, forceOpen }) {
     <div className="card-army overflow-hidden">
       <button
         onClick={() => setLocalOpen(!localOpen)}
-        className="w-full flex items-center justify-between p-5 hover:bg-army-900 transition-colors group text-left"
+        className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors group text-left"
       >
         <div className="flex items-center gap-3">
           <div className="w-1 h-6 bg-gold-500" />
-          <span className="font-heading text-sm text-white uppercase tracking-widest group-hover:text-gold-400 transition-colors">
+          <span className="font-heading text-sm text-gray-900 uppercase tracking-widest group-hover:text-army-700 transition-colors">
             {section.title}
           </span>
-          <span className="text-army-600 font-body text-xs">({section.rules.length})</span>
+          <span className="text-gray-400 font-body text-xs">({section.rules.length})</span>
         </div>
         {isOpen
-          ? <ChevronUp className="w-4 h-4 text-gold-400 flex-shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-army-500 flex-shrink-0" />}
+          ? <ChevronUp className="w-4 h-4 text-gold-500 flex-shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />}
       </button>
       {isOpen && (
         <div className="border-t border-army-800 px-6 py-5">

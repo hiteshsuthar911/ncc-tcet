@@ -1,7 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import NotificationBar from './components/NotificationBar'
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute'
+import { useNotification } from './context/NotificationContext'
 import Home from './pages/Home'
 import About from './pages/About'
 import Login from './pages/Login'
@@ -17,6 +19,8 @@ import AdminApplications from './pages/admin/AdminApplications'
 import AdminDeclarations from './pages/admin/AdminDeclarations'
 import AdminBulkImport from './pages/admin/AdminBulkImport'
 import AdminLeaveApplications from './pages/admin/AdminLeaveApplications'
+import AdminPolls from './pages/admin/AdminPolls'
+import CadetPolls from './pages/CadetPolls'
 import CadetProfile from './pages/CadetProfile'
 import MyRegistrations from './pages/MyRegistrations'
 import InstallPrompt from './components/InstallPrompt'
@@ -28,15 +32,27 @@ import Achievements from './pages/Achievements'
 import Forms from './pages/Forms'
 import Setup from './pages/Setup'
 import AdminAddAdmin from './pages/admin/AdminAddAdmin'
+import OurTeam from './pages/OurTeam'
+import Achievers from './pages/Achievers'
+import Activities from './pages/Activities'
+import CalendarPage from './pages/CalendarPage'
+import Gallery from './pages/Gallery'
+import Magazine from './pages/Magazine'
+import AdminNotifications from './pages/admin/AdminNotifications'
+import AdminGallery from './pages/admin/AdminGallery'
+import AdminTeam from './pages/admin/AdminTeam'
+import CadetDashboard from './pages/CadetDashboard'
 
 // Public layout wrapper (with navbar + footer)
 function PublicLayout({ children }) {
+  const { isActive } = useNotification()
   return (
-    <>
+    <div className="light-site min-h-screen flex flex-col">
+      <NotificationBar />
       <Navbar />
-      <main>{children}</main>
+      <main className="flex-1" style={isActive ? { paddingTop: '2.5rem' } : {}}>{children}</main>
       <Footer />
-    </>
+    </div>
   )
 }
 
@@ -126,8 +142,66 @@ export default function App() {
           </PublicLayout>
         }
       />
+      <Route
+        path="/team"
+        element={
+          <PublicLayout>
+            <OurTeam />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/achievers"
+        element={
+          <PublicLayout>
+            <Achievers />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/activities"
+        element={
+          <PublicLayout>
+            <Activities />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/calendar"
+        element={
+          <PublicLayout>
+            <CalendarPage />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/gallery"
+        element={
+          <PublicLayout>
+            <Gallery />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/magazine"
+        element={
+          <PublicLayout>
+            <Magazine />
+          </PublicLayout>
+        }
+      />
 
       {/* Protected cadet pages */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <PublicLayout>
+              <CadetDashboard />
+            </PublicLayout>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/profile"
         element={
@@ -147,8 +221,14 @@ export default function App() {
             </PublicLayout>
           </ProtectedRoute>
         }
+      />      <Route
+        path="/polls"
+        element={
+          <PublicLayout>
+            <CadetPolls />
+          </PublicLayout>
+        }
       />
-
       {/* Admin routes */}
       <Route
         path="/admin"
@@ -168,6 +248,10 @@ export default function App() {
         <Route path="leave-applications" element={<AdminLeaveApplications />} />
         <Route path="bulk-import" element={<AdminBulkImport />} />
         <Route path="add-admin" element={<AdminAddAdmin />} />
+        <Route path="polls" element={<AdminPolls />} />
+        <Route path="notifications" element={<AdminNotifications />} />
+        <Route path="gallery" element={<AdminGallery />} />
+        <Route path="team" element={<AdminTeam />} />
       </Route>
 
       {/* 404 */}

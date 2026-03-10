@@ -77,14 +77,14 @@ export default function DeclarationForm() {
     <div className="min-h-screen pt-20">
 
       {/* ── Page Header (screen only) ── */}
-      <section className="no-print relative py-14 bg-military-darker overflow-hidden">
+      <section className="no-print relative py-14 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Official Document</p>
-          <h1 className="section-title text-4xl mb-2">Cadet Declaration Form</h1>
+          <p className="section-subtitle text-gold-400">Official Document</p>
+          <h1 className="section-title text-4xl mb-2 text-white">Cadet Declaration Form</h1>
           <div className="divider-gold w-24 mt-3" />
-          <p className="text-army-300 font-body mt-3 text-sm">
+          <p className="text-gray-300 font-body mt-3 text-sm">
             Fill in all fields and check all 10 declarations, then click Print to generate your official A4 form. Submit the signed printed copy with documents to the NCC office.
           </p>
         </div>
@@ -349,7 +349,7 @@ export default function DeclarationForm() {
                           {...register(key, { required: 'This declaration is required' })}
                           className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
                         />
-                        <span className="text-army-300 font-body text-sm leading-relaxed group-hover:text-white transition-colors">
+              <span className="text-gray-600 font-body text-sm leading-relaxed group-hover:text-army-700 transition-colors">
                           <span className="text-gold-600 font-heading text-xs mr-1.5">{String(i + 1).padStart(2, '0')}.</span>
                           {text} <span className="text-gold-500">*</span>
                         </span>
@@ -381,7 +381,7 @@ export default function DeclarationForm() {
                         {...register(key)}
                         className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
                       />
-                      <span className="text-army-300 font-body text-sm leading-snug group-hover:text-white transition-colors">
+                      <span className="text-gray-600 font-body text-sm leading-snug group-hover:text-army-700 transition-colors">
                         {label}
                       </span>
                     </label>
@@ -455,7 +455,7 @@ export default function DeclarationForm() {
           <div className="mt-8 card-army p-5 flex items-start gap-3">
             <Shield className="w-5 h-5 text-gold-500 flex-shrink-0 mt-0.5" />
             <div className="font-body text-sm text-army-400 leading-relaxed">
-              <span className="text-white font-medium">After printing:</span> Sign in blue/black ink, obtain parent/guardian signature, attach all checked documents, and submit to the NCC office (Room 102, TCET Main Building) during office hours (Mon–Fri, 10 AM – 4 PM). Retain a photocopy for your records.
+              <span className="text-gray-900 font-medium">After printing:</span> Sign in blue/black ink, obtain parent/guardian signature, attach all checked documents, and submit to the NCC office (Room 102, TCET Main Building) during office hours (Mon–Fri, 10 AM – 4 PM). Retain a photocopy for your records.
             </div>
           </div>
         </div>

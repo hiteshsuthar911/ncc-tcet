@@ -128,7 +128,7 @@ function DynamicField({ field, register, errors, watch }) {
                   {...register(field.id, rules)}
                   className="accent-gold-500"
                 />
-                <span className="text-army-300 text-sm font-body group-hover:text-white transition-colors">
+                <span className="text-gray-600 text-sm font-body group-hover:text-army-700 transition-colors">
                   {opt.label}
                 </span>
               </label>
@@ -151,7 +151,7 @@ function DynamicField({ field, register, errors, watch }) {
               {...register(field.id, rules)}
               className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
             />
-            <span className="text-army-300 text-sm font-body group-hover:text-white transition-colors">
+            <span className="text-gray-600 text-sm font-body group-hover:text-army-700 transition-colors">
               {field.label}{field.required && <span className="text-gold-500 ml-0.5">*</span>}
             </span>
           </label>
@@ -309,28 +309,28 @@ export default function EventRegistration() {
   return (
     <div className="min-h-screen pt-20">
       {/* Header */}
-      <section className="relative py-16 bg-military-darker overflow-hidden">
+      <section className="relative py-16 bg-army-900 overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle">Participate</p>
-          <h1 className="section-title text-4xl md:text-5xl mb-2">Event Registration</h1>
+          <p className="section-subtitle text-gold-400">Participate</p>
+          <h1 className="section-title text-4xl md:text-5xl mb-2 text-white">Event Registration</h1>
           <div className="divider-gold w-24 mt-3" />
-          <p className="text-army-300 font-body mt-4 max-w-xl">
+          <p className="text-gray-300 font-body mt-4 max-w-xl">
             Browse active events and register with your cadet credentials. All fields are verified against the cadet register.
           </p>
           {/* Quick stats strip */}
           <div className="flex flex-wrap gap-6 mt-6">
-            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
-              <Shield className="w-4 h-4 text-gold-500" />
+            <div className="flex items-center gap-2 text-gray-300 text-sm font-body">
+              <Shield className="w-4 h-4 text-gold-400" />
               <span>{events.length} Active Event{events.length !== 1 ? 's' : ''}</span>
             </div>
-            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
-              <UserCheck className="w-4 h-4 text-gold-500" />
+            <div className="flex items-center gap-2 text-gray-300 text-sm font-body">
+              <UserCheck className="w-4 h-4 text-gold-400" />
               <span>Cadet Credentials Required</span>
             </div>
-            <div className="flex items-center gap-2 text-army-400 text-sm font-body">
-              <CheckCircle className="w-4 h-4 text-gold-500" />
+            <div className="flex items-center gap-2 text-gray-300 text-sm font-body">
+              <CheckCircle className="w-4 h-4 text-gold-400" />
               <span>Instant Confirmation</span>
             </div>
           </div>
@@ -387,7 +387,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> Date
                       </p>
-                      <p className="text-white font-body font-medium">{formatDate(selectedEvent.date)}</p>
+                      <p className="text-gray-900 font-body font-medium">{formatDate(selectedEvent.date)}</p>
                     </div>
                   )}
                   {selectedEvent.time && (
@@ -395,7 +395,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Clock className="w-3 h-3" /> Time
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.time}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.time}</p>
                     </div>
                   )}
                   {selectedEvent.venue && (
@@ -403,7 +403,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <MapPin className="w-3 h-3" /> Venue
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.venue}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.venue}</p>
                     </div>
                   )}
                   {selectedEvent.duration && (
@@ -411,7 +411,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Clock className="w-3 h-3" /> Duration
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.duration}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.duration}</p>
                     </div>
                   )}
                   {selectedEvent.eligibility && (
@@ -419,7 +419,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Award className="w-3 h-3" /> Eligibility
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.eligibility}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.eligibility}</p>
                     </div>
                   )}
                   {selectedEvent.organizer && (
@@ -427,7 +427,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <UserCheck className="w-3 h-3" /> Organizer
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.organizer}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.organizer}</p>
                     </div>
                   )}
                   {selectedEvent.reportingTime && (
@@ -435,7 +435,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Clock className="w-3 h-3" /> Reporting Time
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.reportingTime}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.reportingTime}</p>
                     </div>
                   )}
                   {selectedEvent.deadline && (
@@ -451,7 +451,7 @@ export default function EventRegistration() {
                       <p className="text-army-500 font-body text-xs uppercase tracking-widest mb-1 flex items-center gap-1">
                         <Phone className="w-3 h-3" /> Contact
                       </p>
-                      <p className="text-white font-body font-medium">{selectedEvent.contact}</p>
+                      <p className="text-gray-900 font-body font-medium">{selectedEvent.contact}</p>
                     </div>
                   )}
                 </div>
@@ -546,7 +546,7 @@ export default function EventRegistration() {
                       <tbody>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Full Name</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm font-medium">{receiptData.name || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm font-medium">{receiptData.name || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Regimental No.</td>
@@ -554,19 +554,19 @@ export default function EventRegistration() {
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Rank</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.rank || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.rank || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Wing</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.wing || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.wing || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Batch / Year</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.batch || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.batch || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Contact No.</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{userProfile?.phone || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.phone || '—'}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -581,23 +581,23 @@ export default function EventRegistration() {
                       <tbody>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Event Name</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-heading text-sm uppercase tracking-wide">{receiptData.event.title}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-heading text-sm uppercase tracking-wide">{receiptData.event.title}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Category</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.category || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.category || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Date</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.date ? formatDate(receiptData.event.date) : '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.date ? formatDate(receiptData.event.date) : '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Time</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.time || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.time || '—'}</td>
                         </tr>
                         <tr className="border border-army-700">
                           <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Venue</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.venue || '—'}</td>
+                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.venue || '—'}</td>
                         </tr>
                         {receiptData.event.reportingTime && (
                           <tr className="border border-army-700">
@@ -608,13 +608,13 @@ export default function EventRegistration() {
                         {receiptData.event.organizer && (
                           <tr className="border border-army-700">
                             <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Organized By</td>
-                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.organizer}</td>
+                            <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.organizer}</td>
                           </tr>
                         )}
                         {receiptData.event.contact && (
                           <tr className="border border-army-700">
                             <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Event Contact</td>
-                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">{receiptData.event.contact}</td>
+                            <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.contact}</td>
                           </tr>
                         )}
                       </tbody>
@@ -636,7 +636,7 @@ export default function EventRegistration() {
                               return (
                                 <tr key={field.id} className="border border-army-700">
                                   <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">{field.label}</td>
-                                  <td className="bg-army-950 border border-army-700 px-3 py-2 text-white font-body text-sm">
+                                  <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">
                                     {typeof val === 'boolean' ? (val ? 'Yes' : 'No') : String(val)}
                                   </td>
                                 </tr>
@@ -650,10 +650,10 @@ export default function EventRegistration() {
                     {/* ══ CERTIFICATION ══ */}
                     <div className="receipt-cert-text border border-army-600 bg-army-900/40 p-4 mb-5">
                       <p className="text-army-300 font-body text-sm italic leading-relaxed text-justify">
-                        This is to acknowledge that <strong className="text-white">{receiptData.name || 'the above-named cadet'}</strong> bearing
-                        Regimental No. <strong className="text-gold-400">{receiptData.regimentalNo || '—'}</strong> has
+                        This is to acknowledge that <strong className="text-gray-900">{receiptData.name || 'the above-named cadet'}</strong> bearing
+                        Regimental No. <strong className="text-gold-600">{receiptData.regimentalNo || '—'}</strong> has
                         successfully submitted a registration application for the event titled
-                        <strong className="text-white"> &ldquo;{receiptData.event.title}&rdquo;</strong> organized under
+                        <strong className="text-gray-900"> &ldquo;{receiptData.event.title}&rdquo;</strong> organized under
                         1 Maharashtra Naval Unit, NCC TCET. This receipt is an
                         acknowledgement of submission only and does not constitute a confirmed participation.
                         Final approval is subject to review by the Officer-In-Charge.
@@ -891,7 +891,7 @@ export default function EventRegistration() {
                             {...register('declaration', { required: 'You must accept the declaration to proceed' })}
                             className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
                           />
-                          <span className="text-army-300 text-sm font-body group-hover:text-white transition-colors">
+                          <span className="text-gray-600 text-sm font-body group-hover:text-army-700 transition-colors">
                             I have read and hereby declare that the above statements are true and accurate.
                             <span className="text-gold-500"> *</span>
                           </span>

@@ -961,7 +961,7 @@ export default function Forms() {
                     <Icon className={`w-5 h-5 ${color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-heading text-white uppercase tracking-widest text-sm mb-1">{label}</p>
+                    <p className="font-heading text-gray-900 uppercase tracking-widest text-sm mb-1">{label}</p>
                     <p className="font-body text-army-400 text-xs leading-relaxed">{description}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-army-600 group-hover:text-gold-400 transition-colors mt-1 flex-shrink-0" />

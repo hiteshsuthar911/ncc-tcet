@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
 import {
   Shield,
   LayoutDashboard,
@@ -15,6 +15,8 @@ import {
   FileText,
   Upload,
   ShieldPlus,
+  Image,
+  UserCog,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import toast from 'react-hot-toast'
@@ -27,8 +29,12 @@ const ADMIN_NAV = [
   { to: '/admin/declarations', label: 'Declarations', icon: FileText },
   { to: '/admin/leave-applications', label: 'Leave Applications', icon: ClipboardList },
   { to: '/admin/cadets', label: 'Cadets', icon: Users },
+  { to: '/admin/team', label: 'Our Team', icon: UserCog },
+  { to: '/admin/gallery', label: 'Gallery', icon: Image },
   { to: '/admin/attendance', label: 'Attendance', icon: ClipboardCheck },
+  { to: '/admin/polls', label: 'Attendance Polls', icon: ClipboardCheck },
   { to: '/admin/bulk-import', label: 'Bulk Import', icon: Upload },
+  { to: '/admin/notifications', label: 'Notifications', icon: Bell },
   { to: '/admin/add-admin', label: 'Add Admin', icon: ShieldPlus },
 ]
 
@@ -48,7 +54,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen flex bg-military-dark">
+    <div className="h-screen flex overflow-hidden bg-military-dark">
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-military-darker border-r border-army-800 flex flex-col transition-transform duration-300 ${
@@ -135,10 +141,10 @@ export default function AdminLayout() {
             Command Center
           </h1>
           <div className="flex items-center gap-3 ml-auto">
-            <button className="relative text-army-400 hover:text-gold-400 transition-colors">
+            <Link to="/admin/notifications" className="relative text-army-400 hover:text-gold-400 transition-colors" title="Manage Notifications">
               <Bell className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold-500 rounded-full" />
-            </button>
+            </Link>
           </div>
         </header>
 

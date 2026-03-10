@@ -96,14 +96,14 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="section-title text-5xl md:text-7xl lg:text-8xl mb-4 text-glow-gold">
+          <h1 className="section-title text-5xl md:text-7xl lg:text-8xl mb-4 text-glow-gold text-white">
             NCC TCET
           </h1>
-          <p className="font-heading text-lg md:text-2xl text-gold-500 tracking-[0.4em] uppercase mb-3">
+          <p className="font-heading text-lg md:text-2xl text-gold-400 tracking-[0.4em] uppercase mb-3">
             National Cadet Corps
           </p>
           <div className="divider-gold w-48 mx-auto mb-6" />
-          <p className="font-body text-army-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+          <p className="font-body text-gray-200 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
             Forging disciplined, patriotic, and capable leaders for tomorrow. Join us in the pursuit of excellence, unity, and service to the nation.
           </p>
 
@@ -125,14 +125,14 @@ export default function Home() {
       </section>
 
       {/* ── STATS ── */}
-      <section className="py-16 bg-military-darker border-y border-army-800">
+      <section className="py-16 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {STATS.map(({ label, value, icon: Icon }) => (
               <div key={label} className="stat-card text-center">
                 <Icon className="w-6 h-6 text-gold-500 mx-auto mb-3" />
-                <p className="font-heading text-3xl md:text-4xl text-white mb-1">{value}</p>
-                <p className="font-body text-xs text-army-400 uppercase tracking-widest">{label}</p>
+                <p className="font-heading text-3xl md:text-4xl text-gray-900 mb-1">{value}</p>
+                <p className="font-body text-xs text-gray-500 uppercase tracking-widest">{label}</p>
               </div>
             ))}
           </div>
@@ -140,7 +140,7 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT SNIPPET ── */}
-      <section className="py-20 bg-military-dark">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -149,10 +149,10 @@ export default function Home() {
                 Building Leaders of Tomorrow
               </h2>
               <div className="divider-gold w-24 mb-6" />
-              <p className="text-army-300 font-body leading-relaxed mb-4">
+              <p className="text-gray-600 font-body leading-relaxed mb-4">
                 The NCC unit at TCET is committed to developing young men and women into disciplined, responsible citizens and future leaders through rigorous military training, community service, and character building programs.
               </p>
-              <p className="text-army-400 font-body leading-relaxed mb-8">
+              <p className="text-gray-500 font-body leading-relaxed mb-8">
                 Our cadets participate in national-level camps, adventure activities, social service initiatives, and receive training that instills values of patriotism, integrity, and excellence.
               </p>
               <Link to="/about" className="btn-primary inline-flex items-center gap-2">
@@ -164,28 +164,28 @@ export default function Home() {
                 {CORE_VALUES.map(({ icon: Icon, title, desc }) => (
                   <div
                     key={title}
-                    className="card-army p-5 group hover:bg-army-900 transition-all duration-300"
+                    className="card-army p-5 group transition-all duration-300"
                   >
-                    <div className="w-10 h-10 bg-army-800 border border-army-600 flex items-center justify-center mb-3 group-hover:border-gold-500 transition-colors duration-300">
-                      <Icon className="w-5 h-5 text-gold-500" />
+                    <div className="w-10 h-10 bg-army-50 border border-army-200 rounded-sm flex items-center justify-center mb-3 group-hover:border-gold-500 group-hover:bg-army-100 transition-colors duration-300">
+                      <Icon className="w-5 h-5 text-army-600" />
                     </div>
-                    <h3 className="font-heading text-white text-sm uppercase tracking-widest mb-2">
+                    <h3 className="font-heading text-gray-900 text-sm uppercase tracking-widest mb-2">
                       {title}
                     </h3>
-                    <p className="text-army-400 text-xs font-body leading-relaxed">{desc}</p>
+                    <p className="text-gray-500 text-xs font-body leading-relaxed">{desc}</p>
                   </div>
                 ))}
               </div>
               {/* Decorative element */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 border border-gold-500/20" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 border border-army-600/30" />
+              <div className="absolute -top-4 -right-4 w-24 h-24 border border-gold-500/30" />
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 border border-army-300/40" />
             </div>
           </div>
         </div>
       </section>
 
       {/* ── UPCOMING EVENTS ── */}
-      <section className="py-20 bg-military-darker">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">What's Ahead</p>
@@ -197,9 +197,9 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="card-army p-6 animate-pulse">
-                  <div className="h-4 bg-army-800 rounded mb-3 w-1/3" />
-                  <div className="h-6 bg-army-800 rounded mb-2" />
-                  <div className="h-4 bg-army-800 rounded w-2/3" />
+                  <div className="h-4 bg-gray-200 rounded mb-3 w-1/3" />
+                  <div className="h-6 bg-gray-200 rounded mb-2" />
+                  <div className="h-4 bg-gray-200 rounded w-2/3" />
                 </div>
               ))}
             </div>
@@ -211,9 +211,9 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <Shield className="w-12 h-12 text-army-700 mx-auto mb-4" />
-              <p className="text-army-500 font-body">No upcoming events at the moment.</p>
-              <p className="text-army-600 text-sm font-body mt-1">Check back soon for new events.</p>
+              <Shield className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500 font-body">No upcoming events at the moment.</p>
+              <p className="text-gray-400 text-sm font-body mt-1">Check back soon for new events.</p>
             </div>
           )}
 
@@ -229,19 +229,19 @@ export default function Home() {
       <section className="py-20 bg-army-900 border-y border-army-700 relative overflow-hidden">
         <div className="absolute inset-0 bg-camo-pattern opacity-20" />
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <p className="section-subtitle">Ready to Serve?</p>
-          <h2 className="section-title text-3xl md:text-5xl mb-4">
+          <p className="section-subtitle text-gold-400">Ready to Serve?</p>
+          <h2 className="section-title text-3xl md:text-5xl mb-4 text-white">
             Join the Corps
           </h2>
           <div className="divider-gold w-24 mx-auto mb-6" />
-          <p className="text-army-300 font-body mb-8 max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-300 font-body mb-8 max-w-xl mx-auto leading-relaxed">
             Take the first step towards becoming a part of something bigger. Register for our upcoming events and let your journey begin.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/events" className="btn-primary">
               Register Now
             </Link>
-            <Link to="/login" className="btn-secondary">
+            <Link to="/login" className="border border-white/60 text-white hover:bg-white/10 font-heading tracking-widest uppercase px-6 py-3 transition-all duration-300 text-sm">
               Cadet Login
             </Link>
           </div>
@@ -260,18 +260,18 @@ function EventCard({ event }) {
     : 'TBA'
 
   return (
-    <div className="card-army p-6 group hover:bg-army-900 transition-all duration-300 relative overflow-hidden">
+    <div className="card-army p-6 group transition-all duration-300 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-1 h-full bg-gold-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span className="badge-rank mb-3 inline-flex">{event.category || 'Event'}</span>
-      <h3 className="font-heading text-white text-lg uppercase tracking-wide mb-2 group-hover:text-gold-400 transition-colors duration-200">
+      <h3 className="font-heading text-gray-900 text-lg uppercase tracking-wide mb-2 group-hover:text-army-700 transition-colors duration-200">
         {event.title}
       </h3>
-      <p className="text-army-400 text-sm font-body mb-4 line-clamp-2">{event.description}</p>
+      <p className="text-gray-500 text-sm font-body mb-4 line-clamp-2">{event.description}</p>
       <div className="flex items-center justify-between">
-        <span className="text-gold-500 text-xs font-heading tracking-wider">{dateStr}</span>
+        <span className="text-gold-600 text-xs font-heading tracking-wider">{dateStr}</span>
         <Link
           to={`/events?register=${event.id}`}
-          className="text-xs font-heading text-army-400 hover:text-gold-400 uppercase tracking-wider flex items-center gap-1 transition-colors duration-200"
+          className="text-xs font-heading text-gray-500 hover:text-army-700 uppercase tracking-wider flex items-center gap-1 transition-colors duration-200"
         >
           Register <ChevronRight className="w-3 h-3" />
         </Link>

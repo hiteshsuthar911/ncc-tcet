@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import {
   collection,
   getDocs,
@@ -11,7 +11,8 @@ import {
   orderBy,
 } from 'firebase/firestore'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth, db } from '../../firebase/config'
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { auth, db, storage } from '../../firebase/config'
 import { useForm } from 'react-hook-form'
 import {
   Users,
@@ -23,6 +24,8 @@ import {
   Save,
   AlertTriangle,
   Shield,
+  Upload,
+  UserCircle,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -33,11 +36,22 @@ const RANKS = [
   'Under Officer', 'Junior Under Officer', 'Senior Under Officer',
 ]
 
-const WINGS = ['Army', 'Navy', 'Air', 'All']
+const WINGS = ['Army', 'Navy', 'Air']
 
 function CadetModal({ cadet, onClose, onSaved }) {
   const isEditing = !!cadet
-  const [saving, setSaving] = useState(false)
+  const [saving, setSaving]         = useState(false)
+  const [photoFile, setPhotoFile]   = useState(null)
+  const [photoPreview, setPhotoPreview] = useState(cadet?.photoUrl || null)
+  const fileRef = useRef()
+
+  function handlePhotoChange(e) {
+    const f = e.target.files[0]
+    if (!f) return
+    if (f.size > 5 * 1024 * 1024) { toast.error('Image must be under 5 MB'); return }
+    setPhotoFile(f)
+    setPhotoPreview(URL.createObjectURL(f))
+  }
 
   const {
     register,
@@ -60,7 +74,25 @@ function CadetModal({ cadet, onClose, onSaved }) {
 
   async function onSubmit(data) {
     setSaving(true)
+    let photoUrl    = cadet?.photoUrl    || ''
+    let storagePath = cadet?.storagePath || ''
     try {
+      if (photoFile) {
+        const path = `cadets/${Date.now()}_${photoFile.name.replace(/\s+/g, '_')}`
+        const sRef = storageRef(storage, path)
+        console.log('[Upload] Starting upload to', path, '| storage bucket:', storage.app.options.storageBucket)
+        photoUrl    = await new Promise((resolve, reject) => {
+          const timer = setTimeout(() => reject(new Error('TIMEOUT')), 20000)
+          const task = uploadBytesResumable(sRef, photoFile)
+          task.on(
+            'state_changed',
+            () => { clearTimeout(timer) },
+            (err) => { clearTimeout(timer); reject(err) },
+            async () => { clearTimeout(timer); try { resolve(await getDownloadURL(task.snapshot.ref)) } catch (e) { reject(e) } }
+          )
+        })
+        storagePath = path
+      }
       if (!isEditing) {
         if (!data.password) { toast.error('Password is required for new cadets'); setSaving(false); return }
         // Create Firebase Auth user
@@ -78,6 +110,8 @@ function CadetModal({ cadet, onClose, onSaved }) {
           phone: data.phone,
           email: `${data.regimentalNo.toLowerCase()}@ncc-tcet.in`,
           role: data.role,
+          photoUrl,
+          storagePath,
           createdAt: serverTimestamp(),
         })
         toast.success('Cadet account created!')
@@ -90,16 +124,23 @@ function CadetModal({ cadet, onClose, onSaved }) {
           branch: data.branch,
           phone: data.phone,
           role: data.role,
+          photoUrl,
+          storagePath,
           updatedAt: serverTimestamp(),
         })
         toast.success('Cadet updated!')
       }
       onSaved()
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') {
+      console.error('[Upload] Error:', err)
+      if (err.message === 'TIMEOUT') {
+        toast.error('Upload timed out — Firebase Storage may not be enabled. Go to Firebase Console → Storage → Get Started.')
+      } else if (err.code === 'auth/email-already-in-use') {
         toast.error('A cadet with this Regimental No. already exists.')
+      } else if (err.code === 'storage/unauthorized') {
+        toast.error('Permission denied — update Firebase Storage security rules to allow writes.')
       } else {
-        toast.error('Failed to save cadet.')
+        toast.error(`Failed to save cadet: ${err.message || err.code || 'Unknown error'}`)
       }
     } finally {
       setSaving(false)
@@ -121,6 +162,34 @@ function CadetModal({ cadet, onClose, onSaved }) {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto scrollbar-thin">
+
+            {/* Photo upload */}
+            <div>
+              <label className="label-field">Cadet Photo</label>
+              <div
+                onClick={() => fileRef.current?.click()}
+                className="flex items-center gap-4 cursor-pointer"
+              >
+                <div className="relative w-16 h-16 flex-shrink-0 border border-army-700 hover:border-gold-500 overflow-hidden bg-army-800 flex items-center justify-center transition-colors">
+                  {photoPreview
+                    ? <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
+                    : <UserCircle className="w-9 h-9 text-army-600" />}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                    <Upload className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-army-400 font-body text-xs mb-1.5">
+                    {photoPreview ? 'Photo selected — will upload on save' : 'Optional — click to upload a photo (max 5 MB)'}
+                  </p>
+                  <span className="font-heading text-xs uppercase tracking-wider border border-army-700 hover:border-gold-500 text-army-400 hover:text-gold-400 px-3 py-1.5 transition-colors">
+                    {photoPreview ? 'Change Photo' : 'Select Photo'}
+                  </span>
+                </div>
+              </div>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <label className="label-field">Full Name *</label>
@@ -239,6 +308,9 @@ export default function AdminCadets() {
   const [cadets, setCadets] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [filterWing, setFilterWing] = useState('')
+  const [filterYear, setFilterYear] = useState('')
+  const [filterRank, setFilterRank] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingCadet, setEditingCadet] = useState(null)
   const [deletingId, setDeletingId] = useState(null)
@@ -277,11 +349,17 @@ export default function AdminCadets() {
     fetchCadets()
   }
 
-  const filtered = cadets.filter((c) =>
-    c.name?.toLowerCase().includes(search.toLowerCase()) ||
-    c.regimentalNo?.toLowerCase().includes(search.toLowerCase()) ||
-    c.branch?.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = cadets.filter((c) => {
+    const matchSearch =
+      !search ||
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.regimentalNo?.toLowerCase().includes(search.toLowerCase()) ||
+      c.branch?.toLowerCase().includes(search.toLowerCase())
+    const matchWing = !filterWing || c.wing === filterWing
+    const matchYear = !filterYear || c.year === filterYear
+    const matchRank = !filterRank || c.rank === filterRank
+    return matchSearch && matchWing && matchYear && matchRank
+  })
 
   return (
     <div>
@@ -299,15 +377,55 @@ export default function AdminCadets() {
         </button>
       </div>
 
-      <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
-        <input
-          type="text"
-          placeholder="Search by name, regimental no., branch..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="input-field pl-10"
-        />
+      {/* Search + Filters */}
+      <div className="space-y-3 mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
+          <input
+            type="text"
+            placeholder="Search by name, regimental no., branch..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input-field pl-10"
+          />
+        </div>
+        <div className="flex flex-wrap gap-3 items-center">
+          <select
+            value={filterWing}
+            onChange={(e) => setFilterWing(e.target.value)}
+            className="select-field flex-1 min-w-[120px]"
+          >
+            <option value="">All Wings</option>
+            {['Army', 'Navy', 'Air'].map((w) => <option key={w} value={w}>{w}</option>)}
+          </select>
+          <select
+            value={filterYear}
+            onChange={(e) => setFilterYear(e.target.value)}
+            className="select-field flex-1 min-w-[120px]"
+          >
+            <option value="">All Years</option>
+            {['FE', 'SE', 'TE', 'BE'].map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+          <select
+            value={filterRank}
+            onChange={(e) => setFilterRank(e.target.value)}
+            className="select-field flex-1 min-w-[160px]"
+          >
+            <option value="">All Ranks</option>
+            {RANKS.filter(r => r !== 'All').map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+          {(filterWing || filterYear || filterRank || search) && (
+            <button
+              onClick={() => { setSearch(''); setFilterWing(''); setFilterYear(''); setFilterRank('') }}
+              className="flex items-center gap-1.5 text-xs font-heading text-army-400 hover:text-white uppercase tracking-wider border border-army-700 hover:border-army-500 px-3 py-2 transition-colors"
+            >
+              <X className="w-3 h-3" /> Clear
+            </button>
+          )}
+          <span className="text-army-500 text-xs font-body ml-auto">
+            {filtered.length} of {cadets.length} cadets
+          </span>
+        </div>
       </div>
 
       {loading ? (
@@ -342,8 +460,10 @@ export default function AdminCadets() {
                 <tr key={cadet.docId} className="border-b border-army-900 hover:bg-army-900/50 transition-colors">
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-army-700 border border-army-600 flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-4 h-4 text-army-400" />
+                      <div className="w-9 h-9 flex-shrink-0 border border-army-700 overflow-hidden bg-army-800 flex items-center justify-center">
+                        {cadet.photoUrl
+                          ? <img src={cadet.photoUrl} alt={cadet.name} className="w-full h-full object-cover" />
+                          : <Shield className="w-4 h-4 text-army-500" />}
                       </div>
                       <p className="font-heading text-sm text-white uppercase tracking-wide">{cadet.name}</p>
                     </div>

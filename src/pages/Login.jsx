@@ -37,7 +37,8 @@ export default function Login() {
         navigate('/admin', { replace: true })
       } else {
         toast.success('Welcome back, Cadet!')
-        navigate(from === '/admin' ? '/' : from, { replace: true })
+        const dest = from && from !== '/' && !from.startsWith('/admin') ? from : '/dashboard'
+        navigate(dest, { replace: true })
       }
     } catch (err) {
       let msg = 'Login failed. Please try again.'
@@ -77,14 +78,14 @@ export default function Login() {
           <h1 className="font-heading text-3xl text-white uppercase tracking-widest">
             NCC TCET
           </h1>
-          <p className="text-army-400 font-body text-sm mt-1">Cadet &amp; Admin Portal</p>
+          <p className="text-gray-300 font-body text-sm mt-1">Cadet &amp; Admin Portal</p>
         </div>
 
         {/* Login Form */}
         <div className="card-army relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
           <div className="p-8">
-            <h2 className="font-heading text-lg text-white uppercase tracking-widest mb-6 flex items-center gap-2">
+            <h2 className="font-heading text-lg text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
               <span className="h-px w-4 bg-gold-500 inline-block" />
               Sign In
             </h2>
@@ -186,7 +187,7 @@ export default function Login() {
                   <strong className="text-gold-400">Admins</strong> are automatically redirected to the Admin Dashboard upon login.
                 </p>
               </div>
-              <p className="text-army-600 text-xs font-body text-center">
+              <p className="text-gray-400 text-xs font-body text-center">
                 Access is restricted to registered NCC cadets and staff of TCET.
               </p>
             </div>
