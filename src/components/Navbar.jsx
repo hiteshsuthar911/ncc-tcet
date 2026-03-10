@@ -20,6 +20,12 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isOpen])
+
   async function handleLogout() {
     try {
       await logout()
@@ -225,110 +231,169 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
-          <div className="px-4 py-4 space-y-1">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.to === '/'}
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `block py-2.5 px-4 font-heading text-sm uppercase tracking-widest border-l-2 transition-all duration-200 rounded-r-sm ${
-                    isActive
-                      ? 'text-army-700 border-army-600 bg-army-50'
-                      : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-            {/* Explore links in mobile */}
-            <div className="py-1 px-4 font-heading text-xs text-gray-400 uppercase tracking-widest">Explore</div>
-            {exploreLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `flex items-center gap-2 py-2.5 px-6 font-heading text-sm uppercase tracking-widest border-l-2 transition-all duration-200 rounded-r-sm ${
-                    isActive
-                      ? 'text-army-700 border-army-600 bg-army-50'
-                      : 'text-gray-600 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                  }`
-                }
-              >
-                <link.icon className="w-3.5 h-3.5" />{link.label}
-              </NavLink>
-            ))}
-            {isAdmin && (
-              <NavLink
-                to="/admin"
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `block py-2.5 px-4 font-heading text-sm uppercase tracking-widest border-l-2 transition-all duration-200 rounded-r-sm ${
-                    isActive
-                      ? 'text-army-700 border-army-600 bg-army-50'
-                      : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
-                  }`
-                }
-              >
-                Admin Portal
-              </NavLink>
-            )}
-            {currentUser ? (
-                <div className="space-y-1 border-t border-gray-100 pt-2 mt-2">
+      {/* Mobile Drawer Overlay */}
+      <div
+        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/60"
+          onClick={() => setIsOpen(false)}
+        />
+
+        {/* Drawer Panel */}
+        <div
+          className={`absolute top-0 right-0 h-full w-[min(300px,85vw)] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
+            isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white flex-shrink-0">
+            <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5">
+              <img
+                src={`${import.meta.env.BASE_URL}ncc-logo.svg`}
+                alt="NCC Logo"
+                className="h-10 w-auto object-contain"
+              />
+              <div>
+                <p className="font-heading text-xs tracking-[0.25em] text-gold-500 uppercase leading-none">NCC TCET</p>
+                <p className="font-body text-[10px] text-gray-400 leading-none mt-0.5">National Cadet Corps</p>
+              </div>
+            </Link>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 text-gray-500 hover:text-gray-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Scrollable Nav Content */}
+          <div className="flex-1 overflow-y-auto overscroll-contain">
+            <nav className="py-3">
+              {/* Main Links */}
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  end={link.to === '/'}
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    `flex items-center py-3 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                      isActive
+                        ? 'text-army-700 border-army-600 bg-army-50'
+                        : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                    }`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+
+              {/* Explore Section */}
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <p className="px-5 pb-2 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">Explore</p>
+                {exploreLinks.map((link) => (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3 px-5 pl-7 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                        isActive
+                          ? 'text-army-700 border-army-600 bg-army-50'
+                          : 'text-gray-600 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                      }`
+                    }
+                  >
+                    <link.icon className="w-3.5 h-3.5 flex-shrink-0" />{link.label}
+                  </NavLink>
+                ))}
+              </div>
+
+              {/* Admin */}
+              {isAdmin && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <NavLink
+                    to="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2.5 py-3 px-5 font-heading text-sm uppercase tracking-widest border-l-4 transition-all ${
+                        isActive
+                          ? 'text-army-700 border-army-600 bg-army-50'
+                          : 'text-gray-700 border-transparent hover:text-army-700 hover:border-army-400 hover:bg-gray-50'
+                      }`
+                    }
+                  >
+                    <Settings className="w-3.5 h-3.5 flex-shrink-0" /> Admin Portal
+                  </NavLink>
+                </div>
+              )}
+
+              {/* Cadet Links */}
+              {currentUser && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="px-5 pb-2 font-heading text-[10px] text-gray-400 uppercase tracking-[0.2em]">My Account</p>
                   <Link
                     to="/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-2.5 px-4 text-gold-600 font-heading text-sm uppercase tracking-widest border-l-2 border-gold-500 bg-amber-50 transition-all duration-200 rounded-r-sm"
+                    className="flex items-center gap-2.5 py-3 px-5 text-gold-600 bg-amber-50 border-l-4 border-gold-500 font-heading text-sm uppercase tracking-widest"
                   >
-                    <LayoutDashboard className="w-4 h-4" /> My Dashboard
+                    <LayoutDashboard className="w-4 h-4 flex-shrink-0" /> My Dashboard
                   </Link>
                   <Link
                     to="/profile"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-2.5 px-4 text-gray-700 hover:text-army-700 font-heading text-sm uppercase tracking-widest border-l-2 border-transparent hover:border-army-400 hover:bg-gray-50 transition-all duration-200 rounded-r-sm"
+                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
                   >
-                    <User className="w-4 h-4" /> My Profile
+                    <User className="w-4 h-4 flex-shrink-0" /> My Profile
                   </Link>
                   <Link
                     to="/my-registrations"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-2.5 px-4 text-gray-700 hover:text-army-700 font-heading text-sm uppercase tracking-widest border-l-2 border-transparent hover:border-army-400 hover:bg-gray-50 transition-all duration-200 rounded-r-sm"
+                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
                   >
-                    <ClipboardList className="w-4 h-4" /> My Registrations
+                    <ClipboardList className="w-4 h-4 flex-shrink-0" /> My Registrations
                   </Link>
                   <Link
                     to="/polls"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-2.5 px-4 text-gray-700 hover:text-army-700 font-heading text-sm uppercase tracking-widest border-l-2 border-transparent hover:border-army-400 hover:bg-gray-50 transition-all duration-200 rounded-r-sm"
+                    className="flex items-center gap-2.5 py-3 px-5 text-gray-700 hover:text-army-700 border-l-4 border-transparent hover:border-army-400 hover:bg-gray-50 font-heading text-sm uppercase tracking-widest transition-all"
                   >
-                    <ClipboardList className="w-4 h-4" /> Session Polls
+                    <ClipboardList className="w-4 h-4 flex-shrink-0" /> Session Polls
                   </Link>
-                  <button
-                    onClick={() => { handleLogout(); setIsOpen(false) }}
-                    className="flex items-center gap-2 text-red-600 hover:bg-red-50 font-heading text-sm uppercase tracking-wider px-4 py-2.5 w-full text-left transition-colors rounded-r-sm"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
-                  </button>
                 </div>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-2.5 text-army-700 font-heading text-sm uppercase tracking-wider border border-army-600 mx-2 my-2 text-center hover:bg-army-600 hover:text-white transition-colors rounded-sm"
-                >
-                  Login
-                </Link>
               )}
+            </nav>
+          </div>
+
+          {/* Drawer Footer */}
+          <div className="flex-shrink-0 px-5 py-4 border-t border-gray-200 bg-gray-50">
+            {currentUser ? (
+              <div>
+                <p className="font-heading text-xs text-army-700 uppercase tracking-widest">{userProfile?.name || 'Cadet'}</p>
+                <p className="text-gray-500 text-xs mb-3">{userProfile?.regimentalNo || ''}</p>
+                <button
+                  onClick={() => { handleLogout(); setIsOpen(false) }}
+                  className="flex items-center gap-2 text-red-600 hover:text-red-700 font-heading text-xs uppercase tracking-wider transition-colors"
+                >
+                  <LogOut className="w-4 h-4" /> Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="btn-primary block w-full text-center py-3 text-sm"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   )
 }
