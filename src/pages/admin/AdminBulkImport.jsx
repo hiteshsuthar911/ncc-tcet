@@ -53,7 +53,9 @@ function parseCSV(text) {
     return result
   }
 
-  const headers = parseLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim())
+  // Strip BOM if present
+  const firstLine = lines[0].replace(/^\uFEFF/, '')
+  const headers = parseLine(firstLine).map(h => h.replace(/^"|"$/g, '').trim())
   const rows = lines.slice(1)
     .filter(l => l.trim())
     .map(l => {
@@ -63,6 +65,24 @@ function parseCSV(text) {
       return obj
     })
   return { headers, rows }
+}
+
+// Remap CSV headers to canonical column keys, tolerating different capitalisation/spacing
+function normalizeRows(rows, columns) {
+  const keyMap = {}
+  columns.forEach(col => {
+    const normalize = s => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+    keyMap[normalize(col.key)]   = col.key
+    keyMap[normalize(col.label)] = col.key
+  })
+  return rows.map(row => {
+    const out = {}
+    Object.entries(row).forEach(([h, v]) => {
+      const lookup = h.toLowerCase().replace(/[^a-z0-9]/g, '')
+      out[keyMap[lookup] ?? h] = v
+    })
+    return out
+  })
 }
 
 function downloadCSV(filename, columns, sampleRows) {
@@ -85,6 +105,66 @@ function downloadCSV(filename, columns, sampleRows) {
   a.download = filename
   a.click()
   URL.revokeObjectURL(url)
+}
+
+// ── Helper Functions ──────────────────────────────────────────────────────────
+
+function generatePassword() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
+  return Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
+}
+
+async function createFirebaseUser(email, password) {
+  const res = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${import.meta.env.VITE_FIREBASE_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, returnSecureToken: false }),
+    }
+  )
+  const json = await res.json()
+  if (!res.ok) {
+    const msg = json.error?.message || 'UNKNOWN_ERROR'
+    if (msg.includes('EMAIL_EXISTS')) throw Object.assign(new Error(msg), { code: 'auth/email-already-in-use' })
+    throw Object.assign(new Error(msg), { code: msg })
+  }
+  return json.localId
+}
+
+function printAllCredentials(credentials) {
+  const win = window.open('', '_blank', 'width=700,height=900')
+  if (!win) { alert('Allow popups to print credentials.'); return }
+  const rows = credentials.map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${c.regimentalNo}</td>
+      <td>${c.wing || '—'}</td>
+      <td>${c.rank || '—'}</td>
+      <td>${c.email}</td>
+      <td class="pwd">${c.password}</td>
+    </tr>`).join('')
+  win.document.write(`<!DOCTYPE html><html><head><title>NCC TCET – Bulk Credentials</title><style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial,sans-serif;padding:32px;color:#111}
+    h1{font-size:20px;text-transform:uppercase;letter-spacing:3px;color:#1a2e0d;margin-bottom:4px}
+    p{font-size:11px;color:#6b7280;margin-bottom:24px;letter-spacing:1px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:#1a2e0d;color:#fff;text-align:left;padding:8px 10px;text-transform:uppercase;letter-spacing:1px;font-size:10px}
+    td{padding:7px 10px;border-bottom:1px solid #e5e7eb}
+    tr:nth-child(even) td{background:#f9fafb}
+    .pwd{font-family:'Courier New',monospace;font-weight:700;color:#92400e;background:#fffbeb;letter-spacing:2px}
+    .warn{margin-top:20px;font-size:10px;color:#b45309;border:1px solid #f59e0b;padding:8px 12px;background:#fffbeb}
+    @media print{body{padding:16px}}
+  </style></head><body>
+    <h1>🛡️ NCC TCET — Cadet Login Credentials</h1>
+    <p>STRICTLY CONFIDENTIAL · Bulk Import · ${new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })}</p>
+    <table><thead><tr><th>Name</th><th>Regimental No.</th><th>Wing</th><th>Rank</th><th>Email</th><th>Password</th></tr></thead>
+    <tbody>${rows}</tbody></table>
+    <div class="warn">⚠ Ask each cadet to change their password after first login. Do not share this document.</div>
+    <script>setTimeout(function(){window.print();},600);<\/script>
+  </body></html>`)
+  win.document.close()
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -112,7 +192,7 @@ const IMPORT_CONFIGS = {
     templateFile: 'cadets_template.csv',
     columns: [
       { key: 'name',          label: 'Name',           required: true,  example: 'Arjun Sharma',          hint: 'Full name of the cadet' },
-      { key: 'regimentalNo',  label: 'Regimental No',  required: true,  example: 'MH-01234',               hint: 'Format: XX-##### (e.g. MH-01234)' },
+      { key: 'regimentalNo',  label: 'Regimental No',  required: true,  example: 'MH2024SDIA4200621',      hint: 'Alphanumeric regimental number (e.g. MH2024SDIA4200621)' },
       { key: 'rank',          label: 'Rank',           required: false, example: 'Cadet',                  hint: RANKS.slice(0, 4).join(', ') + ' …' },
       { key: 'wing',          label: 'Wing',           required: false, example: 'Army',                   hint: WINGS.join(' / ') },
       { key: 'year',          label: 'Year',           required: false, example: 'SE',                     hint: YEARS.join(' / ') },
@@ -120,16 +200,16 @@ const IMPORT_CONFIGS = {
       { key: 'phone',         label: 'Phone',          required: false, example: '9876543210',             hint: '10-digit mobile number' },
     ],
     sampleRows: [
-      { name: 'Arjun Sharma',  regimentalNo: 'MH-01001', rank: 'Cadet',          wing: 'Army',  year: 'SE', branch: 'Computer Engineering', phone: '9876543210' },
-      { name: 'Priya Nair',    regimentalNo: 'MH-01002', rank: 'Lance Corporal',  wing: 'Navy',  year: 'TE', branch: 'Electronics',          phone: '8765432109' },
-      { name: 'Rohan Mehta',   regimentalNo: 'MH-01003', rank: 'Corporal',        wing: 'Air',   year: 'BE', branch: 'Mechanical',           phone: '7654321098' },
+      { name: 'Arjun Sharma',  regimentalNo: 'MH2024SDIA4200001', rank: 'Cadet',          wing: 'Army',  year: 'SE', branch: 'Computer Engineering', phone: '9876543210' },
+      { name: 'Priya Nair',    regimentalNo: 'MH2024SDIA4200002', rank: 'Lance Corporal',  wing: 'Navy',  year: 'TE', branch: 'Electronics',          phone: '8765432109' },
+      { name: 'Rohan Mehta',   regimentalNo: 'MH2024SDIA4200003', rank: 'Corporal',        wing: 'Air',   year: 'BE', branch: 'Mechanical',           phone: '7654321098' },
     ],
     validate(row) {
       const errs = []
       if (!row.name?.trim())          errs.push('Name is required')
       if (!row.regimentalNo?.trim())  errs.push('Regimental No is required')
-      else if (!/^[A-Za-z]{2}-\d{3,6}$/.test(row.regimentalNo.trim()))
-                                      errs.push('Regimental No must be in format XX-##### (e.g. MH-01234)')
+      else if (!/^[A-Za-z0-9]{4,30}$/.test(row.regimentalNo.trim()))
+                                      errs.push('Regimental No must be alphanumeric with no spaces (e.g. MH2024SDIA4200621)')
       if (row.wing && !WINGS.includes(row.wing))  errs.push(`Wing must be one of: ${WINGS.join(', ')}`)
       if (row.year && !YEARS.includes(row.year))  errs.push(`Year must be one of: ${YEARS.join(', ')}`)
       if (row.phone && !/^\d{10}$/.test(row.phone.replace(/\s/g, '')))
@@ -499,8 +579,9 @@ export default function AdminBulkImport() {
     }
     const reader = new FileReader()
     reader.onload = (e) => {
-      const { rows } = parseCSV(e.target.result)
-      if (rows.length === 0) { toast.error('No data rows found in the file'); return }
+      const { rows: rawRows } = parseCSV(e.target.result)
+      if (rawRows.length === 0) { toast.error('No data rows found in the file'); return }
+      const rows = normalizeRows(rawRows, config.columns)
       const map = {}
       rows.forEach((row, i) => {
         const errs = config.validate(row)
