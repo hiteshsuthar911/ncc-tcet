@@ -43,6 +43,7 @@ import AdminGallery from './pages/admin/AdminGallery'
 import AdminTeam from './pages/admin/AdminTeam'
 import CadetDashboard from './pages/CadetDashboard'
 import DownloadApp from './pages/DownloadApp'
+import ResetPassword from './pages/ResetPassword'
 
 // Public layout wrapper (with navbar + footer)
 function PublicLayout({ children }) {
@@ -95,6 +96,14 @@ export default function App() {
         }
       />
       <Route path="/setup" element={<Setup />} />
+      <Route
+        path="/reset-password"
+        element={
+          <PublicLayout>
+            <ResetPassword />
+          </PublicLayout>
+        }
+      />
       <Route
         path="/join"
         element={
