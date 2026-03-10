@@ -47,6 +47,7 @@ export default function Footer() {
                 { to: '/rules', label: 'Rules & Regulations' },
                 { to: '/declaration', label: 'Declaration Form' },
                 { to: '/login', label: 'Cadet Login' },
+                { to: '/download', label: 'Download App' },
               ].map((link) => (
                 <li key={link.to}>
                   <Link
