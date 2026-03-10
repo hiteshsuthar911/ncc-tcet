@@ -3,6 +3,8 @@ import {
   collection,
   addDoc,
   getDocs,
+  setDoc,
+  doc,
   serverTimestamp,
 } from 'firebase/firestore'
 import { db } from '../../firebase/config'
@@ -140,12 +142,17 @@ const IMPORT_CONFIGS = {
         snap.docs.map(d => (d.data().regimentalNo || '').toUpperCase())
       )
       let imported = 0, skipped = 0, failed = 0
+      const credentials = []
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i]
         const regtNo = row.regimentalNo.toUpperCase().trim()
         if (existingRegnos.has(regtNo)) { skipped++; setProgress(i + 1); continue }
         try {
-          await addDoc(collection(db, 'users'), {
+          const password = generatePassword()
+          const email = `${regtNo.toLowerCase()}@ncc-tcet.in`
+          const uid = await createFirebaseUser(email, password)
+          if (!uid) { skipped++; setProgress(i + 1); continue } // auth account already existed
+          await setDoc(doc(db, 'users', uid), {
             name: row.name.trim(),
             regimentalNo: regtNo,
             rank: row.rank?.trim() || 'Cadet',
@@ -153,18 +160,19 @@ const IMPORT_CONFIGS = {
             year: row.year?.trim() || '',
             branch: row.branch?.trim() || '',
             phone: row.phone?.trim() || '',
-            email: `${regtNo.toLowerCase()}@ncc-tcet.in`,
+            email,
             role: 'cadet',
-            uid: '',
+            uid,
             createdAt: serverTimestamp(),
             importedAt: serverTimestamp(),
           })
+          credentials.push({ name: row.name.trim(), regimentalNo: regtNo, email, password, wing: row.wing?.trim() || 'Army', rank: row.rank?.trim() || 'Cadet' })
           existingRegnos.add(regtNo)
           imported++
-        } catch { failed++ }
+        } catch (err) { console.error('Import error', row.regimentalNo, err); failed++ }
         setProgress(i + 1)
       }
-      return { imported, skipped, failed }
+      return { imported, skipped, failed, credentials }
     },
   },
 
@@ -893,16 +901,21 @@ export default function AdminBulkImport() {
               <p className="font-body text-army-400 text-xs mb-6 max-w-md mx-auto">{result.note}</p>
             )}
 
-            {typeId === 'cadets' && result.imported > 0 && (
-              <div className="card-army p-4 max-w-md mx-auto mb-6 text-left">
+            {typeId === 'cadets' && result.credentials?.length > 0 && (
+              <div className="card-army p-5 max-w-md mx-auto mb-6 text-left border border-gold-700/40">
                 <p className="font-heading text-xs text-gold-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <AlertTriangle className="w-3.5 h-3.5" /> Important — Cadet Login Accounts
+                  <CheckCircle className="w-3.5 h-3.5" /> {result.credentials.length} Login Account{result.credentials.length !== 1 ? 's' : ''} Created
                 </p>
-                <p className="font-body text-army-400 text-xs leading-relaxed">
-                  Cadet profiles have been created in Firestore. To allow cadets to log in to the portal,
-                  their Firebase Auth accounts must be created individually via the <strong className="text-army-200">Add Cadet</strong> button
-                  on the Cadets page.
+                <p className="font-body text-army-400 text-xs leading-relaxed mb-4">
+                  Firebase Auth accounts and passwords were generated for {result.credentials.length} cadet(s).
+                  Print their credentials now — passwords cannot be retrieved later.
                 </p>
+                <button
+                  onClick={() => printAllCredentials(result.credentials)}
+                  className="btn-primary text-sm flex items-center gap-2"
+                >
+                  🖨️ Print All Credentials PDF
+                </button>
               </div>
             )}
 

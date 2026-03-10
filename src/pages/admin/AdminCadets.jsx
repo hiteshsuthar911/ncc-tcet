@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import {
   collection,
   getDocs,
-  addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   doc,
@@ -10,9 +10,8 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { auth, db, storage } from '../../firebase/config'
+import { db, storage } from '../../firebase/config'
 import { useForm } from 'react-hook-form'
 import {
   Users,
@@ -38,6 +37,37 @@ const RANKS = [
 
 const WINGS = ['Army', 'Navy', 'Air']
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function generatePassword() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'
+  return Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
+}
+
+async function createFirebaseUser(email, password) {
+  const res = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${import.meta.env.VITE_FIREBASE_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, returnSecureToken: false }),
+    }
+  )
+  const json = await res.json()
+  if (!res.ok) {
+    const msg = json.error?.message || 'UNKNOWN_ERROR'
+    if (msg.includes('EMAIL_EXISTS')) throw Object.assign(new Error(msg), { code: 'auth/email-already-in-use' })
+    throw Object.assign(new Error(msg), { code: msg })
+  }
+  return json.localId
+}
+
+function printCredential({ name, regimentalNo, email, password, wing, rank }) {
+  const win = window.open('', '_blank', 'width=520,height=700')
+  if (!win) { alert('Allow popups to print credentials.'); return }
+  win.document.write(`<!DOCTYPE html><html><head><title>NCC TCET – Cadet Credentials</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f5f5f5;display:flex;justify-content:center;padding:40px 20px}.card{background:#fff;border:2px solid #2d5016;border-radius:8px;padding:32px;max-width:420px;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.15)}.hdr{text-align:center;border-bottom:1px solid #e5e7eb;padding-bottom:18px;margin-bottom:24px}.logo{font-size:36px;margin-bottom:10px}.t1{font-size:18px;color:#1a2e0d;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:4px}.t2{font-size:11px;color:#6b7280;letter-spacing:2px;text-transform:uppercase}.row{margin-bottom:14px}.lbl{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}.val{font-size:15px;color:#111827;font-weight:600}.pwd-box{background:#fffbeb;border:1px solid #f59e0b;border-radius:6px;padding:12px 16px;margin-top:6px}.pwd-val{color:#92400e;font-family:'Courier New',monospace;font-size:22px;letter-spacing:3px;font-weight:700}.pwd-note{font-size:10px;color:#b45309;margin-top:6px}.ftr{margin-top:22px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:10px;color:#9ca3af;text-align:center;letter-spacing:1px}@media print{body{background:#fff;padding:0}.card{box-shadow:none;max-width:100%}}</style></head><body><div class="card"><div class="hdr"><div class="logo">🛡️</div><div class="t1">NCC TCET</div><div class="t2">Cadet Login Credentials — Confidential</div></div><div class="row"><div class="lbl">Cadet Name</div><div class="val">${name}</div></div><div class="row"><div class="lbl">Regimental No.</div><div class="val">${regimentalNo}</div></div><div class="row"><div class="lbl">Wing</div><div class="val">${wing||'—'}</div></div><div class="row"><div class="lbl">Rank</div><div class="val">${rank||'—'}</div></div><div class="row"><div class="lbl">Login Email</div><div class="val">${email}</div></div><div class="row"><div class="lbl">Login Password</div><div class="pwd-box"><div class="pwd-val">${password}</div><div class="pwd-note">⚠ Ask cadet to change this password after first login</div></div></div><div class="ftr">NCC TCET Cadet Portal · Strictly Confidential · Do not share</div></div><script>setTimeout(function(){window.print();},500);<\/script></body></html>`)
+  win.document.close()
+}
+
 function CadetModal({ cadet, onClose, onSaved }) {
   const isEditing = !!cadet
   const [saving, setSaving]         = useState(false)
@@ -56,6 +86,8 @@ function CadetModal({ cadet, onClose, onSaved }) {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -71,6 +103,7 @@ function CadetModal({ cadet, onClose, onSaved }) {
       password: '',
     },
   })
+  const regimentalNoValue = watch('regimentalNo', '')
 
   async function onSubmit(data) {
     setSaving(true)
@@ -94,13 +127,11 @@ function CadetModal({ cadet, onClose, onSaved }) {
         storagePath = path
       }
       if (!isEditing) {
-        if (!data.password) { toast.error('Password is required for new cadets'); setSaving(false); return }
-        // Create Firebase Auth user
+        if (!data.password || data.password.length < 6) { toast.error('Password must be at least 6 characters'); setSaving(false); return }
         const email = `${data.regimentalNo.toLowerCase()}@ncc-tcet.in`
-        const cred = await createUserWithEmailAndPassword(auth, email, data.password)
-        // Save profile in Firestore
-        await addDoc(collection(db, 'users'), {
-          uid: cred.user.uid,
+        const uid = await createFirebaseUser(email, data.password)
+        await setDoc(doc(db, 'users', uid), {
+          uid,
           name: data.name,
           regimentalNo: data.regimentalNo.toUpperCase(),
           rank: data.rank,
@@ -108,13 +139,14 @@ function CadetModal({ cadet, onClose, onSaved }) {
           year: data.year,
           branch: data.branch,
           phone: data.phone,
-          email: `${data.regimentalNo.toLowerCase()}@ncc-tcet.in`,
+          email,
           role: data.role,
           photoUrl,
           storagePath,
           createdAt: serverTimestamp(),
         })
-        toast.success('Cadet account created!')
+        printCredential({ name: data.name, regimentalNo: data.regimentalNo.toUpperCase(), email, password: data.password, wing: data.wing, rank: data.rank })
+        toast.success('Cadet account created! Credentials window opened.')
       } else {
         await updateDoc(doc(db, 'users', cadet.docId), {
           name: data.name,
@@ -266,17 +298,27 @@ function CadetModal({ cadet, onClose, onSaved }) {
               </div>
               {!isEditing && (
                 <div className="col-span-2">
-                  <label className="label-field">
-                    Password * <span className="text-army-500 font-body normal-case tracking-normal">(for cadet login)</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="label-field !mb-0">
+                      Password * <span className="text-army-500 font-body normal-case tracking-normal">(for cadet login)</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setValue('password', generatePassword())}
+                      className="text-xs font-heading uppercase tracking-wider text-gold-500 hover:text-gold-300 border border-gold-700 hover:border-gold-500 px-2 py-1 transition-colors flex-shrink-0"
+                    >
+                      Auto-Generate
+                    </button>
+                  </div>
                   <input
-                    type="password"
+                    type="text"
                     {...register('password')}
                     placeholder="Min. 6 characters"
-                    className="input-field"
+                    className="input-field font-mono tracking-wider"
+                    autoComplete="new-password"
                   />
                   <p className="text-army-600 text-xs font-body mt-1">
-                    Login email will be: {'{regimentalNo}'}@ncc-tcet.in
+                    Login email: {regimentalNoValue ? `${regimentalNoValue.toLowerCase()}@ncc-tcet.in` : '{regimentalNo}@ncc-tcet.in'}
                   </p>
                 </div>
               )}
