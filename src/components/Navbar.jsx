@@ -44,6 +44,7 @@ export default function Navbar() {
     { to: '/join', label: 'Join NCC' },
     { to: '/training', label: 'Training' },
     { to: '/forms', label: 'Forms' },
+    { to: '/contact', label: 'Contact' },
   ]
 
   const exploreLinks = [
