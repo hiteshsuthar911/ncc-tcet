@@ -499,146 +499,92 @@ export default function EventRegistration() {
                   <div className="receipt-page">
 
                     {/* ══ LETTERHEAD ══ */}
-                    <div className="receipt-letterhead flex items-center gap-4 border-b-2 border-army-600 pb-4 mb-3">
-                      {/* NCC Shield SVG */}
-                      <div className="receipt-crest flex-shrink-0">
-                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M32 4L54 12V28C54 42 44 54 32 60C20 54 10 42 10 28V12L32 4Z" fill="#1a2214" stroke="#b8860b" strokeWidth="2"/>
-                          <path d="M32 10L48 17V28C48 38 41 47 32 52C23 47 16 38 16 28V17L32 10Z" fill="#111808" stroke="#d4a017" strokeWidth="1.2"/>
-                          <text x="32" y="30" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">NATIONAL</text>
-                          <text x="32" y="38" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">CADET</text>
-                          <text x="32" y="46" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017" letterSpacing="0.5">CORPS</text>
-                        </svg>
-                      </div>
-                      <div className="receipt-org-name flex-1 text-center">
-                        <span className="org-main block font-heading text-xl text-white uppercase tracking-widest">National Cadet Corps</span>
-                        <span className="org-sub block font-body text-gold-400 text-sm mt-0.5">1 Maharashtra Naval Unit — Thakur College of Engineering &amp; Technology</span>
-                        <span className="org-address block font-body text-army-400 text-xs mt-0.5">Kandivali (East), Mumbai — 400 101 &nbsp;|&nbsp; Ministry of Defence, Govt. of India</span>
-                      </div>
-                    </div>
-
-                    {/* ══ DOCUMENT TITLE ══ */}
-                    <div className="receipt-title-bar bg-army-800 border border-army-600 text-center py-2 mb-3">
-                      <p className="font-heading text-sm text-white uppercase tracking-widest">Event Registration — Acknowledgement Receipt</p>
-                    </div>
-
-                    {/* ══ REG ID + DATE ROW ══ */}
-                    <div className="receipt-regid-row flex flex-wrap justify-between items-center border border-army-700 bg-army-900/60 px-4 py-2 mb-5 gap-2">
-                      <div>
-                        <span className="text-army-500 font-body text-xs uppercase tracking-widest mr-2">Registration No.:</span>
-                        <span className="font-heading text-gold-400 text-xs tracking-widest break-all">{receiptData.regId}</span>
-                      </div>
-                      <div>
-                        <span className="text-army-500 font-body text-xs uppercase tracking-widest mr-2">Generated:</span>
-                        <span className="text-army-300 font-body text-xs">
-                          {receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' })}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* ══ CADET PARTICULARS ══ */}
-                    <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
-                      <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
-                        <Shield className="w-3 h-3" /> Part I — Cadet Particulars
-                      </p>
-                    </div>
-                    <table className="receipt-table w-full border-collapse mb-5">
+                    <table style={{width:'100%',borderCollapse:'collapse',borderBottom:'2px solid #000',marginBottom:'4px',paddingBottom:'4px'}}>
                       <tbody>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Full Name</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm font-medium">{receiptData.name || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Regimental No.</td>
-                          <td className="bg-army-950 border border-army-700 px-3 py-2 text-gold-400 font-heading text-sm">{receiptData.regimentalNo || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Rank</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.rank || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Wing</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.wing || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Batch / Year</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.batch || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Contact No.</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{userProfile?.phone || '—'}</td>
+                        <tr>
+                          <td style={{width:'54px',padding:'0 8px 4px 0',verticalAlign:'middle'}}>
+                            <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M32 4L54 12V28C54 42 44 54 32 60C20 54 10 42 10 28V12L32 4Z" fill="#1a2214" stroke="#b8860b" strokeWidth="2"/>
+                              <path d="M32 10L48 17V28C48 38 41 47 32 52C23 47 16 38 16 28V17L32 10Z" fill="#111808" stroke="#d4a017" strokeWidth="1.2"/>
+                              <text x="32" y="30" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">NATIONAL</text>
+                              <text x="32" y="38" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">CADET</text>
+                              <text x="32" y="46" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">CORPS</text>
+                            </svg>
+                          </td>
+                          <td style={{textAlign:'center',verticalAlign:'middle',padding:'0 0 4px'}}>
+                            <div style={{fontFamily:"'Times New Roman',serif",fontSize:'15pt',fontWeight:'bold',textTransform:'uppercase',letterSpacing:'0.08em',color:'#000'}}>National Cadet Corps</div>
+                            <div style={{fontFamily:"'Times New Roman',serif",fontSize:'9.5pt',color:'#222',marginTop:'2px'}}>1 Maharashtra Naval Unit — Thakur College of Engineering &amp; Technology</div>
+                            <div style={{fontFamily:"'Times New Roman',serif",fontSize:'8pt',color:'#555',marginTop:'1px'}}>Kandivali (East), Mumbai — 400 101 &nbsp;|&nbsp; Ministry of Defence, Govt. of India</div>
+                          </td>
+                          <td style={{width:'54px',padding:'0 0 4px 8px',verticalAlign:'middle',textAlign:'right'}}>
+                            <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M32 4L54 12V28C54 42 44 54 32 60C20 54 10 42 10 28V12L32 4Z" fill="#1a2214" stroke="#b8860b" strokeWidth="2"/>
+                              <path d="M32 10L48 17V28C48 38 41 47 32 52C23 47 16 38 16 28V17L32 10Z" fill="#111808" stroke="#d4a017" strokeWidth="1.2"/>
+                              <text x="32" y="30" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">NATIONAL</text>
+                              <text x="32" y="38" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">CADET</text>
+                              <text x="32" y="46" fontFamily="Arial" fontSize="7" fontWeight="900" textAnchor="middle" fill="#d4a017">CORPS</text>
+                            </svg>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
 
-                    {/* ══ EVENT PARTICULARS ══ */}
-                    <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
-                      <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
-                        <Calendar className="w-3 h-3" /> Part II — Event Particulars
-                      </p>
-                    </div>
-                    <table className="receipt-table w-full border-collapse mb-5">
-                      <tbody>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">Event Name</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-heading text-sm uppercase tracking-wide">{receiptData.event.title}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Category</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.category || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Date</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.date ? formatDate(receiptData.event.date) : '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Time</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.time || '—'}</td>
-                        </tr>
-                        <tr className="border border-army-700">
-                          <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Venue</td>
-                          <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.venue || '—'}</td>
-                        </tr>
-                        {receiptData.event.reportingTime && (
-                          <tr className="border border-army-700">
-                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Reporting Time</td>
-                            <td className="bg-army-950 border border-army-700 px-3 py-2 text-gold-400 font-body text-sm">{receiptData.event.reportingTime}</td>
-                          </tr>
-                        )}
-                        {receiptData.event.organizer && (
-                          <tr className="border border-army-700">
-                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Organized By</td>
-                            <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.organizer}</td>
-                          </tr>
-                        )}
-                        {receiptData.event.contact && (
-                          <tr className="border border-army-700">
-                            <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider">Event Contact</td>
-                            <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">{receiptData.event.contact}</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
+                    {/* ══ TITLE BAR ══ */}
+                    <div className="rpt-title-bar">Event Registration — Acknowledgement Receipt</div>
 
-                    {/* ══ ADDITIONAL DETAILS (dynamic fields) ══ */}
+                    {/* ══ REF ROW ══ */}
+                    <div className="rpt-ref-row">
+                      <span>Registration No.:&nbsp;<strong>{receiptData.regId}</strong></span>
+                      <span>Generated:&nbsp;{receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                    </div>
+
+                    {/* ══ 2-COL: CADET + EVENT ══ */}
+                    <div className="rpt-2col">
+                      <div className="rpt-col">
+                        <div className="rpt-sec-hdr">Part I — Cadet Particulars</div>
+                        <table className="rpt-table">
+                          <tbody>
+                            {[
+                              ['Full Name', receiptData.name || '—'],
+                              ['Regimental No.', receiptData.regimentalNo || '—'],
+                              ['Rank', userProfile?.rank || '—'],
+                              ['Wing', userProfile?.wing || '—'],
+                              ['Batch / Year', userProfile?.batch || userProfile?.year || '—'],
+                              ['Contact No.', userProfile?.phone || '—'],
+                            ].map(([lbl, val]) => (
+                              <tr key={lbl}><td className="rpt-lbl">{lbl}</td><td className="rpt-val">{val}</td></tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="rpt-col">
+                        <div className="rpt-sec-hdr">Part II — Event Particulars</div>
+                        <table className="rpt-table">
+                          <tbody>
+                            <tr><td className="rpt-lbl">Event Name</td><td className="rpt-val">{receiptData.event.title}</td></tr>
+                            <tr><td className="rpt-lbl">Category</td><td className="rpt-val">{receiptData.event.category || '—'}</td></tr>
+                            <tr><td className="rpt-lbl">Date</td><td className="rpt-val">{receiptData.event.date ? formatDate(receiptData.event.date) : '—'}</td></tr>
+                            <tr><td className="rpt-lbl">Time</td><td className="rpt-val">{receiptData.event.time || '—'}</td></tr>
+                            <tr><td className="rpt-lbl">Venue</td><td className="rpt-val">{receiptData.event.venue || '—'}</td></tr>
+                            <tr><td className="rpt-lbl">Reporting Time</td><td className="rpt-val">{receiptData.event.reportingTime || '—'}</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* ══ PART III: ADDITIONAL INFO ══ */}
                     {Object.entries(receiptData.formData).filter(([k]) => k !== 'declaration').length > 0 && (
                       <>
-                        <div className="receipt-section-header bg-army-700 px-3 py-1.5 mb-0">
-                          <p className="font-heading text-xs text-gold-400 uppercase tracking-widest flex items-center gap-2">
-                            <ClipboardList className="w-3 h-3" /> Part III — Additional Information
-                          </p>
-                        </div>
-                        <table className="receipt-table w-full border-collapse mb-5">
+                        <div className="rpt-sec-hdr" style={{marginTop:'5px'}}>Part III — Additional Information</div>
+                        <table className="rpt-table">
                           <tbody>
                             {(receiptData.event.fields || []).map((field) => {
                               const val = receiptData.formData[field.id]
                               if (!val) return null
                               return (
-                                <tr key={field.id} className="border border-army-700">
-                                  <td className="lbl bg-army-900 border border-army-700 px-3 py-2 text-army-400 font-body text-xs uppercase tracking-wider w-2/5">{field.label}</td>
-                                  <td className="bg-white border border-gray-200 px-3 py-2 text-gray-900 font-body text-sm">
-                                    {typeof val === 'boolean' ? (val ? 'Yes' : 'No') : String(val)}
-                                  </td>
+                                <tr key={field.id}>
+                                  <td className="rpt-lbl" style={{width:'28%'}}>{field.label}</td>
+                                  <td className="rpt-val">{typeof val === 'boolean' ? (val ? 'Yes' : 'No') : String(val)}</td>
                                 </tr>
                               )
                             })}
@@ -648,54 +594,45 @@ export default function EventRegistration() {
                     )}
 
                     {/* ══ CERTIFICATION ══ */}
-                    <div className="receipt-cert-text border border-army-600 bg-army-900/40 p-4 mb-5">
-                      <p className="text-army-300 font-body text-sm italic leading-relaxed text-justify">
-                        This is to acknowledge that <strong className="text-gray-900">{receiptData.name || 'the above-named cadet'}</strong> bearing
-                        Regimental No. <strong className="text-gold-600">{receiptData.regimentalNo || '—'}</strong> has
-                        successfully submitted a registration application for the event titled
-                        <strong className="text-gray-900"> &ldquo;{receiptData.event.title}&rdquo;</strong> organized under
-                        1 Maharashtra Naval Unit, NCC TCET. This receipt is an
-                        acknowledgement of submission only and does not constitute a confirmed participation.
-                        Final approval is subject to review by the Officer-In-Charge.
-                      </p>
+                    <div className="rpt-cert">
+                      This is to acknowledge that <strong>{receiptData.name || 'the above-named cadet'}</strong> bearing
+                      Regimental No.&nbsp;<strong>{receiptData.regimentalNo || '—'}</strong> has successfully submitted a
+                      registration application for the event titled&nbsp;<strong>&ldquo;{receiptData.event.title}&rdquo;</strong>&nbsp;organized
+                      under 1 Maharashtra Naval Unit, NCC TCET. This receipt is an acknowledgement of submission only and does not
+                      constitute confirmed participation. Final approval is subject to review by the Officer-In-Charge.
                     </div>
 
-                    {/* ══ STATUS STRIP ══ */}
-                    <div className="receipt-status-strip flex flex-wrap justify-between items-center border border-army-600 bg-army-900/60 px-4 py-2 mb-6 gap-2">
-                      <div className="flex items-center gap-3">
-                        <span className="text-army-400 font-body text-xs uppercase tracking-wider">Submission Status:</span>
-                        <span className="receipt-status-pending font-heading text-xs text-yellow-400 uppercase tracking-widest border border-yellow-700 px-2 py-0.5">⏳ Pending Approval</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-army-400 font-body text-xs uppercase tracking-wider">Submitted: </span>
-                        <span className="text-army-300 font-body text-xs">
-                          {receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* ══ SIGNATURE BLOCKS ══ */}
-                    <div className="receipt-signatures">
-                      <div className="receipt-sig-block">
-                        <div className="sig-line" />
-                        <p>Cadet's Signature</p>
-                        <p>{receiptData.name || ''}</p>
-                        <p>{receiptData.regimentalNo || ''}</p>
-                      </div>
-                      <div className="receipt-sig-block">
-                        <div className="sig-line" />
-                        <p>Officer-In-Charge</p>
-                        <p>1 Maharashtra Naval Unit</p>
-                        <p>NCC TCET, Mumbai</p>
-                      </div>
-                    </div>
+                    {/* ══ STATUS + SIGNATURES ══ */}
+                    <table className="rpt-bottom-table">
+                      <tbody>
+                        <tr>
+                          <td className="rpt-status-cell">
+                            <div className="rpt-status-label">Submission Status</div>
+                            <div className="rpt-status-badge">&#x2B1B; PENDING APPROVAL</div>
+                            <div className="rpt-status-sub">Submitted:&nbsp;{receiptData.submittedAt.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</div>
+                          </td>
+                          <td className="rpt-sig-td">
+                            <div className="rpt-sig-line" />
+                            <div className="rpt-sig-label">Cadet&rsquo;s Signature</div>
+                            <div className="rpt-sig-sub">{receiptData.name}</div>
+                            <div className="rpt-sig-sub">{receiptData.regimentalNo}</div>
+                          </td>
+                          <td className="rpt-sig-td">
+                            <div className="rpt-sig-line" />
+                            <div className="rpt-sig-label">Officer-In-Charge</div>
+                            <div className="rpt-sig-sub">1 Maharashtra Naval Unit</div>
+                            <div className="rpt-sig-sub">NCC TCET, Mumbai</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
 
                     {/* ══ INSTRUCTIONS (screen-only) ══ */}
-                    <div className="no-print bg-army-900 border border-gold-500/20 p-4 mb-5">
-                      <p className="text-gold-500 font-body text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <div className="no-print bg-navy-900 border border-saffron-500/20 p-4 mt-4">
+                      <p className="text-saffron-400 font-body text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
                         <ArrowRight className="w-3.5 h-3.5" /> Next Steps
                       </p>
-                      <ul className="space-y-1.5 text-army-300 font-body text-sm">
+                      <ul className="space-y-1.5 text-navy-300 font-body text-sm">
                         {[
                           'Your registration is under review by the event coordinator.',
                           'You will be notified of approval via the NCC notice board.',
@@ -703,7 +640,7 @@ export default function EventRegistration() {
                           'Report in proper NCC uniform unless instructed otherwise.',
                         ].map((step, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <span className="text-gold-500 font-heading text-xs mt-0.5">{String(i + 1).padStart(2, '0')}.</span>
+                            <span className="text-saffron-400 font-heading text-xs mt-0.5">{String(i + 1).padStart(2, '0')}.</span>
                             {step}
                           </li>
                         ))}
@@ -711,13 +648,8 @@ export default function EventRegistration() {
                     </div>
 
                     {/* ══ FOOTER ══ */}
-                    <div className="receipt-footer border-t border-army-700 pt-3 text-center">
-                      <p className="text-army-500 font-body text-xs">
-                        This is a system-generated acknowledgement receipt from the NCC TCET Cadet Management Portal.
-                      </p>
-                      <p className="text-army-600 font-body text-xs mt-0.5">
-                        For queries, contact the NCC Office, TCET Campus, Thakur Village, Kandivali (East), Mumbai — 400 101.
-                      </p>
+                    <div className="rpt-footer">
+                      System-generated acknowledgement &nbsp;|&nbsp; NCC TCET Cadet Management Portal &nbsp;|&nbsp; NCC Office, TCET Campus, Thakur Village, Kandivali (East), Mumbai — 400 101
                     </div>
 
                   </div>{/* end receipt-page */}
