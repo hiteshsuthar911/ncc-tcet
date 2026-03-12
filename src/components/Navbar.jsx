@@ -60,8 +60,8 @@ export default function Navbar() {
     <nav
       className={`fixed left-0 right-0 z-50 transition-all duration-300 ${hasNotif ? 'top-10' : 'top-0'} ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-nav border-b border-gray-100'
-          : 'bg-white/80 backdrop-blur-sm'
+          ? 'bg-white shadow-md border-b border-gray-200'
+          : 'bg-navy-950 lg:bg-white/80 lg:backdrop-blur-sm border-b border-navy-800 lg:border-gray-100'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,10 +75,14 @@ export default function Navbar() {
               className="h-11 w-auto object-contain drop-shadow-sm flex-shrink-0"
             />
             <div className="hidden sm:block">
-              <p className="font-heading font-bold text-sm tracking-wide text-navy-900 leading-none">
+              <p className={`font-heading font-bold text-sm tracking-wide leading-none ${
+                scrolled ? 'text-navy-900' : 'text-white lg:text-navy-900'
+              }`}>
                 NCC TCET
               </p>
-              <p className="font-body text-[11px] text-gray-500 leading-none mt-0.5">
+              <p className={`font-body text-[11px] leading-none mt-0.5 ${
+                scrolled ? 'text-gray-500' : 'text-navy-300 lg:text-gray-500'
+              }`}>
                 National Cadet Corps
               </p>
             </div>
@@ -242,10 +246,14 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-navy-800 hover:bg-gray-50 transition-colors"
+            className={`lg:hidden p-2 rounded-lg transition-colors ${
+              scrolled
+                ? 'text-gray-600 hover:text-navy-800 hover:bg-gray-50'
+                : 'text-white hover:text-saffron-400 hover:bg-white/10'
+            }`}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
