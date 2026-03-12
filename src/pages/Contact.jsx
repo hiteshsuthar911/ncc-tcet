@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail, Clock, ExternalLink, Shield, Star, Anchor } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const OFFICERS = [
   {
@@ -179,8 +180,14 @@ export default function Contact() {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
+          </div>          <div className="text-center mt-6">
+            <Link
+              to="/officers"
+              className="inline-flex items-center gap-2 bg-navy-950 hover:bg-navy-800 text-white text-sm font-semibold px-7 py-3 rounded-xl transition-colors"
+            >
+              View Detailed Officer Profiles →
+            </Link>
+          </div>        </section>
 
         {/* ── Map + Quick Details ── */}
         <section className="grid grid-cols-1 lg:grid-cols-5 gap-8">

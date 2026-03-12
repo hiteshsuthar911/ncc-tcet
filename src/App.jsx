@@ -44,6 +44,7 @@ import AdminTeam from './pages/admin/AdminTeam'
 import CadetDashboard from './pages/CadetDashboard'
 import DownloadApp from './pages/DownloadApp'
 import Contact from './pages/Contact'
+import Officers from './pages/Officers'
 
 // Public layout wrapper (with navbar + footer)
 function PublicLayout({ children }) {
@@ -205,6 +206,14 @@ export default function App() {
         element={
           <PublicLayout>
             <Contact />
+          </PublicLayout>
+        }
+      />
+      <Route
+        path="/officers"
+        element={
+          <PublicLayout>
+            <Officers />
           </PublicLayout>
         }
       />
