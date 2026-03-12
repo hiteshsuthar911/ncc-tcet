@@ -1,78 +1,22 @@
-import { Trophy, Star, Users, Medal, Camera, ChevronRight, Globe } from 'lucide-react'
+import { Trophy, Star, Users, Medal, Camera, ArrowRight, Globe } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const stats = [
-  { label: 'Years Active', value: '15+' },
-  { label: 'Cadets Trained', value: '1200+' },
-  { label: 'Camps Attended', value: '80+' },
-  { label: 'Awards Won', value: '45+' },
+  { label: 'Years Active', value: '15+', color: 'bg-navy-50 text-navy-700' },
+  { label: 'Cadets Trained', value: '1200+', color: 'bg-saffron-50 text-saffron-700' },
+  { label: 'Camps Attended', value: '80+', color: 'bg-green-50 text-green-700' },
+  { label: 'Awards Won', value: '45+', color: 'bg-purple-50 text-purple-700' },
 ]
 
 const achievements = [
-  {
-    year: '2024',
-    title: 'Best NCC Unit – Maharashtra Directorate',
-    desc: 'TCET NCC Unit was awarded the Best Unit trophy at the Maharashtra & Goa Directorate Annual Review for outstanding performance in all categories.',
-    icon: Trophy,
-    color: 'text-gold-500',
-    bg: 'bg-gold-900/20 border-gold-800',
-  },
-  {
-    year: '2024',
-    title: 'Republic Day Camp – 3 Cadets Selected',
-    desc: 'Three TCET cadets represented Maharashtra at the prestigious Republic Day Camp, New Delhi, and participated in the march-past at Kartavya Path.',
-    icon: Star,
-    color: 'text-army-400',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2023',
-    title: 'Thal Sainik Camp – 1st Rank (Obstacle Course)',
-    desc: 'Cadet Rajan Mehta won the first position in the obstacle course at the national-level Thal Sainik Camp, beating 28 state teams.',
-    icon: Medal,
-    color: 'text-amber-500',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2023',
-    title: 'Best Drilled Cadet – State Level',
-    desc: 'Cadet Priya Sharma was awarded "Best Drilled Cadet" at the CATC held in Pune, judged on precision drill, uniform, and bearing.',
-    icon: Star,
-    color: 'text-army-400',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2022',
-    title: 'Youth Exchange Programme – Germany',
-    desc: 'Two TCET cadets were selected for the NCC Youth Exchange Programme (YEP) to Germany, representing India in cultural and adventure activities.',
-    icon: Globe,
-    color: 'text-blue-400',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2022',
-    title: 'National Integration Camp – Delhi',
-    desc: 'A contingent of 8 cadets attended the NIC in New Delhi, fostering bonds with cadets from Assam, Rajasthan, Tamil Nadu, and Punjab.',
-    icon: Users,
-    color: 'text-green-400',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2021',
-    title: 'COVID Seva — Vaccination Drive Support',
-    desc: "TCET NCC Cadets volunteered 2000+ man-hours supporting the Mumbai Municipal Corporation's COVID-19 vaccination and awareness drive.",
-    icon: Star,
-    color: 'text-red-400',
-    bg: 'bg-army-900 border-army-700',
-  },
-  {
-    year: '2020',
-    title: "Prime Minister's Rally – NCC Day Participant",
-    desc: "Selected cadets participated in the national NCC Day PM's Rally, one of the most coveted events in the NCC calendar.",
-    icon: Trophy,
-    color: 'text-gold-500',
-    bg: 'bg-gold-900/20 border-gold-800',
-  },
+  { year: '2024', title: 'Best NCC Unit – Maharashtra Directorate', desc: 'TCET NCC Unit was awarded the Best Unit trophy at the Maharashtra & Goa Directorate Annual Review for outstanding performance in all categories.', icon: Trophy, accent: 'border-l-saffron-500' },
+  { year: '2024', title: 'Republic Day Camp – 3 Cadets Selected', desc: 'Three TCET cadets represented Maharashtra at the prestigious Republic Day Camp, New Delhi, and participated in the march-past at Kartavya Path.', icon: Star, accent: 'border-l-navy-500' },
+  { year: '2023', title: 'Thal Sainik Camp – 1st Rank (Obstacle Course)', desc: 'Cadet Rajan Mehta won the first position in the obstacle course at the national-level Thal Sainik Camp, beating 28 state teams.', icon: Medal, accent: 'border-l-amber-500' },
+  { year: '2023', title: 'Best Drilled Cadet – State Level', desc: 'Cadet Priya Sharma was awarded "Best Drilled Cadet" at the CATC held in Pune, judged on precision drill, uniform, and bearing.', icon: Star, accent: 'border-l-navy-500' },
+  { year: '2022', title: 'Youth Exchange Programme – Germany', desc: 'Two TCET cadets were selected for the NCC Youth Exchange Programme (YEP) to Germany, representing India in cultural and adventure activities.', icon: Globe, accent: 'border-l-blue-500' },
+  { year: '2022', title: 'National Integration Camp – Delhi', desc: 'A contingent of 8 cadets attended the NIC in New Delhi, fostering bonds with cadets from Assam, Rajasthan, Tamil Nadu, and Punjab.', icon: Users, accent: 'border-l-green-500' },
+  { year: '2021', title: 'COVID Seva — Vaccination Drive Support', desc: "TCET NCC Cadets volunteered 2000+ man-hours supporting the Mumbai Municipal Corporation's COVID-19 vaccination and awareness drive.", icon: Star, accent: 'border-l-red-500' },
+  { year: '2020', title: "Prime Minister's Rally – NCC Day Participant", desc: "Selected cadets participated in the national NCC Day PM's Rally, one of the most coveted events in the NCC calendar.", icon: Trophy, accent: 'border-l-saffron-500' },
 ]
 
 const galleryPlaceholders = [
@@ -98,58 +42,55 @@ export default function Achievements() {
     <div className="min-h-screen pt-20">
 
       {/* Header */}
-      <section className="relative py-16 bg-army-900 overflow-hidden">
-        <div className="absolute inset-0 bg-camo-pattern opacity-20" />
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+      <section className="relative py-20 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 60%, #1d4ed8 100%)' }}>
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle text-gold-400">Pride & Legacy</p>
-          <h1 className="section-title text-4xl md:text-5xl mb-2 text-white">Achievements & Gallery</h1>
-          <div className="divider-gold w-24 mt-3 mb-4" />
-          <p className="text-gray-300 font-body max-w-2xl leading-relaxed">
+          <p className="section-subtitle-light">Pride &amp; Legacy</p>
+          <h1 className="font-heading font-extrabold text-4xl md:text-5xl text-white mb-3">Achievements &amp; Gallery</h1>
+          <div className="w-12 h-1 bg-saffron-400 rounded-full mb-5" />
+          <p className="text-white/80 font-body max-w-2xl leading-relaxed">
             TCET NCC Unit has earned recognition at unit, state, and national levels. Our cadets carry the torch of excellence in every field they step onto.
           </p>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-10 bg-white border-b border-gray-100">
+      <section className="py-12 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
             {stats.map((s) => (
-              <div key={s.label} className="p-6 text-center">
-                <p className="font-heading text-4xl text-gold-600 tracking-widest">{s.value}</p>
-                <p className="font-body text-xs text-gray-500 mt-1 uppercase">{s.label}</p>
+              <div key={s.label} className="stat-card p-6 text-center">
+                <p className={`font-heading font-extrabold text-4xl ${s.color.split(' ')[1]} tracking-tight`}>{s.value}</p>
+                <p className="font-body text-xs text-gray-500 mt-1 tracking-wide">{s.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Achievements Timeline */}
+      {/* Achievements */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Track Record</p>
             <h2 className="section-title text-3xl">Notable Achievements</h2>
-            <div className="divider-gold w-20 mx-auto mt-3" />
+            <div className="divider-gold mx-auto mt-3" />
           </div>
-          <div className="relative space-y-4">
-            <div className="absolute left-12 top-0 bottom-0 w-px bg-gray-200 hidden sm:block" />
+          <div className="space-y-4">
             {achievements.map((a, i) => {
               const Icon = a.icon
               return (
-                <div key={i} className="card-army p-5 sm:ml-20 relative">
-                  <div className="hidden sm:flex absolute -left-[3.25rem] top-5 w-6 h-6 rounded-full items-center justify-center bg-white border border-gray-200">
-                    <div className="w-2 h-2 rounded-full bg-gold-500" />
-                  </div>
+                <div key={i} className={`card-army p-5 border-l-4 ${a.accent} hover:-translate-y-0.5`}>
                   <div className="flex items-start gap-4">
-                    <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${a.color}`} />
-                    <div>
+                    <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-saffron-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-heading text-xs text-gold-600 tracking-widest">{a.year}</span>
+                        <span className="badge-pill">{a.year}</span>
                       </div>
-                      <h3 className="font-heading text-sm text-gray-900 uppercase tracking-wide">{a.title}</h3>
-                      <p className="text-gray-500 font-body text-sm leading-relaxed mt-1">{a.desc}</p>
+                      <h3 className="font-heading font-bold text-gray-900 text-base mb-1">{a.title}</h3>
+                      <p className="text-gray-500 font-body text-sm leading-relaxed">{a.desc}</p>
                     </div>
                   </div>
                 </div>
@@ -159,30 +100,29 @@ export default function Achievements() {
         </div>
       </section>
 
-      {/* Gallery */}
+      {/* Gallery Preview */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="section-subtitle">Moments</p>
-            <h2 className="section-title text-3xl">Photo Gallery</h2>
-            <div className="divider-gold w-20 mx-auto mt-3" />
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">
+            <div>
+              <p className="section-subtitle">Moments</p>
+              <h2 className="section-title text-3xl">Photo Gallery</h2>
+              <div className="divider-gold mt-3" />
+            </div>
+            <Link to="/gallery" className="btn-ghost text-sm self-start sm:self-auto">
+              Full Gallery <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {galleryPlaceholders.map((g, i) => (
-              <div
-                key={i}
-                className="relative aspect-[4/3] bg-gray-100 border border-gray-200 flex items-end p-3 group overflow-hidden cursor-pointer hover:border-army-400 transition-colors rounded-sm"
-              >
-                {/* Placeholder gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />
+              <div key={i} className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl overflow-hidden group cursor-pointer border border-gray-100 hover:border-navy-300 hover:shadow-card-hover transition-all duration-300">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Camera className="w-10 h-10 text-gray-300 group-hover:text-gray-400 transition-colors" />
                 </div>
-                {/* Overlay on hover */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-900/60 to-transparent h-16 translate-y-full group-hover:translate-y-0 transition-transform" />
-                <div className="relative z-10">
-                  <span className="font-heading text-xs text-gold-600 block">{g.tag}</span>
-                  <span className="font-body text-xs text-white">{g.label}</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <span className="badge-pill text-[10px] mb-1 inline-flex">{g.tag}</span>
+                  <p className="text-white font-body text-xs leading-tight">{g.label}</p>
                 </div>
               </div>
             ))}
@@ -199,16 +139,16 @@ export default function Achievements() {
           <div className="text-center mb-10">
             <p className="section-subtitle">Exemplary Cadets</p>
             <h2 className="section-title text-3xl">Notable Alumni</h2>
-            <div className="divider-gold w-20 mx-auto mt-3" />
+            <div className="divider-gold mx-auto mt-3" />
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
             {notableAlumni.map((a, i) => (
-              <div key={i} className="card-army p-5 text-center border-b-2 border-gold-500">
-                <div className="w-12 h-12 rounded-full bg-army-50 border border-army-200 flex items-center justify-center mx-auto mb-3">
-                  <Medal className="w-5 h-5 text-gold-600" />
+              <div key={i} className="card-army p-6 text-center hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-2xl bg-saffron-50 flex items-center justify-center mx-auto mb-4">
+                  <Medal className="w-7 h-7 text-saffron-500" />
                 </div>
-                <h3 className="font-heading text-sm text-gray-900 tracking-wide mb-0.5">{a.name}</h3>
-                <p className="text-gold-600 font-body text-xs mb-2">Batch of {a.batch}</p>
+                <h3 className="font-heading font-bold text-gray-900 text-sm mb-1">{a.name}</h3>
+                <p className="badge-pill mb-3">Batch of {a.batch}</p>
                 <p className="text-gray-500 font-body text-xs leading-relaxed">{a.achievement}</p>
               </div>
             ))}
@@ -217,16 +157,17 @@ export default function Achievements() {
       </section>
 
       {/* CTA */}
-      <section className="py-12 bg-army-900 border-t border-army-700">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="font-heading text-xl text-white uppercase tracking-widest mb-3">Write Your Own Legacy</h2>
-          <p className="text-gray-300 font-body text-sm mb-6">Join the ranks of cadets who went beyond the classroom and made their mark on history.</p>
+      <section className="py-16 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 100%)' }}>
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+        <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
+          <h2 className="font-heading font-extrabold text-2xl text-white mb-3">Write Your Own Legacy</h2>
+          <p className="text-white/70 font-body text-sm mb-7">Join the ranks of cadets who went beyond the classroom and made their mark on history.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/join" className="btn-primary inline-flex items-center gap-2">
+            <Link to="/join" className="inline-flex items-center justify-center gap-2 bg-saffron-500 hover:bg-saffron-600 text-white font-heading font-semibold px-7 py-3.5 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-0.5">
               <Star className="w-4 h-4" /> Join NCC TCET
             </Link>
-            <Link to="/training" className="btn-secondary inline-flex items-center gap-2">
-              <ChevronRight className="w-4 h-4" /> View Training
+            <Link to="/training" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-heading font-semibold px-7 py-3.5 rounded-xl transition-all duration-300">
+              View Training <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

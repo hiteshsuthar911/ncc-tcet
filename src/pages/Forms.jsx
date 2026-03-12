@@ -802,9 +802,9 @@ function TransferNOCForm({ onPrint, defaultValues }) {
 function SectionHeader({ children }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-px flex-1 bg-army-800" />
-      <span className="font-heading text-xs text-gold-500 uppercase tracking-[0.25em]">{children}</span>
-      <span className="h-px flex-1 bg-army-800" />
+      <span className="h-px flex-1 bg-gray-200" />
+      <span className="font-heading text-xs text-navy-600 uppercase tracking-[0.25em]">{children}</span>
+      <span className="h-px flex-1 bg-gray-200" />
     </div>
   )
 }
@@ -815,7 +815,7 @@ function Field({ label, error, children, className = '' }) {
       <label className="label-field">{label}</label>
       {children}
       {error && (
-        <p className="text-red-400 text-xs mt-1 font-body">{error.message}</p>
+        <p className="text-red-500 text-xs mt-1 font-body">{error.message}</p>
       )}
     </div>
   )
@@ -858,7 +858,7 @@ const FORM_CONFIGS = [
     label: 'Camp Nomination Form',
     description: 'Nominate a cadet for a camp, course, or competition — with ANO recommendation.',
     icon: Tent,
-    color: 'text-gold-400',
+    color: 'text-saffron-500',
     FormComponent: CampNominationForm,
     PrintComponent: CampNominationPrint,
   },
@@ -922,25 +922,35 @@ export default function Forms() {
   const PrintComp = config?.PrintComponent
 
   return (
-    <div className="min-h-screen bg-military-dark py-24 px-4">
-      <div className="max-w-4xl mx-auto">
-
-        {/* Header */}
-        <div className="mb-10">
-          <p className="section-subtitle">NCC TCET</p>
-          <h1 className="section-title mb-3">Official Forms</h1>
-          <div className="h-px w-20 bg-gold-500 mb-4" />
-          <p className="font-body text-army-400 text-sm max-w-xl">
+    <div className="min-h-screen bg-gray-50 pt-20 pb-16">
+      {/* Hero */}
+      <div
+        className="relative overflow-hidden mb-10"
+        style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 60%, #1d4ed8 100%)' }}
+      >
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="relative max-w-4xl mx-auto px-6 py-14 text-center">
+          <p className="section-subtitle-light">NCC TCET</p>
+          <h1 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-wide mb-3">
+            Official Forms
+          </h1>
+          <div className="w-14 h-1 bg-saffron-500 rounded-full mx-auto mt-3 mb-4" />
+          <p className="font-body text-blue-200 text-sm max-w-xl mx-auto leading-relaxed">
             Fill out NCC official forms digitally and print a formatted A4 copy ready for submission.
             Fields are pre-filled from your profile where available.
           </p>
         </div>
+      </div>
 
+      <div className="max-w-4xl mx-auto px-4">
         {/* Breadcrumb */}
         {selectedId && (
           <button
             onClick={() => { setSelectedId(null); setPrintData(null) }}
-            className="flex items-center gap-2 text-army-400 hover:text-gold-400 transition-colors text-sm font-body mb-6"
+            className="flex items-center gap-2 text-gray-500 hover:text-navy-700 transition-colors text-sm font-body mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             All Forms
@@ -954,17 +964,17 @@ export default function Forms() {
               <button
                 key={id}
                 onClick={() => { setSelectedId(id); setPrintData(null) }}
-                className="card-army p-6 text-left hover:border-army-600 transition-all duration-200 group"
+                className="card-army p-6 text-left hover:border-navy-200 hover:shadow-md transition-all duration-200 group"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 border border-army-700 group-hover:border-army-500 transition-colors flex-shrink-0">
+                  <div className="p-3 bg-navy-50 rounded-xl group-hover:bg-navy-100 transition-colors flex-shrink-0">
                     <Icon className={`w-5 h-5 ${color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-heading text-gray-900 uppercase tracking-widest text-sm mb-1">{label}</p>
-                    <p className="font-body text-army-400 text-xs leading-relaxed">{description}</p>
+                    <p className="font-body text-gray-500 text-xs leading-relaxed">{description}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-army-600 group-hover:text-gold-400 transition-colors mt-1 flex-shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-navy-700 transition-colors mt-1 flex-shrink-0" />
                 </div>
               </button>
             ))}
@@ -974,10 +984,11 @@ export default function Forms() {
         {/* ── Fill form ── */}
         {selectedId && config && (
           <div className="card-army p-6 md:p-8">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-2 border-l-4 border-l-navy-600 pl-4">
               <config.icon className={`w-5 h-5 ${config.color}`} />
-              <h2 className="font-heading text-white uppercase tracking-widest text-base">{config.label}</h2>
+              <h2 className="font-heading text-gray-900 uppercase tracking-widest text-base">{config.label}</h2>
             </div>
+            <div className="h-px bg-gray-100 mb-6" />
 
             <config.FormComponent
               onPrint={handlePrint}
@@ -985,7 +996,7 @@ export default function Forms() {
             />
 
             {printData && (
-              <p className="text-green-400 text-xs font-body mt-4 text-center">
+              <p className="text-green-600 text-xs font-body mt-4 text-center">
                 ✓ Print dialog opened — if it didn't appear, click Generate &amp; Print again.
               </p>
             )}

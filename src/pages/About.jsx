@@ -1,4 +1,5 @@
-import { Shield, Star, Target, Users, Award, ChevronRight, CheckCircle } from 'lucide-react'
+import { Shield, Star, Target, Users, Award, CheckCircle, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const TIMELINE = [
   { year: '2008', title: 'Unit Established', desc: 'NCC unit founded at TCET with an initial strength of 30 cadets.' },
@@ -23,157 +24,137 @@ const ACTIVITIES = [
 ]
 
 const OFFICERS = [
-  { rank: 'Lt Col', name: 'Associate NCC Officer', role: 'Commanding Officer', img: null },
-  { rank: 'Capt', name: 'ANO', role: 'Associate NCC Officer', img: null },
-  { rank: 'SUO', name: 'Senior Under Officer', role: 'Senior Under Officer', img: null },
-  { rank: 'JUO', name: 'Junior Under Officer', role: 'Junior Under Officer', img: null },
+  { rank: 'Lt Col', name: 'Associate NCC Officer', role: 'Commanding Officer' },
+  { rank: 'Capt', name: 'ANO', role: 'Associate NCC Officer' },
+  { rank: 'SUO', name: 'Senior Under Officer', role: 'Senior Under Officer' },
+  { rank: 'JUO', name: 'Junior Under Officer', role: 'Junior Under Officer' },
 ]
 
 export default function About() {
   return (
     <div className="min-h-screen pt-20">
-      {/* ── HERO ── */}
-      <section className="relative py-24 bg-army-900 overflow-hidden">
-        <div className="absolute inset-0 bg-camo-pattern opacity-20" />
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+
+      {/* HERO */}
+      <section className="relative py-24 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 60%, #1d4ed8 100%)' }}>
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+        <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-saffron-400/10 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="section-subtitle text-gold-400">Who We Are</p>
-            <h1 className="section-title text-4xl md:text-6xl mb-4 text-white">
-              About NCC TCET
-            </h1>
-            <div className="divider-gold w-24 mb-6" />
-            <p className="text-gray-300 font-body text-lg leading-relaxed">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
+              <Shield className="w-3.5 h-3.5 text-saffron-400" />
+              <span className="font-body text-xs text-white/80 tracking-[0.15em] uppercase">Who We Are</span>
+            </div>
+            <h1 className="font-heading font-extrabold text-4xl md:text-6xl text-white mb-4 leading-tight">About NCC TCET</h1>
+            <div className="w-12 h-1 bg-saffron-400 rounded-full mb-6" />
+            <p className="text-white/80 font-body text-lg leading-relaxed">
               The NCC Unit of Thakur College of Engineering &amp; Technology — a premier cadet corps committed to creating disciplined, patriotic, and well-rounded leaders.
             </p>
           </div>
         </div>
-        {/* Decorative */}
-        <div className="absolute bottom-0 right-10 w-32 h-32 border border-gold-500/20" />
-        <div className="absolute top-10 right-32 w-16 h-16 border border-gold-500/10" />
       </section>
 
-      {/* ── MISSION & VISION ── */}
+      {/* MISSION & VISION */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="card-army p-8 relative">
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gold-500 to-transparent" />
-              <Shield className="w-8 h-8 text-gold-500 mb-4" />
-              <h3 className="font-heading text-2xl text-gray-900 uppercase tracking-widest mb-4">
-                Our Mission
-              </h3>
+          <div className="text-center mb-12">
+            <p className="section-subtitle">Our Guiding Principles</p>
+            <h2 className="section-title text-3xl md:text-4xl">Mission &amp; Vision</h2>
+            <div className="divider-gold mx-auto mt-3" />
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="card-army p-8 relative overflow-hidden group hover:-translate-y-1">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-navy-600 to-navy-400 rounded-t-2xl" />
+              <div className="w-14 h-14 bg-navy-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <Shield className="w-7 h-7 text-navy-700" />
+              </div>
+              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-4">Our Mission</h3>
               <p className="text-gray-600 font-body leading-relaxed">
                 To develop the qualities of character, courage, comradeship, discipline, leadership, secular outlook, spirit of adventure, and the ideal of selfless service among the youth of the country so that they can become useful citizens.
               </p>
             </div>
-            <div className="card-army p-8 relative">
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gold-500 to-transparent" />
-              <Star className="w-8 h-8 text-gold-500 mb-4" />
-              <h3 className="font-heading text-2xl text-gray-900 uppercase tracking-widest mb-4">
-                Our Vision
-              </h3>
+            <div className="card-army p-8 relative overflow-hidden group hover:-translate-y-1">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-saffron-500 to-saffron-400 rounded-t-2xl" />
+              <div className="w-14 h-14 bg-saffron-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <Star className="w-7 h-7 text-saffron-600" />
+              </div>
+              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-4">Our Vision</h3>
               <p className="text-gray-600 font-body leading-relaxed">
-                To be recognized as the best NCC Unit in Maharashtra, producing cadets who exemplify the NCC motto — <em className="text-gold-600">"Unity and Discipline"</em> — and go on to serve the nation in military and civilian capacities.
+                To be recognized as the best NCC Unit in Maharashtra, producing cadets who exemplify the NCC motto —{' '}
+                <em className="text-navy-700 font-medium not-italic">"Unity and Discipline"</em> — and serve the nation in military and civilian capacities.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── NCC MOTTO ── */}
-      <section className="py-14 bg-army-900 border-y border-army-700">
+      {/* NCC MOTTO */}
+      <section className="py-16" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 100%)' }}>
         <div className="max-w-4xl mx-auto text-center px-4">
-          <p className="font-heading text-xl md:text-2xl text-gray-300 tracking-[0.2em] uppercase mb-2">
-            NCC Motto
-          </p>
-          <h2 className="font-heading text-4xl md:text-6xl text-gold-400 tracking-widest uppercase text-glow-gold mb-2">
-            एकता और अनुशासन
-          </h2>
-          <p className="font-heading text-xl md:text-2xl text-gold-600 tracking-[0.4em] uppercase">
-            Unity &amp; Discipline
-          </p>
+          <p className="font-body text-navy-300 text-xs uppercase tracking-[0.3em] mb-3">NCC Motto</p>
+          <h2 className="font-heading font-extrabold text-4xl md:text-6xl text-saffron-400 tracking-wider mb-3">एकता और अनुशासन</h2>
+          <p className="font-heading font-bold text-xl md:text-2xl text-white/80 tracking-[0.3em] uppercase">Unity &amp; Discipline</p>
         </div>
       </section>
 
-      {/* ── ACTIVITIES ── */}
+      {/* ACTIVITIES */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
             <div>
               <p className="section-subtitle">What We Do</p>
-              <h2 className="section-title text-3xl md:text-4xl mb-4">
-                Training &amp; Activities
-              </h2>
-              <div className="divider-gold w-24 mb-6" />
-              <p className="text-gray-600 font-body leading-relaxed mb-8">
+              <h2 className="section-title text-3xl md:text-4xl mb-3">Training &amp; Activities</h2>
+              <div className="divider-gold mb-6" />
+              <p className="text-gray-600 font-body leading-relaxed mb-8 text-base">
                 Our cadets undergo comprehensive training spanning military skills, adventure, leadership, and social responsibility. From local drills to national-level camps, every activity builds character and capability.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid sm:grid-cols-2 gap-3">
                 {ACTIVITIES.map((activity) => (
-                  <div key={activity} className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-gold-500 flex-shrink-0" />
+                  <div key={activity} className="flex items-center gap-2.5">
+                    <CheckCircle className="w-4 h-4 text-saffron-500 flex-shrink-0" />
                     <span className="text-gray-700 text-sm font-body">{activity}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="relative">
-              <div className="card-army p-8 text-center">
-                <Target className="w-16 h-16 text-gold-500 mx-auto mb-6" />
-                <h3 className="font-heading text-2xl text-gray-900 uppercase tracking-widest mb-4">
-                  NCC B &amp; C Certificate
-                </h3>
-                <p className="text-gray-600 font-body leading-relaxed mb-6">
-                  Cadets work towards NCC B and C certificates, which provide numerous benefits in higher education admissions, government job applications, and direct military entry schemes.
-                </p>
-                <div className="grid grid-cols-3 gap-4">
-                  {[
-                    { label: 'B Cert Holders', value: '60+' },
-                    { label: 'C Cert Holders', value: '25+' },
-                    { label: 'Military Entry', value: '8+' },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="text-center">
-                      <p className="font-heading text-2xl text-gold-600">{value}</p>
-                      <p className="text-gray-500 text-xs font-body">{label}</p>
-                    </div>
-                  ))}
-                </div>
+            <div className="card-army p-8 text-center">
+              <div className="w-20 h-20 bg-navy-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <Target className="w-10 h-10 text-navy-700" />
               </div>
-              <div className="absolute -top-4 -right-4 w-16 h-16 border border-gold-500/30" />
+              <h3 className="font-heading font-bold text-2xl text-gray-900 mb-4">NCC B &amp; C Certificate</h3>
+              <p className="text-gray-600 font-body leading-relaxed mb-8">
+                Cadets work towards NCC B and C certificates, which provide numerous benefits in higher education admissions, government job applications, and direct military entry schemes.
+              </p>
+              <div className="grid grid-cols-3 gap-4">
+                {[{ label: 'B Cert Holders', value: '60+' }, { label: 'C Cert Holders', value: '25+' }, { label: 'Military Entry', value: '8+' }].map(({ label, value }) => (
+                  <div key={label} className="p-3 bg-navy-50 rounded-xl">
+                    <p className="font-heading font-extrabold text-2xl text-navy-800">{value}</p>
+                    <p className="text-gray-500 text-xs font-body mt-1">{label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── TIMELINE ── */}
+      {/* TIMELINE */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Our Journey</p>
             <h2 className="section-title text-3xl md:text-4xl">Unit History</h2>
-            <div className="divider-gold w-24 mx-auto mt-4" />
+            <div className="divider-gold mx-auto mt-3" />
           </div>
           <div className="relative">
-            {/* Timeline line */}
             <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 md:-translate-x-px" />
-            <div className="space-y-10">
+            <div className="space-y-8">
               {TIMELINE.map((item, i) => (
-                <div
-                  key={item.year}
-                  className={`relative flex gap-6 md:gap-0 ${
-                    i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                >
-                  {/* Dot */}
-                  <div className="absolute left-6 md:left-1/2 w-3 h-3 bg-gold-500 rounded-full -translate-x-1.5 md:-translate-x-1.5 border-2 border-white mt-1" />
-                  {/* Content */}
+                <div key={item.year} className={`relative flex gap-6 md:gap-0 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                  <div className="absolute left-6 md:left-1/2 w-3 h-3 bg-saffron-500 rounded-full -translate-x-1.5 border-2 border-white mt-2 shadow-sm" />
                   <div className={`ml-14 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
                     <div className="card-army p-5">
-                      <span className="badge-rank mb-2 inline-flex">{item.year}</span>
-                      <h3 className="font-heading text-gray-900 uppercase tracking-wide text-lg mb-1">
-                        {item.title}
-                      </h3>
+                      <span className="badge-pill mb-2 inline-flex">{item.year}</span>
+                      <h3 className="font-heading font-bold text-gray-900 text-base mb-1">{item.title}</h3>
                       <p className="text-gray-500 text-sm font-body">{item.desc}</p>
                     </div>
                   </div>
@@ -185,22 +166,22 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── LEADERSHIP ── */}
+      {/* LEADERSHIP */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="section-subtitle">Chain of Command</p>
             <h2 className="section-title text-3xl md:text-4xl">Leadership</h2>
-            <div className="divider-gold w-24 mx-auto mt-4" />
+            <div className="divider-gold mx-auto mt-3" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {OFFICERS.map(({ rank, name, role }) => (
-              <div key={role} className="card-army p-6 text-center group transition-all duration-300">
-                <div className="w-20 h-20 bg-army-50 border-2 border-army-200 group-hover:border-gold-500 transition-colors duration-300 flex items-center justify-center rounded-full mx-auto mb-4">
-                  <Users className="w-8 h-8 text-army-500 group-hover:text-gold-500 transition-colors duration-300" />
+              <div key={role} className="card-army p-6 text-center group hover:-translate-y-1">
+                <div className="w-16 h-16 bg-navy-50 border-2 border-navy-100 group-hover:border-saffron-400 transition-colors duration-300 flex items-center justify-center rounded-2xl mx-auto mb-4">
+                  <Users className="w-8 h-8 text-navy-600 group-hover:text-saffron-600 transition-colors duration-300" />
                 </div>
-                <span className="badge-rank mb-2 inline-flex">{rank}</span>
-                <h4 className="font-heading text-gray-900 text-sm uppercase tracking-wider mt-2">{name}</h4>
+                <span className="badge-rank mb-2">{rank}</span>
+                <h4 className="font-heading font-semibold text-gray-900 text-sm mt-2">{name}</h4>
                 <p className="text-gray-500 text-xs font-body mt-1">{role}</p>
               </div>
             ))}
@@ -208,17 +189,18 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="py-16 bg-army-900 border-t border-army-700">
-        <div className="max-w-3xl mx-auto text-center px-4">
-          <Award className="w-12 h-12 text-gold-400 mx-auto mb-4" />
-          <h2 className="section-title text-3xl mb-4 text-white">Be Part of the Unit</h2>
-          <p className="text-gray-300 font-body mb-8">
-            Join us and be part of a legacy of discipline, service, and excellence.
-          </p>
-          <a href="/events" className="btn-primary inline-flex items-center gap-2">
-            Register for Events <ChevronRight className="w-4 h-4" />
-          </a>
+      {/* CTA */}
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 100%)' }}>
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+        <div className="relative z-10 max-w-3xl mx-auto text-center px-4">
+          <div className="w-16 h-16 bg-saffron-500/10 border border-saffron-400/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
+            <Award className="w-8 h-8 text-saffron-400" />
+          </div>
+          <h2 className="font-heading font-extrabold text-3xl text-white mb-4">Be Part of the Unit</h2>
+          <p className="text-white/75 font-body mb-8">Join us and be part of a legacy of discipline, service, and excellence.</p>
+          <Link to="/events" className="inline-flex items-center gap-2 bg-saffron-500 hover:bg-saffron-600 text-white font-heading font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+            Register for Events <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
     </div>

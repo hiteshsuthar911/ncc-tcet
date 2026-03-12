@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Shield, Eye, EyeOff, Lock, Hash, AlertTriangle, ShieldCheck } from 'lucide-react'
+import { Shield, Eye, EyeOff, Lock, Hash, AlertTriangle, Info } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/config'
@@ -25,7 +25,6 @@ export default function Login() {
     setLoading(true)
     try {
       const credential = await login(regimentalNo.trim(), password)
-      // Fetch role from Firestore to redirect correctly
       let role = 'cadet'
       try {
         const profileSnap = await getDoc(doc(db, 'users', credential.user.uid))
@@ -50,54 +49,47 @@ export default function Login() {
       } else if (code === 'auth/network-request-failed') {
         msg = 'Network error. Check your internet connection.'
       } else if (code === 'auth/configuration-not-found' || code === 'auth/operation-not-allowed') {
-        msg = 'Authentication not enabled. Enable Email/Password in Firebase Console.'
+        msg = 'Authentication not enabled. Contact administrator.'
       }
       toast.error(msg, { duration: 5000 })
-      console.error('Login error:', code, err.message)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 pb-8">
       {/* Background */}
-      <div className="absolute inset-0 bg-camo-pattern opacity-20" />
-      <div className="absolute inset-0 bg-gradient-to-br from-military-darker via-military-dark to-army-900" />
-
-      {/* Decorative */}
-      <div className="absolute top-20 left-10 w-20 h-20 border-t-2 border-l-2 border-gold-500/30" />
-      <div className="absolute bottom-20 right-10 w-20 h-20 border-b-2 border-r-2 border-gold-500/30" />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 55%, #1d4ed8 100%)' }} />
+      <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-saffron-400/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-navy-400/20 rounded-full blur-3xl" />
 
       <div className="relative z-10 w-full max-w-md px-4">
-        {/* Header Card */}
+
+        {/* Logo / Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex w-16 h-16 bg-army-700 border-2 border-gold-500 items-center justify-center mb-4">
-            <Shield className="w-8 h-8 text-gold-400" />
+          <div className="inline-flex w-16 h-16 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl items-center justify-center mb-4">
+            <Shield className="w-8 h-8 text-saffron-400" />
           </div>
-          <h1 className="font-heading text-3xl text-white uppercase tracking-widest">
-            NCC TCET
-          </h1>
-          <p className="text-gray-300 font-body text-sm mt-1">Cadet &amp; Admin Portal</p>
+          <h1 className="font-heading font-extrabold text-3xl text-white">NCC TCET</h1>
+          <p className="text-white/70 font-body text-sm mt-1">Cadet &amp; Admin Portal</p>
         </div>
 
-        {/* Login Form */}
-        <div className="card-army relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          {/* Card top accent */}
+          <div className="h-1.5 bg-gradient-to-r from-navy-800 via-navy-600 to-saffron-500" />
+
           <div className="p-8">
-            <h2 className="font-heading text-lg text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <span className="h-px w-4 bg-gold-500 inline-block" />
-              Sign In
-            </h2>
+            <h2 className="font-heading font-bold text-xl text-gray-900 mb-6">Sign In to Your Account</h2>
 
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
               {/* Regimental No */}
               <div>
-                <label className="label-field">
-                  Regimental No. <span className="text-gold-500">*</span>
-                </label>
+                <label className="label-field">Regimental No. <span className="text-red-500">*</span></label>
                 <div className="relative">
-                  <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
+                  <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
                     placeholder="e.g. MH-01234"
@@ -106,11 +98,11 @@ export default function Login() {
                       required: 'Regimental number is required',
                       minLength: { value: 3, message: 'Enter a valid regimental number' },
                     })}
-                    className={`input-field pl-10 ${errors.regimentalNo ? 'border-red-700' : ''}`}
+                    className={`input-field pl-10 ${errors.regimentalNo ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
                   />
                 </div>
                 {errors.regimentalNo && (
-                  <p className="flex items-center gap-1 text-red-400 text-xs mt-1 font-body">
+                  <p className="flex items-center gap-1.5 text-red-500 text-xs mt-1.5 font-body">
                     <AlertTriangle className="w-3 h-3" />
                     {errors.regimentalNo.message}
                   </p>
@@ -119,11 +111,9 @@ export default function Login() {
 
               {/* Password */}
               <div>
-                <label className="label-field">
-                  Password <span className="text-gold-500">*</span>
-                </label>
+                <label className="label-field">Password <span className="text-red-500">*</span></label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-army-500" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
@@ -131,18 +121,18 @@ export default function Login() {
                       required: 'Password is required',
                       minLength: { value: 6, message: 'Password must be at least 6 characters' },
                     })}
-                    className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-700' : ''}`}
+                    className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-army-500 hover:text-army-300 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="flex items-center gap-1 text-red-400 text-xs mt-1 font-body">
+                  <p className="flex items-center gap-1.5 text-red-500 text-xs mt-1.5 font-body">
                     <AlertTriangle className="w-3 h-3" />
                     {errors.password.message}
                   </p>
@@ -153,21 +143,13 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                className="w-full flex items-center justify-center gap-2 bg-navy-900 hover:bg-navy-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-heading font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md mt-2"
               >
                 {loading ? (
                   <>
                     <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <circle
-                        className="opacity-25"
-                        cx="12" cy="12" r="10"
-                        stroke="currentColor" strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8H4z"
-                      />
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                     </svg>
                     Authenticating...
                   </>
@@ -180,33 +162,29 @@ export default function Login() {
               </button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-army-800 space-y-3">
-              <div className="flex items-start gap-2 bg-gold-950/30 border border-gold-900/50 p-3">
-                <ShieldCheck className="w-4 h-4 text-gold-500 mt-0.5 shrink-0" />
-                <p className="text-army-400 text-xs font-body leading-relaxed">
-                  <strong className="text-gold-400">Admins</strong> are automatically redirected to the Admin Dashboard upon login.
+            <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
+              <div className="flex items-start gap-2.5 bg-navy-50 border border-navy-100 rounded-xl p-3.5">
+                <Info className="w-4 h-4 text-navy-600 mt-0.5 shrink-0" />
+                <p className="text-navy-700 text-xs font-body leading-relaxed">
+                  <strong className="font-semibold">Admins</strong> are automatically redirected to the Admin Dashboard upon login.
                 </p>
               </div>
               <p className="text-gray-400 text-xs font-body text-center">
                 Access is restricted to registered NCC cadets and staff of TCET.
               </p>
-              <p className="text-center text-army-600 text-xs font-body">
-                Forgot password? Contact your unit administrator.
+              <p className="text-center text-gray-400 text-xs font-body">
+                Forgot your password?{' '}
+                <Link to="/reset-password" className="text-navy-700 hover:text-navy-900 font-medium transition-colors">
+                  Reset it here
+                </Link>
               </p>
             </div>
           </div>
         </div>
 
-        <div className="text-center mt-6">
-          <Link
-            to="/"
-            className="text-army-500 hover:text-gold-400 text-xs font-body transition-colors duration-200"
-          >
-            ← Back to Home
-          </Link>
-        </div>
-
-
+        <p className="text-center text-white/50 text-xs font-body mt-6">
+          &copy; {new Date().getFullYear()} NCC TCET — Thakur College of Engineering &amp; Technology
+        </p>
       </div>
     </div>
   )

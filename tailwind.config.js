@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Legacy colors — used by admin panel, do not remove
         army: {
           50:  '#f4f6f0',
           100: '#e3e9d9',
@@ -39,23 +40,55 @@ export default {
           400: '#e8c84a',
           500: '#d4af37',
           600: '#b8952a',
+          900: '#3d2e08',
+          950: '#1f1804',
         },
         military: {
           dark: '#0d1207',
           darker: '#070c03',
-        }
+        },
+        // New design system — public facing
+        navy: {
+          50:  '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
+        },
+        saffron: {
+          50:  '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+        },
       },
       fontFamily: {
-        heading: ['Oswald', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
       },
       backgroundImage: {
         'camo-pattern': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%232f3f20'/%3E%3Cellipse cx='20' cy='20' rx='15' ry='10' fill='%23232e17' opacity='0.6'/%3E%3Cellipse cx='60' cy='15' rx='20' ry='12' fill='%231a2014' opacity='0.5'/%3E%3Cellipse cx='80' cy='55' rx='12' ry='18' fill='%23232e17' opacity='0.6'/%3E%3Cellipse cx='30' cy='70' rx='18' ry='10' fill='%231a2014' opacity='0.4'/%3E%3Cellipse cx='70' cy='85' rx='15' ry='8' fill='%23232e17' opacity='0.5'/%3E%3C/svg%3E\")",
+        'dot-pattern': "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
+      },
+      backgroundSize: {
+        'dot-sm': '20px 20px',
+        'dot-md': '32px 32px',
       },
       animation: {
         'fade-up': 'fadeUp 0.6s ease-out forwards',
         'slide-in': 'slideIn 0.5s ease-out forwards',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
         fadeUp: {
@@ -66,6 +99,15 @@ export default {
           '0%': { opacity: '0', transform: 'translateX(-20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-12px)' },
+        },
+      },
+      boxShadow: {
+        'card': '0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04)',
+        'card-hover': '0 20px 40px -10px rgba(30,58,138,0.15), 0 4px 20px -4px rgba(0,0,0,0.08)',
+        'nav': '0 4px 24px -2px rgba(0,0,0,0.08)',
       },
     },
   },

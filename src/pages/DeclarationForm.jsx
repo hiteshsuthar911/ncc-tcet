@@ -77,14 +77,19 @@ export default function DeclarationForm() {
     <div className="min-h-screen pt-20">
 
       {/* ── Page Header (screen only) ── */}
-      <section className="no-print relative py-14 bg-army-900 overflow-hidden">
-        <div className="absolute inset-0 bg-camo-pattern opacity-20" />
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="section-subtitle text-gold-400">Official Document</p>
-          <h1 className="section-title text-4xl mb-2 text-white">Cadet Declaration Form</h1>
-          <div className="divider-gold w-24 mt-3" />
-          <p className="text-gray-300 font-body mt-3 text-sm">
+      <section
+        className="no-print relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0f1f47 0%, #1e3a8a 60%, #1d4ed8 100%)' }}
+      >
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
+          <p className="section-subtitle-light">Official Document</p>
+          <h1 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-wide mb-3">Cadet Declaration Form</h1>
+          <div className="w-14 h-1 bg-saffron-500 rounded-full mx-auto mt-3 mb-4" />
+          <p className="text-blue-200 font-body mt-3 text-sm max-w-xl mx-auto leading-relaxed">
             Fill in all fields and check all 10 declarations, then click Print to generate your official A4 form. Submit the signed printed copy with documents to the NCC office.
           </p>
         </div>
@@ -93,10 +98,10 @@ export default function DeclarationForm() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         {/* Instructions */}
-        <div className="no-print flex items-start gap-4 border border-army-700 bg-army-900/50 p-4 mb-8">
-          <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-          <p className="text-yellow-300/80 font-body text-sm leading-relaxed">
-            Fill in <strong className="text-yellow-200">block letters</strong>. After printing, sign in blue/black ink, obtain parent/guardian signature (mandatory if below 18), attach all required documents, and submit to the NCC office. All 10 declarations must be accepted before printing.
+        <div className="no-print flex items-start gap-4 border border-amber-200 bg-amber-50 rounded-xl p-4 mb-8">
+          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-amber-700 font-body text-sm leading-relaxed">
+            Fill in <strong className="text-amber-800">block letters</strong>. After printing, sign in blue/black ink, obtain parent/guardian signature (mandatory if below 18), attach all required documents, and submit to the NCC office. All 10 declarations must be accepted before printing.
           </p>
         </div>
 
@@ -108,15 +113,14 @@ export default function DeclarationForm() {
 
             {/* ── Section A: Personal Information ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <User className="w-4 h-4 text-gold-500" /> Section A — Personal Information
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <User className="w-4 h-4 text-saffron-500" /> Section A — Personal Information
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="label-field">Full Name (as in Aadhaar) <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Full Name (as in Aadhaar) <span className="text-red-500">*</span></label>
                     <input type="text" {...register('name', { required: 'Required' })} className={`input-field uppercase ${errors.name ? 'border-red-700' : ''}`} placeholder="FIRST MIDDLE LAST" />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
                   </div>
@@ -125,22 +129,22 @@ export default function DeclarationForm() {
                     <input type="text" {...register('regimentalNo')} className="input-field uppercase" placeholder="Leave blank if new applicant" />
                   </div>
                   <div>
-                    <label className="label-field">Father's Name <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Father's Name <span className="text-red-500">*</span></label>
                     <input type="text" {...register('fatherName', { required: 'Required' })} className={`input-field uppercase ${errors.fatherName ? 'border-red-700' : ''}`} placeholder="FATHER'S FULL NAME" />
                     {errors.fatherName && <p className="text-red-400 text-xs mt-1">{errors.fatherName.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Mother's Name <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Mother's Name <span className="text-red-500">*</span></label>
                     <input type="text" {...register('motherName', { required: 'Required' })} className={`input-field uppercase ${errors.motherName ? 'border-red-700' : ''}`} placeholder="MOTHER'S FULL NAME" />
                     {errors.motherName && <p className="text-red-400 text-xs mt-1">{errors.motherName.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Date of Birth <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Date of Birth <span className="text-red-500">*</span></label>
                     <input type="date" {...register('dob', { required: 'Required' })} className={`input-field [color-scheme:dark] ${errors.dob ? 'border-red-700' : ''}`} />
                     {errors.dob && <p className="text-red-400 text-xs mt-1">{errors.dob.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Gender <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Gender <span className="text-red-500">*</span></label>
                     <select {...register('gender', { required: 'Required' })} className={`select-field ${errors.gender ? 'border-red-700' : ''}`}>
                       <option value="">— Select —</option>
                       <option value="Male">Male</option>
@@ -162,7 +166,7 @@ export default function DeclarationForm() {
                     <input type="text" {...register('aadhaarLast4', { maxLength: 4, pattern: { value: /^\d{0,4}$/, message: '4 digits only' } })} className="input-field" maxLength={4} placeholder="XXXX" />
                   </div>
                   <div>
-                    <label className="label-field">Blood Group <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Blood Group <span className="text-red-500">*</span></label>
                     <select {...register('bloodGroup', { required: 'Required' })} className={`select-field ${errors.bloodGroup ? 'border-red-700' : ''}`}>
                       <option value="">— Select —</option>
                       {BLOOD_GROUPS.map((g) => <option key={g} value={g}>{g}</option>)}
@@ -170,12 +174,12 @@ export default function DeclarationForm() {
                     {errors.bloodGroup && <p className="text-red-400 text-xs mt-1">{errors.bloodGroup.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Cadet Mobile No. <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Cadet Mobile No. <span className="text-red-500">*</span></label>
                     <input type="tel" {...register('phone', { required: 'Required', pattern: { value: /^[6-9]\d{9}$/, message: 'Enter valid 10-digit number' } })} className={`input-field ${errors.phone ? 'border-red-700' : ''}`} placeholder="10-digit mobile number" />
                     {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Parent / Guardian Mobile <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Parent / Guardian Mobile <span className="text-red-500">*</span></label>
                     <input type="tel" {...register('parentPhone', { required: 'Required' })} className={`input-field ${errors.parentPhone ? 'border-red-700' : ''}`} placeholder="Parent's mobile number" />
                     {errors.parentPhone && <p className="text-red-400 text-xs mt-1">{errors.parentPhone.message}</p>}
                   </div>
@@ -188,7 +192,7 @@ export default function DeclarationForm() {
                     <input type="text" {...register('emergencyRelation')} className="input-field" placeholder="e.g. Father, Sibling..." />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="label-field">Permanent Address <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Permanent Address <span className="text-red-500">*</span></label>
                     <textarea rows={2} {...register('address', { required: 'Required' })} className={`input-field resize-none ${errors.address ? 'border-red-700' : ''}`} placeholder="House No., Street, Area, City, State — Pin Code" />
                     {errors.address && <p className="text-red-400 text-xs mt-1">{errors.address.message}</p>}
                   </div>
@@ -198,19 +202,19 @@ export default function DeclarationForm() {
 
             {/* ── Section B: Physical Details ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-gold-500" /> Section B — Physical Details
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-saffron-500" /> Section B — Physical Details
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="label-field">Height (cm) <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Height (cm) <span className="text-red-500">*</span></label>
                     <input type="number" {...register('height', { required: 'Required', min: { value: 100, message: 'Enter valid height' } })} className={`input-field ${errors.height ? 'border-red-700' : ''}`} placeholder="e.g. 170" />
                     {errors.height && <p className="text-red-400 text-xs mt-1">{errors.height.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Weight (kg) <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Weight (kg) <span className="text-red-500">*</span></label>
                     <input type="number" {...register('weight', { required: 'Required', min: { value: 30, message: 'Enter valid weight' } })} className={`input-field ${errors.weight ? 'border-red-700' : ''}`} placeholder="e.g. 65" />
                     {errors.weight && <p className="text-red-400 text-xs mt-1">{errors.weight.message}</p>}
                   </div>
@@ -228,14 +232,14 @@ export default function DeclarationForm() {
 
             {/* ── Section C: Academic Information ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-gold-500" /> Section C — Academic Information
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-saffron-500" /> Section C — Academic Information
                 </h2>
                 <div className="grid sm:grid-cols-3 gap-5">
                   <div>
-                    <label className="label-field">Department / Branch <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Department / Branch <span className="text-red-500">*</span></label>
                     <select {...register('department', { required: 'Required' })} className={`select-field ${errors.department ? 'border-red-700' : ''}`}>
                       <option value="">— Select —</option>
                       {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
@@ -243,7 +247,7 @@ export default function DeclarationForm() {
                     {errors.department && <p className="text-red-400 text-xs mt-1">{errors.department.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Year of Study <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Year of Study <span className="text-red-500">*</span></label>
                     <select {...register('year', { required: 'Required' })} className={`select-field ${errors.year ? 'border-red-700' : ''}`}>
                       <option value="">— Select —</option>
                       {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
@@ -251,12 +255,12 @@ export default function DeclarationForm() {
                     {errors.year && <p className="text-red-400 text-xs mt-1">{errors.year.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">Admission Year <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Admission Year <span className="text-red-500">*</span></label>
                     <input type="text" {...register('admissionYear', { required: 'Required' })} className={`input-field ${errors.admissionYear ? 'border-red-700' : ''}`} placeholder="e.g. 2023" />
                     {errors.admissionYear && <p className="text-red-400 text-xs mt-1">{errors.admissionYear.message}</p>}
                   </div>
                   <div>
-                    <label className="label-field">College Roll No. <span className="text-gold-500">*</span></label>
+                    <label className="label-field">College Roll No. <span className="text-red-500">*</span></label>
                     <input type="text" {...register('rollNo', { required: 'Required' })} className={`input-field ${errors.rollNo ? 'border-red-700' : ''}`} placeholder="e.g. 22102035" />
                     {errors.rollNo && <p className="text-red-400 text-xs mt-1">{errors.rollNo.message}</p>}
                   </div>
@@ -269,7 +273,7 @@ export default function DeclarationForm() {
                     <input type="text" {...register('universityRegNo')} className="input-field" placeholder="Mumbai University No." />
                   </div>
                   <div>
-                    <label className="label-field">College Email ID <span className="text-gold-500">*</span></label>
+                    <label className="label-field">College Email ID <span className="text-red-500">*</span></label>
                     <input type="email" {...register('collegeEmail', { required: 'Required' })} className={`input-field ${errors.collegeEmail ? 'border-red-700' : ''}`} placeholder="abc@tcetmumbai.in" />
                     {errors.collegeEmail && <p className="text-red-400 text-xs mt-1">{errors.collegeEmail.message}</p>}
                   </div>
@@ -283,14 +287,14 @@ export default function DeclarationForm() {
 
             {/* ── Section D: NCC Details ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <Award className="w-4 h-4 text-gold-500" /> Section D — NCC Details &amp; Wing Preference
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-saffron-500" /> Section D — NCC Details &amp; Wing Preference
                 </h2>
                 <div className="grid sm:grid-cols-3 gap-5">
                   <div>
-                    <label className="label-field">Wing Preference <span className="text-gold-500">*</span></label>
+                    <label className="label-field">Wing Preference <span className="text-red-500">*</span></label>
                     <select {...register('wing', { required: 'Required' })} className={`select-field ${errors.wing ? 'border-red-700' : ''}`}>
                       <option value="">— Select —</option>
                       <option value="Naval">Naval Wing</option>
@@ -333,31 +337,31 @@ export default function DeclarationForm() {
 
             {/* ── Section E: Declarations ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-gold-500" /> Section E — Declarations
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-2 flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-saffron-500" /> Section E — Declarations
                 </h2>
-                <p className="text-army-500 font-body text-xs mb-6">All 10 declarations must be accepted before you can print the form.</p>
+                <p className="text-gray-500 font-body text-xs mb-6">All 10 declarations must be accepted before you can print the form.</p>
                 <div className="space-y-4">
                   {DECLARATIONS.map((text, i) => {
                     const key = `declare${i + 1}`
                     return (
-                      <label key={key} className="flex items-start gap-3 cursor-pointer group border border-army-800 hover:border-gold-700/50 p-3 transition-colors">
+                      <label key={key} className="flex items-start gap-3 cursor-pointer group border border-gray-200 hover:border-navy-200 p-3 rounded-lg transition-colors">
                         <input
                           type="checkbox"
                           {...register(key, { required: 'This declaration is required' })}
-                          className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
+                          className="mt-0.5 accent-navy-700 w-4 h-4 flex-shrink-0"
                         />
-              <span className="text-gray-600 font-body text-sm leading-relaxed group-hover:text-army-700 transition-colors">
-                          <span className="text-gold-600 font-heading text-xs mr-1.5">{String(i + 1).padStart(2, '0')}.</span>
-                          {text} <span className="text-gold-500">*</span>
+              <span className="text-gray-600 font-body text-sm leading-relaxed group-hover:text-gray-700 transition-colors">
+                          <span className="text-navy-600 font-heading text-xs mr-1.5">{String(i + 1).padStart(2, '0')}.</span>
+                          {text} <span className="text-red-500">*</span>
                         </span>
                       </label>
                     )
                   })}
                   {Object.keys(errors).some((k) => k.startsWith('declare')) && (
-                    <p className="text-red-400 text-xs flex items-center gap-1">
+                    <p className="text-red-500 text-xs flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3" /> Please accept all declarations before printing.
                     </p>
                   )}
@@ -367,21 +371,21 @@ export default function DeclarationForm() {
 
             {/* ── Section F: Document Checklist ── */}
             <div className="card-army relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <ClipboardList className="w-4 h-4 text-gold-500" /> Section F — Document Submission Checklist
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-2 flex items-center gap-2">
+                  <ClipboardList className="w-4 h-4 text-saffron-500" /> Section F — Document Submission Checklist
                 </h2>
-                <p className="text-army-500 font-body text-xs mb-5">Tick all documents you will be attaching with this form. Self-attested photocopies must be submitted with originals for verification.</p>
+                <p className="text-gray-500 font-body text-xs mb-5">Tick all documents you will be attaching with this form. Self-attested photocopies must be submitted with originals for verification.</p>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {DOCUMENTS.map(({ key, label }) => (
-                    <label key={key} className="flex items-start gap-3 cursor-pointer group border border-army-800 hover:border-gold-700/50 p-3 transition-colors">
+                    <label key={key} className="flex items-start gap-3 cursor-pointer group border border-gray-200 hover:border-navy-200 p-3 rounded-lg transition-colors">
                       <input
                         type="checkbox"
                         {...register(key)}
-                        className="mt-0.5 accent-gold-500 w-4 h-4 flex-shrink-0"
+                        className="mt-0.5 accent-navy-700 w-4 h-4 flex-shrink-0"
                       />
-                      <span className="text-gray-600 font-body text-sm leading-snug group-hover:text-army-700 transition-colors">
+                      <span className="text-gray-600 font-body text-sm leading-snug group-hover:text-gray-700 transition-colors">
                         {label}
                       </span>
                     </label>
@@ -392,12 +396,12 @@ export default function DeclarationForm() {
 
             {/* ── Section G: Signatures ── */}
             <div className="card-army relative overflow-hidden mb-8">
-              <div className="absolute left-0 top-0 w-1 h-full bg-gold-500" />
+              <div className="absolute left-0 top-0 w-1 h-full bg-navy-600" />
               <div className="p-6 sm:p-8">
-                <h2 className="font-heading text-base text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-gold-500" /> Section G — Signatures
+                <h2 className="font-heading text-base text-gray-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-saffron-500" /> Section G — Signatures
                 </h2>
-                <p className="text-army-500 font-body text-xs mb-6">Signatures are to be applied in ink on the printed form. The boxes below are for reference only.</p>
+                <p className="text-gray-500 font-body text-xs mb-6">Signatures are to be applied in ink on the printed form. The boxes below are for reference only.</p>
                 <div className="grid sm:grid-cols-3 gap-8">
                   {[
                     { label: "Cadet's Signature", sub: 'Date: _______________' },
@@ -405,13 +409,13 @@ export default function DeclarationForm() {
                     { label: 'ANO / Enrollment Officer', sub: 'For office use only' },
                   ].map((sig) => (
                     <div key={sig.label} className="text-center">
-                      <div className="h-16 border border-dashed border-army-600 mb-2" />
-                      <p className="text-army-400 font-body text-xs uppercase tracking-wider">{sig.label}</p>
-                      <p className="text-army-600 font-body text-xs mt-0.5">{sig.sub}</p>
+                      <div className="h-16 border border-dashed border-gray-300 mb-2" />
+                      <p className="text-gray-500 font-body text-xs uppercase tracking-wider">{sig.label}</p>
+                      <p className="text-gray-400 font-body text-xs mt-0.5">{sig.sub}</p>
                     </div>
                   ))}
                 </div>
-                <div className="mt-6 pt-4 border-t border-army-800 flex flex-wrap gap-6 text-army-600 font-body text-xs">
+                <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap gap-6 text-gray-400 font-body text-xs">
                   <span>Date of Application: ___________________________</span>
                   <span>Place: TCET, Mumbai</span>
                 </div>
@@ -445,16 +449,16 @@ export default function DeclarationForm() {
               >
                 <Printer className="w-4 h-4" /> Print / Save as PDF
               </button>
-              <p className="text-army-500 font-body text-xs text-center max-w-md">
-                In Chrome's print dialog, uncheck <strong className="text-army-300">"Headers and footers"</strong> to remove the browser URL from the printed document.
+              <p className="text-gray-500 font-body text-xs text-center max-w-md">
+                In Chrome's print dialog, uncheck <strong className="text-gray-600">"Headers and footers"</strong> to remove the browser URL from the printed document.
               </p>
             </div>
           </form>
 
           {/* Submission note */}
           <div className="mt-8 card-army p-5 flex items-start gap-3">
-            <Shield className="w-5 h-5 text-gold-500 flex-shrink-0 mt-0.5" />
-            <div className="font-body text-sm text-army-400 leading-relaxed">
+            <Shield className="w-5 h-5 text-saffron-500 flex-shrink-0 mt-0.5" />
+            <div className="font-body text-sm text-gray-500 leading-relaxed">
               <span className="text-gray-900 font-medium">After printing:</span> Sign in blue/black ink, obtain parent/guardian signature, attach all checked documents, and submit to the NCC office (Room 102, TCET Main Building) during office hours (Mon–Fri, 10 AM – 4 PM). Retain a photocopy for your records.
             </div>
           </div>
