@@ -675,18 +675,18 @@ export default function EventRegistration() {
                     </div>
 
                     {/* ══ SIGNATURE BLOCKS ══ */}
-                    <div className="receipt-signatures grid grid-cols-2 gap-8 mb-5">
-                      <div className="receipt-sig-block border-t border-army-500 pt-3 text-center">
-                        <div className="sig-line h-10 border-b border-army-600 mb-2" />
-                        <p className="text-army-400 font-body text-xs uppercase tracking-widest">Cadet's Signature</p>
-                        <p className="text-army-500 font-body text-xs mt-0.5">{receiptData.name || ''}</p>
-                        <p className="text-army-600 font-body text-xs">{receiptData.regimentalNo || ''}</p>
+                    <div className="receipt-signatures">
+                      <div className="receipt-sig-block">
+                        <div className="sig-line" />
+                        <p>Cadet's Signature</p>
+                        <p>{receiptData.name || ''}</p>
+                        <p>{receiptData.regimentalNo || ''}</p>
                       </div>
-                      <div className="receipt-sig-block border-t border-army-500 pt-3 text-center">
-                        <div className="sig-line h-10 border-b border-army-600 mb-2" />
-                        <p className="text-army-400 font-body text-xs uppercase tracking-widest">Officer-In-Charge</p>
-                        <p className="text-army-500 font-body text-xs mt-0.5">1 Maharashtra Naval Unit</p>
-                        <p className="text-army-600 font-body text-xs">NCC TCET, Mumbai</p>
+                      <div className="receipt-sig-block">
+                        <div className="sig-line" />
+                        <p>Officer-In-Charge</p>
+                        <p>1 Maharashtra Naval Unit</p>
+                        <p>NCC TCET, Mumbai</p>
                       </div>
                     </div>
 
